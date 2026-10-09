@@ -1,0 +1,20 @@
+1. Upload files.
+
+2. Install composer: composer install
+
+3. Rename env.example to .env.
+
+4. Edit values:
+APP_URL=http://example.com
+API_URL=http://api.example.com
+FRONTEND_URL=http://example.com
+DB_DATABASE=laravel
+DB_USERNAME=root
+DB_PASSWORD=
+
+5. Run in console:
+php artisan key:generate
+php artisan migrate
+php artisan db:seed
+
+6. Admin access: email: admin@email.com, pass: 123456
