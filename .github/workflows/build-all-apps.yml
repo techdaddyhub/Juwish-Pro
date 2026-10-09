@@ -1,0 +1,227 @@
+name: Build JuwishPro Multi-Platform Apps
+
+on:
+  push:
+    branches: [ main, master ]
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  # -------------------------------------------------------------
+  # 1. ANDROID BUILD (APK)
+  # -------------------------------------------------------------
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: juwish_pro_flutter
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Create Platform Scaffolding
+        run: flutter create . --org org.dmillers.juwishpro --project-name juwish_pro --platforms=android
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-Android-APK
+          path: juwish_pro_flutter/build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: warn
+
+  # -------------------------------------------------------------
+  # 2. WINDOWS BUILD (.zip)
+  # -------------------------------------------------------------
+  build-windows:
+    name: Build Windows Application
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: juwish_pro_flutter
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Enable Windows Desktop
+        run: flutter config --enable-windows-desktop
+
+      - name: Create Platform Scaffolding
+        run: flutter create . --org org.dmillers.juwishpro --project-name juwish_pro --platforms=windows
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      - name: Build Windows Executable
+        run: flutter build windows --release
+
+      - name: Package Windows Artifacts
+        shell: pwsh
+        run: |
+          Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath JuwishPro-Windows-x64.zip
+
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-Windows-ZIP
+          path: juwish_pro_flutter/JuwishPro-Windows-x64.zip
+          if-no-files-found: warn
+
+  # -------------------------------------------------------------
+  # 3. macOS BUILD (.dmg / .app)
+  # -------------------------------------------------------------
+  build-macos:
+    name: Build macOS Application
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: juwish_pro_flutter
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Enable macOS Desktop
+        run: flutter config --enable-macos-desktop
+
+      - name: Create Platform Scaffolding
+        run: flutter create . --org org.dmillers.juwishpro --project-name juwish_pro --platforms=macos
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      - name: Build macOS App
+        run: flutter build macos --release
+
+      - name: Package macOS App
+        run: |
+          cd build/macos/Build/Products/Release
+          tar -czf ../../../../../JuwishPro-macOS-universal.tar.gz *.app
+
+      - name: Upload macOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-macOS-TAR
+          path: JuwishPro-macOS-universal.tar.gz
+          if-no-files-found: warn
+
+  # -------------------------------------------------------------
+  # 4. LINUX BUILD (.tar.gz)
+  # -------------------------------------------------------------
+  build-linux:
+    name: Build Linux Application
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: juwish_pro_flutter
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Linux Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Enable Linux Desktop
+        run: flutter config --enable-linux-desktop
+
+      - name: Create Platform Scaffolding
+        run: flutter create . --org org.dmillers.juwishpro --project-name juwish_pro --platforms=linux
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      - name: Build Linux Bundle
+        run: flutter build linux --release
+
+      - name: Package Linux Bundle
+        run: |
+          cd build/linux/x64/release/bundle
+          tar -czf ../../../../../JuwishPro-Linux-x64.tar.gz .
+
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-Linux-TAR
+          path: JuwishPro-Linux-x64.tar.gz
+          if-no-files-found: warn
+
+  # -------------------------------------------------------------
+  # 5. USER PORTAL BUILD (Next.js)
+  # -------------------------------------------------------------
+  build-user-portal:
+    name: Build User Portal (Next.js)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: Tradexpro-UserPortal
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'yarn'
+          cache-dependency-path: Tradexpro-UserPortal/yarn.lock
+
+      - name: Install Dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build Next.js User Portal
+        run: yarn build
+        env:
+          NEXT_PUBLIC_APP_NAME: "JuwishPro"
+          NEXT_PUBLIC_BASE_URL: "https://2026.dmillers.org"
+          NEXT_PUBLIC_SECRET_KEY: "h0vWu6MkInNlWHJVfIXmHbIbC66cQvlbSUQI09Whbp"
+
+      - name: Upload User Portal Build Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-UserPortal-Build
+          path: Tradexpro-UserPortal/.next
+          if-no-files-found: warn
