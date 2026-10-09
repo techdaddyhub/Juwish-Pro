@@ -38,7 +38,12 @@ Route::group(['middleware' => 'installation'], function () {
     Route::group(['middleware' => 'default_lang'], function () {
 
         Route::get('testcase', 'AuthController@test')->name('testAuth');
-        Route::get('/', 'AuthController@login')->name('login');
+        Route::get('/', 'UserPortalController@index')->name('home');
+        Route::get('exchange', 'UserPortalController@index')->name('exchange');
+        Route::get('markets', 'UserPortalController@index')->name('markets');
+        Route::get('admin', function () {
+            return redirect()->route('adminDashboard');
+        });
         Route::get('login', 'AuthController@login')->name('login');
         Route::post('login-process', 'AuthController@loginProcess')->name('loginProcess');
         Route::get('forgot-password', 'AuthController@forgotPassword')->name('forgotPassword');

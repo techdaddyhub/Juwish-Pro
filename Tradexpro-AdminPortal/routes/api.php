@@ -73,8 +73,14 @@ Route::group(['middleware' => 'maintenanceMode'], function (){
 
             Route::get('currency-list', 'LandingController@currencyList');
             Route::get('public-site-settings', 'LandingController@publicSiteSettings');
+
+            // PancakeSwap Instant Buy & Auto Deposit
+            Route::get('pancakeswap-info', 'PancakeSwapDepositController@getInfo');
+            Route::post('verify-pancakeswap-deposit', 'PancakeSwapDepositController@verifyDeposit');
         });
         Route::group(['namespace'=>'Api\User'], function () {
+            Route::get('pancakeswap-info', 'PancakeSwapDepositController@getInfo');
+            Route::post('verify-pancakeswap-deposit', 'PancakeSwapDepositController@verifyDeposit');
             Route::get('get-exchange-all-orders-app', 'ExchangeController@getExchangeAllOrdersApp')->name('getExchangeAllOrdersApp');
             Route::get('app-get-pair', 'ExchangeController@appExchangeGetAllPair')->name('appExchangeGetAllPair');
             Route::get('app-dashboard/{pair?}', 'ExchangeController@appExchangeDashboard')->name('appExchangeDashboard');
