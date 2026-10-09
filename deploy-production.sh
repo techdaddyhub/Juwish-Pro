@@ -45,3 +45,4 @@ echo "🎉 JuwishPro successfully deployed for https://2026.dmillers.org!"
 echo "To obtain an SSL certificate via Let's Encrypt:"
 echo "   sudo certbot --nginx -d 2026.dmillers.org"
 echo "=================================================================="
+

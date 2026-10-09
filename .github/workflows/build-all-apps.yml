@@ -34,21 +34,26 @@ jobs:
         with:
           flutter-version: '3.24.x'
           channel: 'stable'
+          cache: true
+
+      - name: Create Platform Scaffolding
+        run: flutter create . --org org.dmillers.juwishpro --project-name juwish_pro --platforms=android
 
       - name: Get Dependencies
         run: flutter pub get
 
-      - name: Build APK
+      - name: Build Android APK
         run: flutter build apk --release
 
-      - name: Upload Android Artifact
+      - name: Upload Android APK
         uses: actions/upload-artifact@v4
         with:
           name: JuwishPro-Android-APK
           path: juwish_pro_flutter/build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: warn
 
   # -------------------------------------------------------------
-  # 2. WINDOWS BUILD (.exe)
+  # 2. WINDOWS BUILD (.zip)
   # -------------------------------------------------------------
   build-windows:
     name: Build Windows Application
@@ -65,9 +70,13 @@ jobs:
         with:
           flutter-version: '3.24.x'
           channel: 'stable'
+          cache: true
 
       - name: Enable Windows Desktop
         run: flutter config --enable-windows-desktop
+
+      - name: Create Platform Scaffolding
+        run: flutter create . --org org.dmillers.juwishpro --project-name juwish_pro --platforms=windows
 
       - name: Get Dependencies
         run: flutter pub get
@@ -75,7 +84,8 @@ jobs:
       - name: Build Windows Executable
         run: flutter build windows --release
 
-      - name: Compress Windows Output
+      - name: Package Windows Artifacts
+        shell: pwsh
         run: |
           Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath JuwishPro-Windows-x64.zip
 
@@ -84,6 +94,7 @@ jobs:
         with:
           name: JuwishPro-Windows-ZIP
           path: juwish_pro_flutter/JuwishPro-Windows-x64.zip
+          if-no-files-found: warn
 
   # -------------------------------------------------------------
   # 3. macOS BUILD (.dmg / .app)
@@ -103,9 +114,13 @@ jobs:
         with:
           flutter-version: '3.24.x'
           channel: 'stable'
+          cache: true
 
       - name: Enable macOS Desktop
         run: flutter config --enable-macos-desktop
+
+      - name: Create Platform Scaffolding
+        run: flutter create . --org org.dmillers.juwishpro --project-name juwish_pro --platforms=macos
 
       - name: Get Dependencies
         run: flutter pub get
@@ -113,16 +128,17 @@ jobs:
       - name: Build macOS App
         run: flutter build macos --release
 
-      - name: Compress macOS Output
+      - name: Package macOS App
         run: |
           cd build/macos/Build/Products/Release
-          tar -czf JuwishPro-macOS-universal.tar.gz JuwishPro.app || tar -czf JuwishPro-macOS-universal.tar.gz *.app
+          tar -czf ../../../../../JuwishPro-macOS-universal.tar.gz *.app
 
       - name: Upload macOS Artifact
         uses: actions/upload-artifact@v4
         with:
           name: JuwishPro-macOS-TAR
-          path: juwish_pro_flutter/build/macos/Build/Products/Release/JuwishPro-macOS-universal.tar.gz
+          path: JuwishPro-macOS-universal.tar.gz
+          if-no-files-found: warn
 
   # -------------------------------------------------------------
   # 4. LINUX BUILD (.tar.gz)
@@ -147,9 +163,13 @@ jobs:
         with:
           flutter-version: '3.24.x'
           channel: 'stable'
+          cache: true
 
       - name: Enable Linux Desktop
         run: flutter config --enable-linux-desktop
+
+      - name: Create Platform Scaffolding
+        run: flutter create . --org org.dmillers.juwishpro --project-name juwish_pro --platforms=linux
 
       - name: Get Dependencies
         run: flutter pub get
@@ -167,25 +187,4 @@ jobs:
         with:
           name: JuwishPro-Linux-TAR
           path: JuwishPro-Linux-x64.tar.gz
-
-  # -------------------------------------------------------------
-  # 5. CREATE GITHUB RELEASE
-  # -------------------------------------------------------------
-  create-release:
-    name: Publish GitHub Release
-    needs: [build-android, build-windows, build-macos, build-linux]
-    if: startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download All Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: release-assets
-
-      - name: Create Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: release-assets/**/*
-          draft: false
-          prerelease: false
-          generate_release_notes: true
+          if-no-files-found: warn

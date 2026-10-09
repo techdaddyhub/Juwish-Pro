@@ -155,7 +155,8 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
           _currentConfirmations = event['confirmations'] ?? 0;
           _detectedTxHash = event['txHash'];
         });
-      } else if (eventType == 'license_issued' || eventType == 'payment_confirmed') {
+      } else if (eventType == 'license_issued' ||
+          eventType == 'payment_confirmed') {
         final licenseMap = event['license'] as Map<String, dynamic>?;
         if (licenseMap != null) {
           final license = CleanInboxLicense.fromJson(licenseMap);
@@ -197,7 +198,8 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
         }
       } else {
         setState(() {
-          _manualTxErrorMessage = result['message'] ?? 'Transaction could not be verified.';
+          _manualTxErrorMessage =
+              result['message'] ?? 'Transaction could not be verified.';
         });
       }
     } catch (e) {
@@ -238,7 +240,8 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
 
     final uri = Uri.parse(url);
     try {
-      final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+      final launched =
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
       if (!launched) {
         await launchUrl(uri);
       }
@@ -270,7 +273,8 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
       insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 820, maxHeight: 720),
-        child: _issuedLicense != null ? _buildSuccessView() : _buildCheckoutView(),
+        child:
+            _issuedLicense != null ? _buildSuccessView() : _buildCheckoutView(),
       ),
     );
   }
@@ -307,7 +311,8 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
                       TransactionStatusStepper(
                         status: _paymentStatus,
                         currentConfirmations: _currentConfirmations,
-                        requiredConfirmations: _invoice?.requiredConfirmations ?? 15,
+                        requiredConfirmations:
+                            _invoice?.requiredConfirmations ?? 15,
                       ),
                       const SizedBox(height: 20),
                       _buildManualTxInput(),
@@ -330,7 +335,8 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
               color: const Color(0xFF1E2333),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: const Icon(Icons.mark_email_read_outlined, color: Color(0xFF3888FF), size: 24),
+            child: const Icon(Icons.mark_email_read_outlined,
+                color: Color(0xFF3888FF), size: 24),
           ),
           const SizedBox(width: 12),
           const Column(
@@ -338,7 +344,10 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
             children: [
               Text(
                 'CleanInbox Pro Licensing Upgrade',
-                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
               ),
               Text(
                 'Instant activation via JuwishCoin (JWC) on BNB Smart Chain',
@@ -368,12 +377,16 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
       decoration: BoxDecoration(
         color: isLowTime ? const Color(0xFF3E1F1F) : const Color(0xFF1E2333),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: isLowTime ? const Color(0xFFE74C3C) : const Color(0xFF2C3242)),
+        border: Border.all(
+            color:
+                isLowTime ? const Color(0xFFE74C3C) : const Color(0xFF2C3242)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.timer_outlined, size: 14, color: isLowTime ? const Color(0xFFE74C3C) : Colors.white70),
+          Icon(Icons.timer_outlined,
+              size: 14,
+              color: isLowTime ? const Color(0xFFE74C3C) : Colors.white70),
           const SizedBox(width: 6),
           Text(
             '$minutes:$seconds',
@@ -397,7 +410,11 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('1. SELECT TIER', style: TextStyle(color: Color(0xFF8F9BB3), fontSize: 11, fontWeight: FontWeight.bold)),
+              const Text('1. SELECT TIER',
+                  style: TextStyle(
+                      color: Color(0xFF8F9BB3),
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold)),
               const SizedBox(height: 8),
               Row(
                 children: [
@@ -415,7 +432,11 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('2. DURATION', style: TextStyle(color: Color(0xFF8F9BB3), fontSize: 11, fontWeight: FontWeight.bold)),
+            const Text('2. DURATION',
+                style: TextStyle(
+                    color: Color(0xFF8F9BB3),
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             Row(
               children: [
@@ -446,10 +467,13 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
           decoration: BoxDecoration(
-            color: isSelected ? const Color(0xFF1E3A8A) : const Color(0xFF1B1E29),
+            color:
+                isSelected ? const Color(0xFF1E3A8A) : const Color(0xFF1B1E29),
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: isSelected ? const Color(0xFF3888FF) : const Color(0xFF2C3242),
+              color: isSelected
+                  ? const Color(0xFF3888FF)
+                  : const Color(0xFF2C3242),
               width: isSelected ? 1.5 : 1,
             ),
           ),
@@ -467,7 +491,9 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
               Text(
                 quota,
                 style: TextStyle(
-                  color: isSelected ? const Color(0xFF93C5FD) : const Color(0xFF6B7280),
+                  color: isSelected
+                      ? const Color(0xFF93C5FD)
+                      : const Color(0xFF6B7280),
                   fontSize: 10,
                 ),
               ),
@@ -494,7 +520,8 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
           color: isSelected ? const Color(0xFF1E3A8A) : const Color(0xFF1B1E29),
           borderRadius: BorderRadius.circular(8),
           border: Border.all(
-            color: isSelected ? const Color(0xFF3888FF) : const Color(0xFF2C3242),
+            color:
+                isSelected ? const Color(0xFF3888FF) : const Color(0xFF2C3242),
           ),
         ),
         child: Text(
@@ -527,7 +554,11 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('PAYMENT DUE', style: TextStyle(color: Color(0xFF8F9BB3), fontSize: 10, fontWeight: FontWeight.bold)),
+              const Text('PAYMENT DUE',
+                  style: TextStyle(
+                      color: Color(0xFF8F9BB3),
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold)),
               const SizedBox(height: 4),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.baseline,
@@ -569,7 +600,8 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
               backgroundColor: const Color(0xFF1FC7D4), // PancakeSwap Cyan
               foregroundColor: Colors.black,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
               elevation: 2,
             ),
           ),
@@ -580,8 +612,10 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
 
   Widget _buildQrAndTreasurySection() {
     final inv = _invoice;
-    final treasury = inv?.treasuryAddress ?? '0x4989eF673628E1E55E2d0577F14e5bF0aCce6381';
-    final tokenContract = inv?.contractAddress ?? '0xfEEEF79d2A97d9e1f9bcB8eBA8FD9587079C9e99';
+    final treasury =
+        inv?.treasuryAddress ?? '0x4989eF673628E1E55E2d0577F14e5bF0aCce6381';
+    final tokenContract =
+        inv?.contractAddress ?? '0xfEEEF79d2A97d9e1f9bcB8eBA8FD9587079C9e99';
     final qrData = inv?.toWalletQrUri() ?? treasury;
 
     return Row(
@@ -610,23 +644,32 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
               Row(
                 children: [
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFF3BA2F).withOpacity(0.15),
+                      color: const Color(0xFFF3BA2F).withValues(alpha: 0.15),
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: const Text(
                       'BNB SMART CHAIN (BEP-20)',
-                      style: TextStyle(color: Color(0xFFF3BA2F), fontSize: 10, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          color: Color(0xFFF3BA2F),
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(width: 8),
-                  const Text('Direct Deposit Address', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w600)),
+                  const Text('Direct Deposit Address',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600)),
                 ],
               ),
               const SizedBox(height: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
                 decoration: BoxDecoration(
                   color: const Color(0xFF1E2333),
                   borderRadius: BorderRadius.circular(8),
@@ -645,9 +688,11 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.copy, size: 16, color: Color(0xFF3888FF)),
+                      icon: const Icon(Icons.copy,
+                          size: 16, color: Color(0xFF3888FF)),
                       tooltip: 'Copy Treasury Address',
-                      onPressed: () => _copyToClipboard(treasury, 'Treasury Address'),
+                      onPressed: () =>
+                          _copyToClipboard(treasury, 'Treasury Address'),
                     ),
                   ],
                 ),
@@ -655,21 +700,32 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  const Text('Token Contract: ', style: TextStyle(color: Color(0xFF6B7280), fontSize: 10)),
+                  const Text('Token Contract: ',
+                      style: TextStyle(color: Color(0xFF6B7280), fontSize: 10)),
                   SelectableText(
                     '${tokenContract.substring(0, 10)}...${tokenContract.substring(tokenContract.length - 8)}',
-                    style: const TextStyle(color: Color(0xFF93C5FD), fontSize: 10, fontFamily: 'monospace'),
+                    style: const TextStyle(
+                        color: Color(0xFF93C5FD),
+                        fontSize: 10,
+                        fontFamily: 'monospace'),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.copy, size: 12, color: Color(0xFF6B7280)),
+                    icon: const Icon(Icons.copy,
+                        size: 12, color: Color(0xFF6B7280)),
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints(),
-                    onPressed: () => _copyToClipboard(tokenContract, 'Contract Address'),
+                    onPressed: () =>
+                        _copyToClipboard(tokenContract, 'Contract Address'),
                   ),
                   const Spacer(),
-                  const Icon(Icons.verified, size: 14, color: Color(0xFF2ECC71)),
+                  const Icon(Icons.verified,
+                      size: 14, color: Color(0xFF2ECC71)),
                   const SizedBox(width: 4),
-                  const Text('Verified BEP-20', style: TextStyle(color: Color(0xFF2ECC71), fontSize: 10, fontWeight: FontWeight.bold)),
+                  const Text('Verified BEP-20',
+                      style: TextStyle(
+                          color: Color(0xFF2ECC71),
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold)),
                 ],
               ),
             ],
@@ -692,7 +748,10 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
         children: [
           const Text(
             'Already sent? Verify BSC Transaction Hash manually:',
-            style: TextStyle(color: Color(0xFFB0B7C3), fontSize: 12, fontWeight: FontWeight.w500),
+            style: TextStyle(
+                color: Color(0xFFB0B7C3),
+                fontSize: 12,
+                fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 8),
           Row(
@@ -700,13 +759,18 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
               Expanded(
                 child: TextField(
                   controller: _txHashController,
-                  style: const TextStyle(color: Colors.white, fontSize: 12, fontFamily: 'monospace'),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontFamily: 'monospace'),
                   decoration: InputDecoration(
                     hintText: 'Enter 0x... BSC Transaction Hash',
-                    hintStyle: const TextStyle(color: Color(0xFF4B5563), fontSize: 12),
+                    hintStyle:
+                        const TextStyle(color: Color(0xFF4B5563), fontSize: 12),
                     filled: true,
                     fillColor: const Color(0xFF13161F),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 10),
                     isDense: true,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
@@ -721,16 +785,25 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
               ),
               const SizedBox(width: 10),
               ElevatedButton(
-                onPressed: _isVerifyingManualTx ? null : _handleManualTxVerification,
+                onPressed:
+                    _isVerifyingManualTx ? null : _handleManualTxVerification,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF3888FF),
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
                 ),
                 child: _isVerifyingManualTx
-                    ? const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                    : const Text('Verify On-Chain', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                    ? const SizedBox(
+                        width: 14,
+                        height: 14,
+                        child: CircularProgressIndicator(
+                            strokeWidth: 2, color: Colors.white))
+                    : const Text('Verify On-Chain',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 12)),
               ),
             ],
           ),
@@ -760,12 +833,14 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
               color: Color(0xFF1B4332),
               shape: BoxShape.circle,
             ),
-            child: const Icon(Icons.check_circle_outline, color: Color(0xFF2ECC71), size: 42),
+            child: const Icon(Icons.check_circle_outline,
+                color: Color(0xFF2ECC71), size: 42),
           ),
           const SizedBox(height: 18),
           const Text(
             'Payment Confirmed on BSC!',
-            style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 6),
           Text(
@@ -784,10 +859,14 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildLicenseRow('License Key', license.licenseId),
-                _buildLicenseRow('Daily Quota', '${license.dailyLimit} verifications/day'),
-                _buildLicenseRow('Valid Until', '${license.expiresAt.toLocal()}'),
-                _buildLicenseRow('Settlement Tx', '${license.paymentTx.substring(0, 16)}...'),
-                _buildLicenseRow('Signature', '${license.signature.substring(0, 24)}... (Ed25519)'),
+                _buildLicenseRow(
+                    'Daily Quota', '${license.dailyLimit} verifications/day'),
+                _buildLicenseRow(
+                    'Valid Until', '${license.expiresAt.toLocal()}'),
+                _buildLicenseRow('Settlement Tx',
+                    '${license.paymentTx.substring(0, 16)}...'),
+                _buildLicenseRow('Signature',
+                    '${license.signature.substring(0, 24)}... (Ed25519)'),
               ],
             ),
           ),
@@ -804,7 +883,8 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.white,
                   side: const BorderSide(color: Color(0xFF3888FF)),
-                  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 18, vertical: 12),
                 ),
               ),
               const SizedBox(width: 16),
@@ -813,9 +893,11 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF2ECC71),
                   foregroundColor: Colors.black,
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 ),
-                child: const Text('Start Using CleanInbox Pro', style: TextStyle(fontWeight: FontWeight.bold)),
+                child: const Text('Start Using CleanInbox Pro',
+                    style: TextStyle(fontWeight: FontWeight.bold)),
               ),
             ],
           )
@@ -830,14 +912,18 @@ class _JwcCheckoutDialogState extends State<JwcCheckoutDialog> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: const TextStyle(color: Color(0xFF8F9BB3), fontSize: 12)),
+          Text(label,
+              style: const TextStyle(color: Color(0xFF8F9BB3), fontSize: 12)),
           SelectableText(
             value,
-            style: const TextStyle(color: Colors.white, fontSize: 12, fontFamily: 'monospace', fontWeight: FontWeight.w600),
+            style: const TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontFamily: 'monospace',
+                fontWeight: FontWeight.w600),
           ),
         ],
       ),
     );
   }
 }
-
