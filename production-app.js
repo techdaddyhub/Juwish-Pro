@@ -99,8 +99,8 @@ function getExchangeHtml() {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JuwishPro | Premier Cryptocurrency Exchange - Binance Grade</title>
-  <meta name="description" content="JuwishPro is a premier cryptocurrency exchange platform featuring Binance-grade trading, instant PancakeSwap JuwishCoin deposits, and multi-asset capabilities.">
+  <title>JuwishPro | Smart Trading Platform</title>
+  <meta name="description" content="JuwishPro is a premier cryptocurrency exchange platform featuring Smart Trading, instant PancakeSwap JuwishCoin deposits, and multi-asset capabilities.">
   <link rel="icon" href="/img/logo/logo.webp" type="image/webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -635,15 +635,31 @@ function getExchangeHtml() {
 <body>
 
   <!-- ============================================================
-       1. BINANCE ANIMATED SPLASH SCREEN
+       1. ANIMATED SPLASH SCREEN (SMART TRADING)
        ============================================================ -->
-  <div id="splash-screen">
+  <div id="splash-screen" onclick="dismissSplash()" title="Click to enter">
     <div class="splash-logo-container">
       <div class="splash-glow"></div>
-      <img src="/img/logo/logo.webp" alt="JuwishPro Logo" class="splash-logo" onerror="this.src='/img/logo/logo.png'">
+      <svg class="splash-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#FCD535" />
+            <stop offset="100%" stop-color="#F0B90B" />
+          </linearGradient>
+          <filter id="goldShadow" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#F0B90B" flood-opacity="0.6"/>
+          </filter>
+        </defs>
+        <path d="M50 6 L88 28 V72 L50 94 L12 72 V28 Z" fill="#181A20" stroke="url(#goldGrad)" stroke-width="4" filter="url(#goldShadow)" />
+        <path d="M50 20 L72 35 V65 L50 80 L28 65 V35 Z" fill="rgba(240,185,11,0.08)" stroke="url(#goldGrad)" stroke-width="2" />
+        <rect x="46" y="28" width="8" height="28" rx="4" fill="url(#goldGrad)" />
+        <rect x="36" y="38" width="8" height="18" rx="4" fill="url(#goldGrad)" opacity="0.8" />
+        <rect x="56" y="44" width="8" height="22" rx="4" fill="url(#goldGrad)" opacity="0.9" />
+        <circle cx="50" cy="50" r="4" fill="#FFFFFF" />
+      </svg>
     </div>
     <div class="splash-title">Juwish<span>Pro</span></div>
-    <div class="splash-tagline">Binance-Grade Trading Experience</div>
+    <div class="splash-tagline">SMART TRADING</div>
     <div class="splash-progress-track">
       <div class="splash-progress-bar" id="splash-progress"></div>
     </div>
@@ -655,7 +671,12 @@ function getExchangeHtml() {
   <header>
     <div class="nav-left">
       <a href="/" class="brand">
-        <img src="/img/logo/logo.webp" alt="Logo" onerror="this.src='/img/logo/logo.png'">
+        <svg style="width:34px; height:34px;" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M50 6 L88 28 V72 L50 94 L12 72 V28 Z" fill="#181A20" stroke="#F0B90B" stroke-width="4" />
+          <rect x="46" y="28" width="8" height="28" rx="4" fill="#F0B90B" />
+          <rect x="36" y="38" width="8" height="18" rx="4" fill="#F0B90B" opacity="0.8" />
+          <rect x="56" y="44" width="8" height="22" rx="4" fill="#F0B90B" opacity="0.9" />
+        </svg>
         <div>Juwish<span>Pro</span></div>
       </a>
       <ul class="nav-links">
@@ -735,7 +756,7 @@ function getExchangeHtml() {
         <button class="chart-btn">4h</button>
         <button class="chart-btn">1D</button>
         <span style="margin-left: auto; font-size: 11px; color: var(--binance-text-muted);">
-          Binance Engine v6.3.9 • MariaDB Connected
+          Smart Trading Engine v6.3.9 • MariaDB Connected
         </span>
       </div>
       <div class="chart-container">
@@ -829,7 +850,7 @@ function getExchangeHtml() {
           <div class="jwc-badge-icon">💎</div>
           <div>
             <div style="font-weight:700; font-size:16px; color:#fff;">JuwishCoin (JWC)</div>
-            <div style="font-size:12px; color:var(--binance-text-secondary);">Binance Smart Chain (BEP-20) • 18 Decimals</div>
+            <div style="font-size:12px; color:var(--binance-text-secondary);">BNB Smart Chain (BEP-20) • 18 Decimals</div>
             <div style="font-size:11px; color:var(--binance-green); margin-top:4px;">● Live Liquidity Verified on PancakeSwap v3</div>
           </div>
         </div>
@@ -851,7 +872,7 @@ function getExchangeHtml() {
           </div>
           <div class="step-item">
             <div class="step-num">2</div>
-            <div>Swap your BNB or USDT for JWC on Binance Smart Chain.</div>
+            <div>Swap your BNB or USDT for JWC on BNB Smart Chain.</div>
           </div>
           <div class="step-item">
             <div class="step-num">3</div>
@@ -884,7 +905,7 @@ function getExchangeHtml() {
       </div>
       <div class="modal-body">
         <div style="font-size:13px; color:var(--binance-text-secondary); line-height:1.5;">
-          Download native high-performance applications built with Flutter 3.x with zero latency and full Binance dark styling:
+          Download native high-performance applications built with Flutter 3.x with zero latency and full Smart Trading Pro dark styling:
         </div>
 
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
@@ -924,22 +945,34 @@ function getExchangeHtml() {
 
   <!-- Interactive Logic -->
   <script>
-    // Splash screen animation
-    window.addEventListener('load', () => {
+    // Dismiss Splash Screen Safely & Immediately
+    function dismissSplash() {
+      const splash = document.getElementById('splash-screen');
+      if (splash && splash.style.display !== 'none') {
+        splash.style.transition = 'opacity 0.3s ease, visibility 0.3s';
+        splash.style.opacity = '0';
+        setTimeout(() => {
+          splash.style.display = 'none';
+        }, 300);
+      }
+    }
+
+    // Auto-progress immediately without blocking or waiting for window.load
+    (function initSplash() {
       const bar = document.getElementById('splash-progress');
       let p = 0;
-      const interval = setInterval(() => {
-        p += 5;
-        if (bar) bar.style.width = p + '%';
+      const timer = setInterval(() => {
+        p += 20;
+        if (bar) bar.style.width = Math.min(100, p) + '%';
         if (p >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
-            const splash = document.getElementById('splash-screen');
-            if (splash) splash.classList.add('hidden');
-          }, 300);
+          clearInterval(timer);
+          setTimeout(dismissSplash, 150);
         }
-      }, 25);
-    });
+      }, 30);
+
+      // Failsafe: force remove after 600ms under all conditions
+      setTimeout(dismissSplash, 600);
+    })();
 
     const JWC_CONTRACT = "${JWC_CONTRACT}";
     const tickers = ${JSON.stringify(tickers)};
@@ -1174,7 +1207,7 @@ const server = http.createServer(async (req, res) => {
       bep20: {
         token: 'JWC',
         contract: JWC_CONTRACT,
-        network: 'Binance Smart Chain (BSC)',
+        network: 'BNB Smart Chain (BSC)',
         chainId: 56,
         pancakeSwapUrl: PANCAKESWAP_URL
       },
@@ -1238,3 +1271,4 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, () => {
   console.log(`🚀 JuwishPro Live Production Server listening on port ${PORT}`);
 });
+
