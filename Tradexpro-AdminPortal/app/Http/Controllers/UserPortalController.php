@@ -44,3 +44,4 @@ class UserPortalController extends Controller
         return view('user_portal.index', $data);
     }
 }
+

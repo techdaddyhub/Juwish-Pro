@@ -1,0 +1,18 @@
+# Environment & OS
+.env
+.DS_Store
+Thumbs.db
+
+# Dependencies & Builds
+node_modules/
+vendor/
+.dart_tool/
+build/
+*.tar.gz
+*.zip
+*.log
+
+# IDE & Editor
+.idea/
+.vscode/
+*.iml

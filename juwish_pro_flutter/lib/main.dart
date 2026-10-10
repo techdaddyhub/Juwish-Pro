@@ -45,11 +45,31 @@ class _JuwishProDashboardScreenState extends State<JuwishProDashboardScreen> {
   static const String pancakeSwapUrl =
       'https://pancakeswap.finance/swap?outputCurrency=$jwcContract&chainId=56';
 
+  double _userJwcBalance = 0.00;
+
   Future<void> _launchUrl(String url) async {
     final uri = Uri.parse(url);
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       debugPrint('Could not launch $url');
     }
+  }
+
+  void _openJwcCheckout(BuildContext context) {
+    JwcCheckoutDialog.show(
+      context,
+      onDepositConfirmed: (double amount) {
+        setState(() {
+          _userJwcBalance += amount;
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: const Color(0xFF0ECB81),
+            content: Text(
+                'Credited ${amount.toStringAsFixed(2)} JWC to your balance!'),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -85,14 +105,40 @@ class _JuwishProDashboardScreenState extends State<JuwishProDashboardScreen> {
           ],
         ),
         actions: [
+          // Balance pill in AppBar
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: const Color(0xFF2B313A),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0x4DF0B90B)),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.account_balance_wallet,
+                    size: 14, color: Color(0xFFF0B90B)),
+                const SizedBox(width: 6),
+                Text(
+                  '${_userJwcBalance.toStringAsFixed(2)} JWC',
+                  style: const TextStyle(
+                    color: Color(0xFFF0B90B),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                    fontFamily: 'monospace',
+                  ),
+                ),
+              ],
+            ),
+          ),
           TextButton.icon(
             onPressed: () => _launchUrl(webExchangeUrl),
             icon: const Icon(Icons.open_in_browser,
                 color: Color(0xFFF0B90B), size: 18),
-            label: const Text('Open 2026.dmillers.org',
+            label: const Text('2026.dmillers.org',
                 style: TextStyle(color: Color(0xFFF0B90B))),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 8),
         ],
       ),
       body: SingleChildScrollView(
@@ -129,7 +175,7 @@ class _JuwishProDashboardScreenState extends State<JuwishProDashboardScreen> {
                         ),
                         const SizedBox(height: 8),
                         const Text(
-                          'Seamless multi-platform trading for Android, Windows, macOS, and Linux powered by JuwishCoin (JWC) and BNB Smart Chain.',
+                          'Institutional-grade digital asset exchange and automated PancakeSwap settlement engine on BNB Smart Chain.',
                           style:
                               TextStyle(fontSize: 14, color: Color(0xFF848E9C)),
                         ),
@@ -142,7 +188,7 @@ class _JuwishProDashboardScreenState extends State<JuwishProDashboardScreen> {
                               onPressed: () => _openJwcCheckout(context),
                               icon: const Icon(Icons.account_balance_wallet,
                                   color: Color(0xFF181A20)),
-                              label: const Text('Deposit / Pay JWC'),
+                              label: const Text('Buy / Deposit JWC'),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFFF0B90B),
                                 foregroundColor: const Color(0xFF181A20),
@@ -171,7 +217,7 @@ class _JuwishProDashboardScreenState extends State<JuwishProDashboardScreen> {
                               onPressed: () => _launchUrl(webExchangeUrl),
                               icon: const Icon(Icons.language,
                                   color: Color(0xFFEAECEF)),
-                              label: const Text('Launch Web Exchange'),
+                              label: const Text('Launch Web Portal'),
                               style: OutlinedButton.styleFrom(
                                 foregroundColor: const Color(0xFFEAECEF),
                                 side:
@@ -192,7 +238,88 @@ class _JuwishProDashboardScreenState extends State<JuwishProDashboardScreen> {
             ),
             const SizedBox(height: 24),
 
-            // JuwishCoin (JWC) Info Card
+            // Live Markets Table
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: const Color(0xFF181A20),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: const Color(0xFF2B313A)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      const Icon(Icons.candlestick_chart,
+                          color: Color(0xFFF0B90B), size: 20),
+                      const SizedBox(width: 8),
+                      const Text(
+                        'Spot Markets Overview',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFEAECEF),
+                        ),
+                      ),
+                      const Spacer(),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: const Color(0x260ECB81),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: const Text('Zero Fees on JWC Pairs',
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Color(0xFF0ECB81),
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+                  ),
+                  const Divider(color: Color(0xFF2B313A), height: 24),
+                  _buildMarketRow(
+                    symbol: 'JWC / USDT',
+                    name: 'JuwishCoin (BEP-20)',
+                    price: '\$0.0500',
+                    change: '+14.80%',
+                    isUp: true,
+                    onTap: () => _openJwcCheckout(context),
+                  ),
+                  const Divider(color: Color(0xFF2B313A), height: 16),
+                  _buildMarketRow(
+                    symbol: 'BTC / USDT',
+                    name: 'Bitcoin',
+                    price: '\$64,320.50',
+                    change: '+3.42%',
+                    isUp: true,
+                    onTap: () => _launchUrl('$webExchangeUrl/exchange'),
+                  ),
+                  const Divider(color: Color(0xFF2B313A), height: 16),
+                  _buildMarketRow(
+                    symbol: 'ETH / USDT',
+                    name: 'Ethereum',
+                    price: '\$3,450.20',
+                    change: '+2.15%',
+                    isUp: true,
+                    onTap: () => _launchUrl('$webExchangeUrl/exchange'),
+                  ),
+                  const Divider(color: Color(0xFF2B313A), height: 16),
+                  _buildMarketRow(
+                    symbol: 'BNB / USDT',
+                    name: 'BNB Smart Chain',
+                    price: '\$586.40',
+                    change: '+1.80%',
+                    isUp: true,
+                    onTap: () => _launchUrl('$webExchangeUrl/exchange'),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // JuwishCoin (JWC) Specs Card
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -209,11 +336,12 @@ class _JuwishProDashboardScreenState extends State<JuwishProDashboardScreen> {
                           color: Color(0xFF0ECB81), size: 20),
                       const SizedBox(width: 8),
                       const Text(
-                        'JuwishCoin (JWC) BSC Token Specs',
+                        'JuwishCoin (JWC) Token Specifications',
                         style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFFEAECEF)),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFFEAECEF),
+                        ),
                       ),
                       const Spacer(),
                       Container(
@@ -223,7 +351,7 @@ class _JuwishProDashboardScreenState extends State<JuwishProDashboardScreen> {
                           color: const Color(0xFF2B313A),
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: const Text('BNB Smart Chain (BEP-20)',
+                        child: const Text('Chain ID 56',
                             style: TextStyle(
                                 fontSize: 12, color: Color(0xFFF0B90B))),
                       ),
@@ -236,14 +364,15 @@ class _JuwishProDashboardScreenState extends State<JuwishProDashboardScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Contract Address',
+                            Text('BEP-20 Contract Address',
                                 style: TextStyle(
                                     color: Color(0xFF848E9C), fontSize: 12)),
                             SizedBox(height: 4),
                             SelectableText(jwcContract,
                                 style: TextStyle(
-                                    color: Color(0xFFEAECEF),
-                                    fontFamily: 'monospace')),
+                                    color: Color(0xFFF0B90B),
+                                    fontFamily: 'monospace',
+                                    fontWeight: FontWeight.bold)),
                           ],
                         ),
                       ),
@@ -258,7 +387,60 @@ class _JuwishProDashboardScreenState extends State<JuwishProDashboardScreen> {
     );
   }
 
-  void _openJwcCheckout(BuildContext context) {
-    JwcCheckoutDialog.show(context);
+  Widget _buildMarketRow({
+    required String symbol,
+    required String name,
+    required String price,
+    required String change,
+    required bool isUp,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        child: Row(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(symbol,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: Color(0xFFEAECEF))),
+                Text(name,
+                    style: const TextStyle(
+                        fontSize: 11, color: Color(0xFF848E9C))),
+              ],
+            ),
+            const Spacer(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(price,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'monospace',
+                        fontSize: 14,
+                        color: Color(0xFFEAECEF))),
+                Text(change,
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: 'monospace',
+                        fontWeight: FontWeight.w600,
+                        color: isUp
+                            ? const Color(0xFF0ECB81)
+                            : const Color(0xFFF6465D))),
+              ],
+            ),
+            const SizedBox(width: 12),
+            const Icon(Icons.arrow_forward_ios,
+                size: 12, color: Color(0xFF5E6673)),
+          ],
+        ),
+      ),
+    );
   }
 }

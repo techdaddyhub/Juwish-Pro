@@ -36,9 +36,6 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Create Platform Scaffolding
-        run: flutter create . --org org.dmillers.juwishpro --project-name juwish_pro --platforms=android
-
       - name: Get Dependencies
         run: flutter pub get
 
@@ -74,9 +71,6 @@ jobs:
 
       - name: Enable Windows Desktop
         run: flutter config --enable-windows-desktop
-
-      - name: Create Platform Scaffolding
-        run: flutter create . --org org.dmillers.juwishpro --project-name juwish_pro --platforms=windows
 
       - name: Get Dependencies
         run: flutter pub get
@@ -119,14 +113,11 @@ jobs:
       - name: Enable macOS Desktop
         run: flutter config --enable-macos-desktop
 
-      - name: Create Platform Scaffolding
-        run: flutter create . --org org.dmillers.juwishpro --project-name juwish_pro --platforms=macos
-
       - name: Get Dependencies
         run: flutter pub get
 
       - name: Build macOS App
-        run: flutter build macos --release
+        run: flutter build macos --release --no-codesign
 
       - name: Package macOS App
         run: |
@@ -167,9 +158,6 @@ jobs:
 
       - name: Enable Linux Desktop
         run: flutter config --enable-linux-desktop
-
-      - name: Create Platform Scaffolding
-        run: flutter create . --org org.dmillers.juwishpro --project-name juwish_pro --platforms=linux
 
       - name: Get Dependencies
         run: flutter pub get

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/checkout_order.dart';
 
-/// CleanInbox Pro - Blockchain Transaction Progress Stepper
+/// JuwishPro - Blockchain Transaction Progress Stepper
 class TransactionStatusStepper extends StatelessWidget {
   final PaymentStatus status;
   final int currentConfirmations;
