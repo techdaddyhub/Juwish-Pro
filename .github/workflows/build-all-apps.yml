@@ -8,6 +8,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   # -------------------------------------------------------------
@@ -216,3 +218,32 @@ jobs:
           name: JuwishPro-UserPortal-Build
           path: Tradexpro-UserPortal/.next
           if-no-files-found: warn
+
+  # -------------------------------------------------------------
+  # 6. DEPLOY USER PORTAL TO GITHUB PAGES
+  # -------------------------------------------------------------
+  deploy-user-portal-pages:
+    name: Deploy User Portal to GitHub Pages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: Deploy to gh-pages Branch
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          keep_files: false
