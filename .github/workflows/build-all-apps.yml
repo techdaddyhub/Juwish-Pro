@@ -229,21 +229,26 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
       - name: Deploy to gh-pages Branch
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./docs
           keep_files: false
+          force_orphan: true
+
+      - name: Setup Pages (Optional)
+        id: pages_setup
+        continue-on-error: true
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages Artifact
+        if: steps.pages_setup.outcome == 'success'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        if: steps.pages_setup.outcome == 'success'
+        id: deployment
+        uses: actions/deploy-pages@v4
