@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../../core/utils/formatters.dart';
-import '../../../core/utils/validators.dart';
 import '../../../theme/app_theme.dart';
 import '../../blocs/wallet_bloc.dart';
 
@@ -16,7 +14,7 @@ class WithdrawalScreen extends StatefulWidget {
 
 class _WithdrawalScreenState extends State<WithdrawalScreen> {
   String _selectedAsset = 'JWC';
-  String _selectedNetwork = 'BSC (BEP-20)';
+  final String _selectedNetwork = 'BSC (BEP-20)';
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _amountController =
       TextEditingController(text: '500');

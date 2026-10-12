@@ -424,7 +424,7 @@ class _FuturesTradingScreenState extends State<FuturesTradingScreen> {
                         ),
                         onPressed: () => _executeOrder(activeTicker.price),
                         child: Text(
-                          'Open ${_side.name.toUpperCase()} ${_selectedPair} (${_leverage}x)',
+                          'Open ${_side.name.toUpperCase()} $_selectedPair (${_leverage}x)',
                           style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),

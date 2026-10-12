@@ -12,7 +12,7 @@ class MarginTradingScreen extends StatefulWidget {
 
 class _MarginTradingScreenState extends State<MarginTradingScreen> {
   bool _isCrossMargin = true;
-  double _collateralUsd = 25000.0;
+  final double _collateralUsd = 25000.0;
   double _borrowedUsd = 8500.0;
   final TextEditingController _borrowController =
       TextEditingController(text: '1000');

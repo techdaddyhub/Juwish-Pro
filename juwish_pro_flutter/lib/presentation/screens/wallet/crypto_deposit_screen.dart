@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import '../../../core/utils/formatters.dart';
 import '../../../theme/app_theme.dart';
 import '../../blocs/wallet_bloc.dart';
 
