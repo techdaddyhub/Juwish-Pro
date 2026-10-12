@@ -20,6 +20,13 @@ class AppTheme {
   static const Color greenGlow = Color(0x260ECB81);
   static const Color redGlow = Color(0x26F6465D);
 
+  // Semantic & Platform Aliases
+  static const Color backgroundDark = nightObsidian;
+  static const Color surfaceDark = surfaceCharcoal;
+  static const Color cardDark = cardElevated;
+  static const Color gainGreen = greenBullish;
+  static const Color lossRed = redBearish;
+
   // Typography Colors
   static const Color textPrimary = Color(0xFFEAECEF); // Crisp white
   static const Color textSecondary = Color(0xFF848E9C); // Cool muted grey
