@@ -3,11 +3,16 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'theme/app_theme.dart';
 import 'models/market_pair.dart';
+import 'models/user_account.dart';
 import 'views/home_tab.dart';
 import 'views/markets_tab.dart';
 import 'views/trade_tab.dart';
+import 'views/futures_view.dart';
+import 'views/capital_instruments_view.dart';
 import 'views/vault_tab.dart';
 import 'views/wallet_tab.dart';
+import 'views/funding_view.dart';
+import 'views/auth_view.dart';
 import 'widgets/jwc_checkout_dialog.dart';
 
 void main() {
@@ -49,6 +54,7 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
   int _currentIndex = 0;
   double _jwcBalance = 2500.00;
   MarketPair? _selectedTradingPair;
+  UserAccount _currentUser = UserAccount.mockAdmin();
 
   static const String webExchangeUrl = 'https://2026.dmillers.org';
 
@@ -112,14 +118,16 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
             jwcBalance: _jwcBalance,
             onBalanceUpdated: (newBal) => setState(() => _jwcBalance = newBal),
           ),
+          const FuturesView(),
+          const CapitalInstrumentsView(),
           VaultTab(
             jwcBalance: _jwcBalance,
             onBalanceUpdated: (newBal) => setState(() => _jwcBalance = newBal),
           ),
-          WalletTab(
-            jwcBalance: _jwcBalance,
-            onDepositTap: () => _openDepositDialog(context),
-            onBalanceUpdated: (newBal) => setState(() => _jwcBalance = newBal),
+          const FundingView(),
+          AuthView(
+            currentUser: _currentUser,
+            onUserUpdated: (u) => setState(() => _currentUser = u),
           ),
         ];
 
@@ -161,6 +169,28 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
               ],
             ),
             actions: [
+              // Quick action: Futures & Margin
+              IconButton(
+                tooltip: 'Futures & Margin Trading',
+                icon: Icon(
+                  Icons.stacked_line_chart,
+                  color: _currentIndex == 3 ? AppTheme.gold : AppTheme.textSecondary,
+                  size: 20,
+                ),
+                onPressed: () => _onTabSelected(3),
+              ),
+
+              // Quick action: Stocks & Capital Assets
+              IconButton(
+                tooltip: 'Stocks, ETFs & Bonds',
+                icon: Icon(
+                  Icons.domain,
+                  color: _currentIndex == 4 ? AppTheme.gold : AppTheme.textSecondary,
+                  size: 20,
+                ),
+                onPressed: () => _onTabSelected(4),
+              ),
+
               // JWC Balance chip
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
@@ -187,11 +217,22 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
                   ],
                 ),
               ),
-              const SizedBox(width: 6),
+              const SizedBox(width: 4),
+
+              // User Profile & KYC
+              IconButton(
+                tooltip: 'Profile & KYC Status',
+                icon: Icon(
+                  Icons.account_circle,
+                  color: _currentIndex == 7 ? AppTheme.gold : AppTheme.textSecondary,
+                  size: 22,
+                ),
+                onPressed: () => _onTabSelected(7),
+              ),
 
               // Web Portal Link
               IconButton(
-                tooltip: 'Launch Web Portal',
+                tooltip: '2026.dmillers.org Live Portal',
                 icon: const Icon(Icons.language,
                     color: AppTheme.textSecondary, size: 20),
                 onPressed: _launchWebPortal,
@@ -202,7 +243,7 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
           body: isWide
               ? Row(
                   children: [
-                    // Navigation Rail for Tablet / Desktop
+                    // Navigation Rail for Tablet / Desktop (Full 8 Modules)
                     NavigationRail(
                       backgroundColor: AppTheme.surfaceCharcoal,
                       selectedIndex: _currentIndex,
@@ -236,6 +277,16 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
                           label: Text('Trade'),
                         ),
                         NavigationRailDestination(
+                          icon: Icon(Icons.stacked_line_chart_outlined),
+                          selectedIcon: Icon(Icons.stacked_line_chart),
+                          label: Text('Futures'),
+                        ),
+                        NavigationRailDestination(
+                          icon: Icon(Icons.domain_outlined),
+                          selectedIcon: Icon(Icons.domain),
+                          label: Text('Assets'),
+                        ),
+                        NavigationRailDestination(
                           icon: Icon(Icons.account_balance_outlined),
                           selectedIcon: Icon(Icons.account_balance),
                           label: Text('Vault'),
@@ -243,7 +294,12 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
                         NavigationRailDestination(
                           icon: Icon(Icons.account_balance_wallet_outlined),
                           selectedIcon: Icon(Icons.account_balance_wallet),
-                          label: Text('Wallet'),
+                          label: Text('Funding'),
+                        ),
+                        NavigationRailDestination(
+                          icon: Icon(Icons.person_outline),
+                          selectedIcon: Icon(Icons.person),
+                          label: Text('Profile'),
                         ),
                       ],
                     ),
@@ -271,7 +327,7 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
           bottomNavigationBar: isWide
               ? null
               : BottomNavigationBar(
-                  currentIndex: _currentIndex,
+                  currentIndex: _currentIndex > 4 ? 4 : _currentIndex,
                   onTap: _onTabSelected,
                   items: const [
                     BottomNavigationBarItem(
