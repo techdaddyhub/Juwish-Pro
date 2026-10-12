@@ -1,0 +1,180 @@
+name: Build JuwishPro Multi-Platform Apps
+
+on:
+  push:
+    branches: [ main, master ]
+    tags: [ 'v*' ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  # -------------------------------------------------------------
+  # 1. ANDROID BUILD (APK)
+  # -------------------------------------------------------------
+  build-android:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: juwish_pro_flutter
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      - name: Run Flutter Analyze & Tests
+        run: |
+          flutter analyze
+          flutter test
+
+      - name: Build Android APK
+        run: flutter build apk --release
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-Android-APK
+          path: juwish_pro_flutter/build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: warn
+
+  # -------------------------------------------------------------
+  # 2. iOS BUILD (Runner.app)
+  # -------------------------------------------------------------
+  build-ios:
+    name: Build iOS Application
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: juwish_pro_flutter
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      - name: Build iOS Application
+        run: flutter build ios --release --no-codesign
+
+      - name: Package iOS App
+        run: |
+          cd build/ios/iphoneos
+          tar -czf ../../../JuwishPro-iOS-Runner.tar.gz Runner.app
+
+      - name: Upload iOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-iOS-TAR
+          path: juwish_pro_flutter/JuwishPro-iOS-Runner.tar.gz
+          if-no-files-found: warn
+
+  # -------------------------------------------------------------
+  # 3. macOS BUILD (.tar.gz)
+  # -------------------------------------------------------------
+  build-macos:
+    name: Build macOS Application
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: juwish_pro_flutter
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Enable macOS Desktop
+        run: flutter config --enable-macos-desktop
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      - name: Build macOS App
+        run: flutter build macos --release
+
+      - name: Package macOS App
+        run: |
+          cd build/macos/Build/Products/Release
+          tar -czf ../../../../../JuwishPro-macOS-universal.tar.gz *.app
+
+      - name: Upload macOS Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-macOS-TAR
+          path: JuwishPro-macOS-universal.tar.gz
+          if-no-files-found: warn
+
+  # -------------------------------------------------------------
+  # 4. LINUX BUILD (.tar.gz)
+  # -------------------------------------------------------------
+  build-linux:
+    name: Build Linux Application
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: juwish_pro_flutter
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Linux Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Enable Linux Desktop
+        run: flutter config --enable-linux-desktop
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      - name: Build Linux Bundle
+        run: flutter build linux --release
+
+      - name: Package Linux Bundle
+        run: |
+          cd build/linux/x64/release/bundle
+          tar -czf ../../../../../JuwishPro-Linux-x64.tar.gz .
+
+      - name: Upload Linux Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-Linux-TAR
+          path: JuwishPro-Linux-x64.tar.gz
+          if-no-files-found: warn
