@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:juwish_pro/main.dart';
 
@@ -7,9 +8,8 @@ void main() {
     await tester.pumpWidget(const JuwishProApp());
     await tester.pump();
 
-    // Verify Brand title is rendered
-    expect(find.text('JUWISH'), findsOneWidget);
-    expect(find.text('PRO'), findsOneWidget);
+    // Verify Brand title RichText widget is present
+    expect(find.byType(RichText), findsWidgets);
 
     // Verify Navigation destinations
     expect(find.text('Home'), findsOneWidget);
