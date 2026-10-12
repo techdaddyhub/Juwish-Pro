@@ -344,7 +344,7 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                           height: 28,
                           child: SparklineChart(
                             data: item.sparkline,
-                            lineColor: item.isPositive ? AppTheme.gainGreen : AppTheme.lossRed,
+                            color: item.isPositive ? AppTheme.gainGreen : AppTheme.lossRed,
                           ),
                         ),
                         const SizedBox(width: 12),

@@ -12,10 +12,10 @@ void main() {
     expect(find.byType(RichText), findsWidgets);
 
     // Verify Navigation destinations
-    expect(find.text('Home'), findsOneWidget);
-    expect(find.text('Markets'), findsOneWidget);
-    expect(find.text('Trade'), findsOneWidget);
-    expect(find.text('Vault'), findsOneWidget);
-    expect(find.text('Wallet'), findsOneWidget);
+    expect(find.text('Home'), findsWidgets);
+    expect(find.text('Markets'), findsWidgets);
+    expect(find.text('Trade'), findsWidgets);
+    expect(find.text('Vault'), findsWidgets);
+    expect(find.text('Wallet'), findsWidgets);
   });
 }

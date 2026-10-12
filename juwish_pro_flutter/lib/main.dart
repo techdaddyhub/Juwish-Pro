@@ -10,7 +10,6 @@ import 'views/trade_tab.dart';
 import 'views/futures_view.dart';
 import 'views/capital_instruments_view.dart';
 import 'views/vault_tab.dart';
-import 'views/wallet_tab.dart';
 import 'views/funding_view.dart';
 import 'views/auth_view.dart';
 import 'widgets/jwc_checkout_dialog.dart';

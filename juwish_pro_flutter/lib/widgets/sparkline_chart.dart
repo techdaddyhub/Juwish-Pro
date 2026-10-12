@@ -11,11 +11,12 @@ class SparklineChart extends StatelessWidget {
   const SparklineChart({
     super.key,
     required this.data,
-    required this.color,
+    Color? color,
+    Color? lineColor,
     this.width = 72,
     this.height = 28,
     this.showGradient = true,
-  });
+  }) : color = color ?? lineColor ?? const Color(0xFFF0B90B);
 
   @override
   Widget build(BuildContext context) {

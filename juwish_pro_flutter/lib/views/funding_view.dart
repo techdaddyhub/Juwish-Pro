@@ -15,10 +15,10 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
   final LaravelApiService _api = LaravelApiService();
 
   String _selectedDepositAsset = 'JWC';
-  String _selectedDepositNetwork = 'BNB Smart Chain (BEP20)';
+  final String _selectedDepositNetwork = 'BNB Smart Chain (BEP20)';
   final String _depositAddress = '0x71C84949b99682e7075A0c49A4C0513903d6511a';
 
-  String _selectedWithdrawAsset = 'JWC';
+  final String _selectedWithdrawAsset = 'JWC';
   final TextEditingController _withdrawAddress = TextEditingController();
   final TextEditingController _withdrawAmount = TextEditingController(text: '5000');
   bool _isWithdrawing = false;
