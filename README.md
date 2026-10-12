@@ -1,76 +1,55 @@
-# Lozand - HYIP Investment, Forex, Stock and Crypto trading platform PHP Script
+# JuwishPro - Institutional Crypto & Multi-Asset Trading Platform
 
-![Lozand Cover](https://lozand.com/assets/images/lozand-cover-image.png)
+<p align="center">
+  <img src="public/assets/images/logo-rectangle.png" alt="JuwishPro Logo" width="480">
+</p>
 
-## About the Software
-Lozand is a powerful, self-hosted PHP and Laravel-based software solution for building modern Forex, cryptocurrency, stock trading, and multi-asset investment platforms. It features advanced automation, portfolio management, and secure trading infrastructure designed for high-performance financial applications.
+<p align="center">
+  <strong>Decentralized Financial Ecosystem | Powered by JuwishCoin (JWC) | Binance High-Contrast Theme</strong>
+</p>
 
+---
 
-## Core Features
-1. **Investment**
-2. **Crypto Futures Trading**
-3. **Forex Trading**
-4. **Crypto Margin Trading**
-5. **Stock Trading**
-6. **ETF Trading**
-7. **Bonds Trading**
-8. **Loan**
-9. **Trading Bot**
-10. **P2P Transfer**
-11. **File Manager**
-12. **KYC**
-13. **White Label**
-14. **One-Click Installer**
-15. **OTP System**
-16. **Antispam System**
-17. **Multi-Level Referral**
-18. **Automated & Manual Deposits**
-19. **Automated & Manual Withdrawals**
-20. **Built-in Code Editor**
-21. **Multi-Template Engine**
-22. **Multi-Lingual Support**
+## 🌟 About JuwishPro
 
+**JuwishPro** is a razor-sharp, institutional-grade cryptocurrency, forex, stock, and multi-asset investment trading platform. Built with Binance-level speed, high-contrast dark obsidian (`#0B0E11`) and signature gold (`#F0B90B`) aesthetics, and rich Jewish financial heritage branding featuring the Star of David (*Magen David*) and native **JuwishCoin (`JWC`)**.
 
+### ✡ Visual Identity & Currency
+- **Native Ecosystem Currency**: **JuwishCoin (`JWC`)** with sub-second settlement and zero transaction fees.
+- **Brand Emblem**: 3D Golden Star of David medallion with 12 tribe validator nodes and center "J" monogram.
+- **Color Palette**: Ultra-sharp Binance Night Obsidian (`#0B0E11`), Charcoal (`#181A20`), Radiant Gold (`#F0B90B`), Green (`#0ECB81`), Red (`#F6465D`), and Crisp White (`#EAECEF`).
 
-## Demo
-Experience the Lozand Ecosystem through our authorized sandbox environment. Choose an entry point to explore our high-performance trading platform:
+---
 
-- **Main Demo Portal**: [https://lozand.com/demo](https://lozand.com/demo)
+## 🚀 Core Features
 
+1. **JuwishCoin (JWC) Staking Vault**: 14.5% fixed APY compounding yield with on-chain transparency.
+2. **Crypto Futures & Spot Trading**: Binance-grade order matching engine supporting top crypto pairs and JWC pairs.
+3. **Forex & Commodity Markets**: Ultra-low spread institutional liquidity.
+4. **Stocks, ETFs & Bonds**: Multi-asset portfolio diversification.
+5. **Cold Storage Security**: Multi-sig security vaults with 100% asset reserve backing.
+6. **Automated & Manual Payments**: Integrated crypto gateways and direct bank transfer mechanisms.
+7. **cPanel Ready**: Pre-configured for shared hosting and dedicated server environments (`2026.dmillers.org`).
 
-## Documentation
-Access the official technical documentation for installation, configuration, and scaling guides:
-- **Docs**: [https://lozand.com/docs](https://lozand.com/docs)
+---
 
 ## 🛠 Tech Stack
-- **Backend**: Laravel 12.x (PHP 8.3+)
-- **Frontend**: Vite, TailwindCSS (via Bento Theme), Alpine.js / jQuery
-- **Database**: MySQL / MariaDB (UTF8MB4 support enabled)
-- **Deployment**: Shared hosting, VPS, or dedicated server.
 
-## 🚀 Custom Development
-1. **Polymarket Bot**
-   - Gasless Transactions (Builder Program)
-   - Live WebSocket Orderbook Updates
-   - BTC/ETH/SOL/XRP 15-Min Markets
-   - Flash Crash Volatility Strategy
-2. **Crypto Trading Engine**
-   - Aggregated Liquidity
-   - Futures & Options
-   - Real-time Balancing
-3. **Forex Engine**
-   - LP Bridge
-   - Risk Management
-   - Connectivity Hub
-4. **Stock & ETF Engine**
-   - Global OMS
-   - Brokerage Integration
-   - Deep Compliance
-5. **Custom APP Development**
-   - iOS/Android
-   - Custom UI/UX
-   - Full Integration
-6. **Blockchain & Web3 Development**
-   - Smart Contracts
-   - Web3 Wallets
-   - DeFi Protocols
+- **Backend**: Laravel 12.x (PHP 8.2+)
+- **Frontend**: TailwindCSS Bento Theme, Alpine.js, Chart.js
+- **Assets**: Vite & Compiled High-Contrast Production CSS/JS Bundles
+- **Database**: MySQL 8.0+ / MariaDB (utf8mb4)
+- **Deployment**: cPanel & LiteSpeed Web Server
+
+---
+
+## 🌐 Live Deployment
+
+- **Production Portal**: [https://2026.dmillers.org](https://2026.dmillers.org)
+- **Automated Initializer**: [https://2026.dmillers.org/cpanel-setup.php](https://2026.dmillers.org/cpanel-setup.php)
+- **System Installer**: [https://2026.dmillers.org/install/index.php](https://2026.dmillers.org/install/index.php)
+
+---
+
+## 📄 License & Ownership
+Copyright © 2026 JuwishPro LLC. All rights reserved.
