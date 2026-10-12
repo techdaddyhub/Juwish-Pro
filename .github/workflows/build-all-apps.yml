@@ -23,6 +23,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Pillow
+        run: pip install Pillow
+
+      - name: Generate JuwishPro Icons
+        run: python scripts/generate_app_icons.py
+
       - name: Set up Java
         uses: actions/setup-java@v5
         with:
@@ -67,12 +78,26 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Pillow
+        run: pip install Pillow
+
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.24.x'
           channel: 'stable'
           cache: true
+
+      - name: Scaffold Official iOS Project & Inject Icons
+        run: |
+          rm -rf ios
+          flutter create --platforms=ios --org org.dmillers.juwishpro .
+          python3 scripts/generate_app_icons.py
 
       - name: Get Dependencies
         run: flutter pub get
@@ -104,6 +129,17 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Pillow
+        run: pip install Pillow
+
+      - name: Generate JuwishPro Icons
+        run: python3 scripts/generate_app_icons.py
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -142,9 +178,20 @@ jobs:
     defaults:
       run:
         working-directory: juwish_pro_flutter
+    env:
+      CMAKE_GENERATOR: "Visual Studio 17 2022"
+      CMAKE_GENERATOR_PLATFORM: "x64"
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Pillow
+        run: pip install Pillow
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -155,6 +202,11 @@ jobs:
 
       - name: Enable Windows Desktop
         run: flutter config --enable-windows-desktop
+
+      - name: Scaffold Windows Project & Inject Icons
+        run: |
+          flutter create --platforms=windows --org org.dmillers.juwishpro .
+          python scripts/generate_app_icons.py
 
       - name: Get Dependencies
         run: flutter pub get
