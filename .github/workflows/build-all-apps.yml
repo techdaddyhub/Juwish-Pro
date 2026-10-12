@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   # -------------------------------------------------------------
-  # 1. ANDROID BUILD (APK)
+  # 1. ANDROID BUILD (APK) - Mobile App
   # -------------------------------------------------------------
   build-android:
     name: Build Android APK
@@ -55,7 +55,7 @@ jobs:
           if-no-files-found: warn
 
   # -------------------------------------------------------------
-  # 2. iOS BUILD (Runner.app)
+  # 2. iOS BUILD (Runner.app) - Mobile App
   # -------------------------------------------------------------
   build-ios:
     name: Build iOS Application
@@ -73,13 +73,6 @@ jobs:
           flutter-version: '3.24.x'
           channel: 'stable'
           cache: true
-
-      - name: Scaffold Official iOS Project
-        run: |
-          rm -rf ios
-          flutter create --platforms=ios --org org.dmillers.juwishpro .
-          mkdir -p ios/Runner/Assets.xcassets/AppIcon.appiconset
-          cp assets/images/juwishcoin.png ios/Runner/Assets.xcassets/AppIcon.appiconset/app_icon_1024.png 2>/dev/null || true
 
       - name: Get Dependencies
         run: flutter pub get
@@ -100,7 +93,7 @@ jobs:
           if-no-files-found: warn
 
   # -------------------------------------------------------------
-  # 3. macOS BUILD (.tar.gz)
+  # 3. macOS BUILD (.tar.gz) - Desktop App
   # -------------------------------------------------------------
   build-macos:
     name: Build macOS Application
@@ -141,7 +134,48 @@ jobs:
           if-no-files-found: warn
 
   # -------------------------------------------------------------
-  # 4. LINUX BUILD (.tar.gz)
+  # 4. WINDOWS BUILD (.zip) - Desktop App
+  # -------------------------------------------------------------
+  build-windows:
+    name: Build Windows Application
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: juwish_pro_flutter
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.x'
+          channel: 'stable'
+          cache: true
+
+      - name: Enable Windows Desktop
+        run: flutter config --enable-windows-desktop
+
+      - name: Get Dependencies
+        run: flutter pub get
+
+      - name: Build Windows App
+        run: flutter build windows --release
+
+      - name: Package Windows App
+        shell: pwsh
+        run: |
+          Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath JuwishPro-Windows-x64.zip
+
+      - name: Upload Windows Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-Windows-ZIP
+          path: juwish_pro_flutter/JuwishPro-Windows-x64.zip
+          if-no-files-found: warn
+
+  # -------------------------------------------------------------
+  # 5. LINUX BUILD (.tar.gz) - Desktop App
   # -------------------------------------------------------------
   build-linux:
     name: Build Linux Application
