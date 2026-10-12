@@ -358,7 +358,7 @@ class _WalletTabState extends State<WalletTab>
                     padding: const EdgeInsets.all(6),
                     decoration: BoxDecoration(
                       color: isJwc
-                          ? AppTheme.gold.withValues(alpha: 0.15)
+                          ? AppTheme.gold.withOpacity(0.15)
                           : AppTheme.borderSubtle,
                       borderRadius: BorderRadius.circular(10),
                     ),

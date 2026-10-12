@@ -172,7 +172,7 @@ class _HomeTabState extends State<HomeTab>
                         padding: const EdgeInsets.all(6),
                         decoration: BoxDecoration(
                           color: pair.isJwc
-                              ? AppTheme.gold.withValues(alpha: 0.15)
+                              ? AppTheme.gold.withOpacity(0.15)
                               : AppTheme.borderSubtle,
                           borderRadius: BorderRadius.circular(10),
                         ),
@@ -319,7 +319,7 @@ class _HomeTabState extends State<HomeTab>
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
-                  color: AppTheme.gold.withValues(alpha: 0.15),
+                  color: AppTheme.gold.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(color: AppTheme.borderHighlight),
                 ),
@@ -429,7 +429,7 @@ class _HomeTabState extends State<HomeTab>
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: a.color.withValues(alpha: 0.12),
+                        color: a.color.withOpacity(0.12),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(a.icon, color: a.color, size: 20),
@@ -466,7 +466,7 @@ class _HomeTabState extends State<HomeTab>
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.gold.withValues(alpha: 0.35)),
+        border: Border.all(color: AppTheme.gold.withOpacity(0.35)),
       ),
       child: Row(
         children: [
@@ -475,7 +475,7 @@ class _HomeTabState extends State<HomeTab>
             height: 44,
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: AppTheme.gold.withValues(alpha: 0.18),
+              color: AppTheme.gold.withOpacity(0.18),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppTheme.gold),
             ),

@@ -132,7 +132,7 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
                   height: 32,
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
-                    color: AppTheme.gold.withValues(alpha: 0.15),
+                    color: AppTheme.gold.withOpacity(0.15),
                     shape: BoxShape.circle,
                     border: Border.all(color: AppTheme.borderHighlight),
                   ),
