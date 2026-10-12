@@ -77,9 +77,8 @@ class _TradeTabState extends State<TradeTab>
 
   void _selectAllocation(int percentage) {
     HapticFeedback.selectionClick();
-    final maxAmount = _isBuy
-        ? 1000.0 / _currentPair.lastPrice
-        : widget.jwcBalance;
+    final maxAmount =
+        _isBuy ? 1000.0 / _currentPair.lastPrice : widget.jwcBalance;
     final calculated = maxAmount * (percentage / 100.0);
     _amountController.text = calculated.toStringAsFixed(2);
   }
@@ -108,16 +107,14 @@ class _TradeTabState extends State<TradeTab>
     }
 
     // Execute order immediately
-    final updatedBalance = _isBuy
-        ? widget.jwcBalance + amount
-        : widget.jwcBalance - amount;
+    final updatedBalance =
+        _isBuy ? widget.jwcBalance + amount : widget.jwcBalance - amount;
 
     widget.onBalanceUpdated(updatedBalance);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        backgroundColor:
-            _isBuy ? AppTheme.greenBullish : AppTheme.gold,
+        backgroundColor: _isBuy ? AppTheme.greenBullish : AppTheme.gold,
         content: Text(
           '${_isBuy ? "Bought" : "Sold"} ${amount.toStringAsFixed(2)} ${_currentPair.baseAsset} at ${_currentPair.formattedPrice}!',
           style: const TextStyle(fontWeight: FontWeight.bold),
@@ -318,8 +315,7 @@ class _TradeTabState extends State<TradeTab>
                       fontWeight: FontWeight.bold,
                       color: AppTheme.textPrimary)),
               Text('Price / Size',
-                  style:
-                      TextStyle(fontSize: 11, color: AppTheme.textTertiary)),
+                  style: TextStyle(fontSize: 11, color: AppTheme.textTertiary)),
             ],
           ),
           const SizedBox(height: 10),
@@ -432,9 +428,8 @@ class _TradeTabState extends State<TradeTab>
                     setState(() => _isBuy = true);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _isBuy
-                        ? AppTheme.greenBullish
-                        : AppTheme.borderSubtle,
+                    backgroundColor:
+                        _isBuy ? AppTheme.greenBullish : AppTheme.borderSubtle,
                     foregroundColor:
                         _isBuy ? Colors.black : AppTheme.textSecondary,
                     shape: RoundedRectangleBorder(
@@ -452,9 +447,8 @@ class _TradeTabState extends State<TradeTab>
                     setState(() => _isBuy = false);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: !_isBuy
-                        ? AppTheme.redBearish
-                        : AppTheme.borderSubtle,
+                    backgroundColor:
+                        !_isBuy ? AppTheme.redBearish : AppTheme.borderSubtle,
                     foregroundColor:
                         !_isBuy ? Colors.white : AppTheme.textSecondary,
                     shape: RoundedRectangleBorder(
@@ -593,9 +587,8 @@ class _TradeTabState extends State<TradeTab>
             child: ElevatedButton(
               onPressed: _executeOrder,
               style: ElevatedButton.styleFrom(
-                backgroundColor: _isBuy
-                    ? AppTheme.greenBullish
-                    : AppTheme.redBearish,
+                backgroundColor:
+                    _isBuy ? AppTheme.greenBullish : AppTheme.redBearish,
                 foregroundColor: _isBuy ? Colors.black : Colors.white,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

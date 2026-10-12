@@ -275,24 +275,18 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
           appBar: AppBar(
             title: Row(
               children: [
-                Image.asset(
-                  'assets/images/laravel_logo.png',
-                  width: 22,
-                  height: 22,
-                ),
-                const SizedBox(width: 8),
                 Container(
-                  width: 24,
-                  height: 24,
+                  width: 32,
+                  height: 32,
                   padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                     color: AppTheme.gold.withOpacity(0.15),
                     shape: BoxShape.circle,
                     border: Border.all(color: AppTheme.borderHighlight),
                   ),
-                  child: Image.asset('assets/images/juwishcoin.png'),
+                  child: Image.asset('assets/images/logo-square.png'),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 RichText(
                   text: const TextSpan(
                     style: TextStyle(

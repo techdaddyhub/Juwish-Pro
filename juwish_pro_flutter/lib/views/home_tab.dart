@@ -4,6 +4,23 @@ import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
 import '../services/market_data_service.dart';
 import '../widgets/sparkline_chart.dart';
+import '../presentation/blocs/auth_bloc.dart';
+import '../presentation/blocs/market_bloc.dart';
+import '../presentation/blocs/trading_bloc.dart';
+import '../presentation/blocs/wallet_bloc.dart';
+import '../presentation/screens/sectors/stocks_etfs_screen.dart';
+import '../presentation/screens/sectors/crypto_jwc_screen.dart';
+import '../presentation/screens/sectors/real_estate_screen.dart';
+import '../presentation/screens/sectors/capital_instruments_screen.dart';
+import '../presentation/screens/sectors/managed_portfolios_screen.dart';
+import '../presentation/screens/trading/futures_trading_screen.dart';
+import '../presentation/screens/trading/margin_trading_screen.dart';
+import '../presentation/screens/trading/forex_trading_screen.dart';
+import '../presentation/screens/wallet/crypto_deposit_screen.dart';
+import '../presentation/screens/wallet/withdrawal_screen.dart';
+import '../presentation/screens/wallet/transaction_history_screen.dart';
+import '../presentation/screens/auth/kyc_screen.dart';
+import '../presentation/screens/auth/biometric_screen.dart';
 
 class HomeTab extends StatefulWidget {
   final double jwcBalance;
@@ -21,10 +38,22 @@ class HomeTab extends StatefulWidget {
   State<HomeTab> createState() => _HomeTabState();
 }
 
-class _HomeTabState extends State<HomeTab>
-    with AutomaticKeepAliveClientMixin {
+class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   bool _showBalance = true;
   final MarketDataService _dataService = MarketDataService();
+  final MarketBloc _marketBloc = MarketBloc();
+  final TradingBloc _tradingBloc = TradingBloc();
+  final WalletBloc _walletBloc = WalletBloc();
+  final AuthBloc _authBloc = AuthBloc();
+
+  @override
+  void dispose() {
+    _marketBloc.dispose();
+    _tradingBloc.dispose();
+    _walletBloc.dispose();
+    _authBloc.dispose();
+    super.dispose();
+  }
 
   @override
   bool get wantKeepAlive => true;
@@ -78,6 +107,21 @@ class _HomeTabState extends State<HomeTab>
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: _buildStakingBanner(),
             ),
+          ),
+
+          // 3.1. Asset Sectors (Full Parity)
+          SliverToBoxAdapter(
+            child: _buildParitySectorsSection(context),
+          ),
+
+          // 3.2. Live Trading Engines Hub
+          SliverToBoxAdapter(
+            child: _buildTradingEnginesSection(context),
+          ),
+
+          // 3.3. Banking & Settlement Hub
+          SliverToBoxAdapter(
+            child: _buildBankingQuickSection(context),
           ),
 
           // 4. Hot Markets Ticker Carousel
@@ -527,6 +571,377 @@ class _HomeTabState extends State<HomeTab>
     );
   }
 
+  Widget _buildParitySectorsSection(BuildContext context) {
+    final sectors = [
+      (
+        title: 'Stocks & ETFs',
+        subtitle: 'DMA Equities & Dividends',
+        icon: Icons.trending_up,
+        color: const Color(0xFF00C9A7),
+        onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const StocksEtfsScreen()),
+            ),
+      ),
+      (
+        title: 'Crypto & JWC',
+        subtitle: 'Live \$1.425 • DEX Swap',
+        icon: Icons.stars,
+        color: AppTheme.gold,
+        onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => CryptoJwcScreen(marketBloc: _marketBloc)),
+            ),
+      ),
+      (
+        title: 'Real Estate',
+        subtitle: 'Fractional & Rental Yields',
+        icon: Icons.apartment,
+        color: const Color(0xFF4D96FF),
+        onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const RealEstateScreen()),
+            ),
+      ),
+      (
+        title: 'Capital Instruments',
+        subtitle: 'Bonds, Gold & Collectibles',
+        icon: Icons.account_balance,
+        color: const Color(0xFFFF6B6B),
+        onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => const CapitalInstrumentsScreen()),
+            ),
+      ),
+      (
+        title: 'Managed Portfolios',
+        subtitle: '29 Active Database Plans',
+        icon: Icons.pie_chart,
+        color: const Color(0xFF9D65CD),
+        onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (_) => const ManagedPortfoliosScreen()),
+            ),
+      ),
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text(
+                'Asset Sectors (Full Parity)',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.textPrimary,
+                ),
+              ),
+              Text(
+                '5 Institutional Sectors',
+                style: TextStyle(fontSize: 11, color: AppTheme.gold),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          SizedBox(
+            height: 94,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemCount: sectors.length,
+              separatorBuilder: (_, __) => const SizedBox(width: 10),
+              itemBuilder: (ctx, i) {
+                final s = sectors[i];
+                return InkWell(
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    s.onTap();
+                  },
+                  borderRadius: BorderRadius.circular(14),
+                  child: Container(
+                    width: 160,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: AppTheme.surfaceCharcoal,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: AppTheme.borderHighlight),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 12,
+                              backgroundColor: s.color.withOpacity(0.18),
+                              child: Icon(s.icon, size: 14, color: s.color),
+                            ),
+                            const Spacer(),
+                            const Icon(Icons.chevron_right,
+                                size: 16, color: AppTheme.textSecondary),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              s.title,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12,
+                                  color: AppTheme.textPrimary),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              s.subtitle,
+                              style: const TextStyle(
+                                  fontSize: 10, color: AppTheme.textSecondary),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTradingEnginesSection(BuildContext context) {
+    final engines = [
+      (
+        title: 'Futures Trading',
+        desc: 'Up to 125x Leverage • TP/SL Risk Tools',
+        icon: Icons.flash_on,
+        badge: '125x',
+        onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => FuturesTradingScreen(
+                  tradingBloc: _tradingBloc,
+                  marketBloc: _marketBloc,
+                ),
+              ),
+            ),
+      ),
+      (
+        title: 'Margin Trading',
+        desc: '3x-10x Borrow / Repay • Collateral Buffer',
+        icon: Icons.balance,
+        badge: 'Margin',
+        onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const MarginTradingScreen()),
+            ),
+      ),
+      (
+        title: 'Forex Pairs',
+        desc: 'Interbank Spreads • Instant Conversion',
+        icon: Icons.currency_exchange,
+        badge: '0.2 pips',
+        onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const ForexTradingScreen()),
+            ),
+      ),
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Text(
+                'Live Trading Engines',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.textPrimary,
+                ),
+              ),
+              Text(
+                'Institutional DMA',
+                style: TextStyle(fontSize: 11, color: AppTheme.gold),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            children: engines.map((e) {
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: InkWell(
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      e.onTap();
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppTheme.surfaceCharcoal,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: AppTheme.borderHighlight),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Icon(e.icon, size: 20, color: AppTheme.gold),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 2),
+                                decoration: BoxDecoration(
+                                  color: AppTheme.gold.withOpacity(0.18),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: Text(
+                                  e.badge,
+                                  style: const TextStyle(
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppTheme.gold),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            e.title,
+                            style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                                color: AppTheme.textPrimary),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            e.desc,
+                            style: const TextStyle(
+                                fontSize: 9.5, color: AppTheme.textSecondary),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBankingQuickSection(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+      child: Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceCharcoal,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: AppTheme.borderHighlight),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildBankAction(
+              icon: Icons.qr_code_scanner,
+              label: 'Deposit',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) =>
+                        CryptoDepositScreen(walletBloc: _walletBloc)),
+              ),
+            ),
+            _buildBankAction(
+              icon: Icons.outbox,
+              label: 'Withdraw',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => WithdrawalScreen(walletBloc: _walletBloc)),
+              ),
+            ),
+            _buildBankAction(
+              icon: Icons.receipt_long,
+              label: 'Ledger',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) =>
+                        TransactionHistoryScreen(walletBloc: _walletBloc)),
+              ),
+            ),
+            _buildBankAction(
+              icon: Icons.verified_user,
+              label: 'KYC',
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => KycScreen(authBloc: _authBloc)),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBankAction({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: () {
+        HapticFeedback.lightImpact();
+        onTap();
+      },
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+        child: Column(
+          children: [
+            Icon(icon, color: AppTheme.gold, size: 22),
+            const SizedBox(height: 4),
+            Text(label,
+                style: const TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                    color: AppTheme.textPrimary)),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildTickerCard(pair) {
     return InkWell(
       onTap: () {
@@ -541,7 +956,8 @@ class _HomeTabState extends State<HomeTab>
           color: AppTheme.surfaceCharcoal,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: pair.isJwc ? AppTheme.borderHighlight : AppTheme.borderSubtle,
+            color:
+                pair.isJwc ? AppTheme.borderHighlight : AppTheme.borderSubtle,
           ),
         ),
         child: Column(

@@ -111,9 +111,7 @@ class _MarketsTabState extends State<MarketsTab>
                 selectedColor: AppTheme.gold,
                 backgroundColor: AppTheme.surfaceCharcoal,
                 side: BorderSide(
-                  color: isSelected
-                      ? AppTheme.gold
-                      : AppTheme.borderSubtle,
+                  color: isSelected ? AppTheme.gold : AppTheme.borderSubtle,
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -135,14 +133,11 @@ class _MarketsTabState extends State<MarketsTab>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: const [
               Text('Name / Vol',
-                  style:
-                      TextStyle(fontSize: 11, color: AppTheme.textTertiary)),
+                  style: TextStyle(fontSize: 11, color: AppTheme.textTertiary)),
               Text('Chart',
-                  style:
-                      TextStyle(fontSize: 11, color: AppTheme.textTertiary)),
+                  style: TextStyle(fontSize: 11, color: AppTheme.textTertiary)),
               Text('Last Price / 24h',
-                  style:
-                      TextStyle(fontSize: 11, color: AppTheme.textTertiary)),
+                  style: TextStyle(fontSize: 11, color: AppTheme.textTertiary)),
             ],
           ),
         ),

@@ -17,7 +17,8 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
 
   List<CapitalInstrument> get _filteredList {
     return _instruments.where((item) {
-      final matchesCategory = _selectedCategory == null || item.category == _selectedCategory;
+      final matchesCategory =
+          _selectedCategory == null || item.category == _selectedCategory;
       final matchesQuery = _searchQuery.isEmpty ||
           item.ticker.toLowerCase().contains(_searchQuery.toLowerCase()) ||
           item.name.toLowerCase().contains(_searchQuery.toLowerCase());
@@ -64,7 +65,8 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                             ),
                             child: Icon(
                               isBuy ? Icons.arrow_upward : Icons.arrow_downward,
-                              color: isBuy ? AppTheme.gainGreen : AppTheme.lossRed,
+                              color:
+                                  isBuy ? AppTheme.gainGreen : AppTheme.lossRed,
                               size: 20,
                             ),
                           ),
@@ -92,7 +94,8 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                         ],
                       ),
                       IconButton(
-                        icon: const Icon(Icons.close, color: AppTheme.textSecondary),
+                        icon: const Icon(Icons.close,
+                            color: AppTheme.textSecondary),
                         onPressed: () => Navigator.pop(ctx),
                       ),
                     ],
@@ -108,7 +111,8 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Market Price', style: TextStyle(color: AppTheme.textSecondary)),
+                        const Text('Market Price',
+                            style: TextStyle(color: AppTheme.textSecondary)),
                         Text(
                           '\$${instrument.currentPrice.toStringAsFixed(instrument.category == InstrumentCategory.forex ? 4 : 2)}',
                           style: const TextStyle(
@@ -124,11 +128,13 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Quantity / Units', style: TextStyle(color: AppTheme.textSecondary)),
+                      const Text('Quantity / Units',
+                          style: TextStyle(color: AppTheme.textSecondary)),
                       Row(
                         children: [
                           IconButton(
-                            icon: const Icon(Icons.remove_circle_outline, color: AppTheme.textSecondary),
+                            icon: const Icon(Icons.remove_circle_outline,
+                                color: AppTheme.textSecondary),
                             onPressed: shares > 1
                                 ? () => setModalState(() => shares -= 1)
                                 : null,
@@ -142,7 +148,8 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                             ),
                           ),
                           IconButton(
-                            icon: const Icon(Icons.add_circle_outline, color: AppTheme.gold),
+                            icon: const Icon(Icons.add_circle_outline,
+                                color: AppTheme.gold),
                             onPressed: () => setModalState(() => shares += 1),
                           ),
                         ],
@@ -153,7 +160,8 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Total Value', style: TextStyle(color: AppTheme.textSecondary)),
+                      const Text('Total Value',
+                          style: TextStyle(color: AppTheme.textSecondary)),
                       Text(
                         '\$${totalCost.toStringAsFixed(2)}',
                         style: const TextStyle(
@@ -170,17 +178,22 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                     height: 50,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: isBuy ? AppTheme.gainGreen : AppTheme.lossRed,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        backgroundColor:
+                            isBuy ? AppTheme.gainGreen : AppTheme.lossRed,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
                       ),
                       onPressed: () {
                         Navigator.pop(ctx);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            backgroundColor: isBuy ? AppTheme.gainGreen : AppTheme.lossRed,
+                            backgroundColor:
+                                isBuy ? AppTheme.gainGreen : AppTheme.lossRed,
                             content: Text(
                               'Successfully executed ${isBuy ? "buy" : "sell"} for $shares ${instrument.ticker} on 2026.dmillers.org',
-                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
                         );
@@ -224,13 +237,17 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                       border: Border.all(color: AppTheme.borderSubtle),
                     ),
                     child: TextField(
-                      style: const TextStyle(color: AppTheme.textPrimary, fontSize: 14),
+                      style: const TextStyle(
+                          color: AppTheme.textPrimary, fontSize: 14),
                       decoration: const InputDecoration(
                         hintText: 'Search Stocks, ETFs, Bonds, Forex...',
-                        hintStyle: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
-                        prefixIcon: Icon(Icons.search, color: AppTheme.textSecondary, size: 20),
+                        hintStyle: TextStyle(
+                            color: AppTheme.textSecondary, fontSize: 13),
+                        prefixIcon: Icon(Icons.search,
+                            color: AppTheme.textSecondary, size: 20),
                         border: InputBorder.none,
-                        contentPadding: EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                        contentPadding:
+                            EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                       ),
                       onChanged: (val) => setState(() => _searchQuery = val),
                     ),
@@ -243,13 +260,20 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                       children: [
                         _filterChip(label: 'All Assets', category: null),
                         const SizedBox(width: 8),
-                        _filterChip(label: 'Stocks', category: InstrumentCategory.stock),
+                        _filterChip(
+                            label: 'Stocks',
+                            category: InstrumentCategory.stock),
                         const SizedBox(width: 8),
-                        _filterChip(label: 'ETFs', category: InstrumentCategory.etf),
+                        _filterChip(
+                            label: 'ETFs', category: InstrumentCategory.etf),
                         const SizedBox(width: 8),
-                        _filterChip(label: 'Treasury Bonds', category: InstrumentCategory.bond),
+                        _filterChip(
+                            label: 'Treasury Bonds',
+                            category: InstrumentCategory.bond),
                         const SizedBox(width: 8),
-                        _filterChip(label: 'Forex Pairs', category: InstrumentCategory.forex),
+                        _filterChip(
+                            label: 'Forex Pairs',
+                            category: InstrumentCategory.forex),
                       ],
                     ),
                   ),
@@ -284,7 +308,11 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                           ),
                           child: Center(
                             child: Text(
-                              item.ticker.substring(0, item.ticker.length > 3 ? 3 : item.ticker.length),
+                              item.ticker.substring(
+                                  0,
+                                  item.ticker.length > 3
+                                      ? 3
+                                      : item.ticker.length),
                               style: const TextStyle(
                                 color: AppTheme.gold,
                                 fontSize: 12,
@@ -311,14 +339,17 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                                   ),
                                   const SizedBox(width: 6),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6, vertical: 2),
                                     decoration: BoxDecoration(
                                       color: AppTheme.borderSubtle,
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: Text(
                                       item.categoryLabel,
-                                      style: const TextStyle(color: AppTheme.textSecondary, fontSize: 9),
+                                      style: const TextStyle(
+                                          color: AppTheme.textSecondary,
+                                          fontSize: 9),
                                     ),
                                   ),
                                 ],
@@ -328,12 +359,17 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                                 item.name,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(color: AppTheme.textSecondary, fontSize: 11),
+                                style: const TextStyle(
+                                    color: AppTheme.textSecondary,
+                                    fontSize: 11),
                               ),
                               if (item.annualYield != null)
                                 Text(
                                   'Annual Yield: ${item.annualYield}% APY',
-                                  style: const TextStyle(color: AppTheme.gold, fontSize: 10, fontWeight: FontWeight.w600),
+                                  style: const TextStyle(
+                                      color: AppTheme.gold,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w600),
                                 ),
                             ],
                           ),
@@ -344,7 +380,9 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                           height: 28,
                           child: SparklineChart(
                             data: item.sparkline,
-                            color: item.isPositive ? AppTheme.gainGreen : AppTheme.lossRed,
+                            color: item.isPositive
+                                ? AppTheme.gainGreen
+                                : AppTheme.lossRed,
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -363,7 +401,9 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                             Text(
                               '${item.isPositive ? "+" : ""}${item.change24h.toStringAsFixed(2)}%',
                               style: TextStyle(
-                                color: item.isPositive ? AppTheme.gainGreen : AppTheme.lossRed,
+                                color: item.isPositive
+                                    ? AppTheme.gainGreen
+                                    : AppTheme.lossRed,
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -375,14 +415,18 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                                 GestureDetector(
                                   onTap: () => _showOrderDialog(item, true),
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 4),
                                     decoration: BoxDecoration(
                                       color: AppTheme.gainGreen,
                                       borderRadius: BorderRadius.circular(6),
                                     ),
                                     child: const Text(
                                       'Buy',
-                                      style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ),
@@ -390,15 +434,20 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
                                 GestureDetector(
                                   onTap: () => _showOrderDialog(item, false),
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 4),
                                     decoration: BoxDecoration(
                                       color: AppTheme.lossRed.withOpacity(0.2),
                                       borderRadius: BorderRadius.circular(6),
-                                      border: Border.all(color: AppTheme.lossRed),
+                                      border:
+                                          Border.all(color: AppTheme.lossRed),
                                     ),
                                     child: const Text(
                                       'Sell',
-                                      style: TextStyle(color: AppTheme.lossRed, fontSize: 11, fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          color: AppTheme.lossRed,
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ),
                                 ),
@@ -419,7 +468,8 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
     );
   }
 
-  Widget _filterChip({required String label, required InstrumentCategory? category}) {
+  Widget _filterChip(
+      {required String label, required InstrumentCategory? category}) {
     final isSelected = _selectedCategory == category;
     return GestureDetector(
       onTap: () => setState(() => _selectedCategory = category),
@@ -444,4 +494,3 @@ class _CapitalInstrumentsViewState extends State<CapitalInstrumentsView> {
     );
   }
 }
-

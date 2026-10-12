@@ -3,6 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../theme/app_theme.dart';
 import '../services/crypto_payment_client.dart';
+import '../presentation/blocs/wallet_bloc.dart';
+import '../presentation/screens/wallet/crypto_deposit_screen.dart';
+import '../presentation/screens/wallet/withdrawal_screen.dart';
+import '../presentation/screens/wallet/transaction_history_screen.dart';
 
 class WalletTab extends StatefulWidget {
   final double jwcBalance;
@@ -24,6 +28,7 @@ class _WalletTabState extends State<WalletTab>
     with AutomaticKeepAliveClientMixin {
   final TextEditingController _txHashController = TextEditingController();
   final CryptoPaymentClient _paymentClient = CryptoPaymentClient();
+  final WalletBloc _walletBloc = WalletBloc();
   bool _isVerifying = false;
 
   @override
@@ -32,6 +37,7 @@ class _WalletTabState extends State<WalletTab>
   @override
   void dispose() {
     _txHashController.dispose();
+    _walletBloc.dispose();
     super.dispose();
   }
 
@@ -71,7 +77,8 @@ class _WalletTabState extends State<WalletTab>
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: AppTheme.gold,
-            content: Text(res['message'] ?? 'Transaction is being confirmed on BSC network.'),
+            content: Text(res['message'] ??
+                'Transaction is being confirmed on BSC network.'),
           ),
         );
       }
@@ -188,10 +195,18 @@ class _WalletTabState extends State<WalletTab>
                   children: [
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: widget.onDepositTap,
-                        icon: const Icon(Icons.arrow_downward,
+                        onPressed: () {
+                          HapticFeedback.lightImpact();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => CryptoDepositScreen(
+                                    walletBloc: _walletBloc)),
+                          );
+                        },
+                        icon: const Icon(Icons.qr_code_scanner,
                             size: 16, color: Colors.black),
-                        label: const Text('Deposit JWC'),
+                        label: const Text('Deposit'),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppTheme.gold,
                           foregroundColor: Colors.black,
@@ -201,14 +216,21 @@ class _WalletTabState extends State<WalletTab>
                         ),
                       ),
                     ),
-                    const SizedBox(width: 10),
+                    const SizedBox(width: 8),
                     Expanded(
                       child: OutlinedButton.icon(
-                        onPressed: () => _launchUrl(
-                            'https://pancakeswap.finance/swap?outputCurrency=0xfeeef79d2a97d9e1f9bcb8eba8fd9587079c9e99&chainId=56'),
-                        icon: const Icon(Icons.swap_calls,
+                        onPressed: () {
+                          HapticFeedback.lightImpact();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) =>
+                                    WithdrawalScreen(walletBloc: _walletBloc)),
+                          );
+                        },
+                        icon: const Icon(Icons.outbox,
                             size: 16, color: AppTheme.gold),
-                        label: const Text('DEX Swap'),
+                        label: const Text('Withdraw'),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: AppTheme.gold,
                           side: const BorderSide(color: AppTheme.gold),
@@ -216,6 +238,57 @@ class _WalletTabState extends State<WalletTab>
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                         ),
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          HapticFeedback.lightImpact();
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => TransactionHistoryScreen(
+                                    walletBloc: _walletBloc)),
+                          );
+                        },
+                        icon: const Icon(Icons.receipt_long,
+                            size: 16, color: AppTheme.textPrimary),
+                        label: const Text('Ledger'),
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: AppTheme.textPrimary,
+                          side:
+                              const BorderSide(color: AppTheme.borderHighlight),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextButton.icon(
+                        onPressed: widget.onDepositTap,
+                        icon: const Icon(Icons.bolt,
+                            size: 14, color: AppTheme.gold),
+                        label: const Text('Quick JWC Topup',
+                            style:
+                                TextStyle(color: AppTheme.gold, fontSize: 11)),
+                      ),
+                    ),
+                    Expanded(
+                      child: TextButton.icon(
+                        onPressed: () => _launchUrl(
+                            'https://pancakeswap.finance/swap?outputCurrency=0xfeeef79d2a97d9e1f9bcb8eba8fd9587079c9e99&chainId=56'),
+                        icon: const Icon(Icons.swap_calls,
+                            size: 14, color: Color(0xFF00C9A7)),
+                        label: const Text('PancakeSwap DEX',
+                            style: TextStyle(
+                                color: Color(0xFF00C9A7), fontSize: 11)),
                       ),
                     ),
                   ],

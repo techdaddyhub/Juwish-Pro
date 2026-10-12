@@ -1,31 +1,30 @@
 #!/usr/bin/env python3
 """
-JuwishPro - Multi-Platform App Icon Generator (Laravel Edition)
-Generates high-resolution smart app icons featuring the official Laravel logo
+JuwishPro - Multi-Platform App Icon Generator (Official JuwishPro Edition)
+Generates high-resolution app icons featuring the official JuwishPro Gold Star of David medallion
 across Android, iOS, macOS, Windows, and Web.
 """
 
 import os
-import subprocess
 from PIL import Image
 
 def generate_icons():
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    master_png = os.path.join(root, 'assets/images/app_icon_1024.png')
-    svg_file = os.path.join(root, 'assets/images/app_icon.svg')
+    src_path = os.path.join(root, 'assets/images/logo-square.png')
+    if not os.path.exists(src_path):
+        src_path = os.path.join(root, 'assets/images/juwishcoin.png')
 
-    # If master PNG doesn't exist, try rasterizing from SVG if convert is available
-    if not os.path.exists(master_png) and os.path.exists(svg_file):
-        try:
-            subprocess.run(['convert', svg_file, master_png], check=True)
-            print('[INFO] Rasterized master icon from app_icon.svg')
-        except Exception as e:
-            print(f'[WARN] convert not available, falling back: {e}')
+    medallion = Image.open(src_path).convert('RGBA')
 
-    if not os.path.exists(master_png):
-        raise FileNotFoundError(f"Master app icon not found at {master_png}")
+    # Create 1024x1024 master with solid dark obsidian background (#0B0E11)
+    master_1024 = Image.new('RGBA', (1024, 1024), (11, 14, 17, 255))
+    # Sized to 900x900 so it sits comfortably inside mobile safe zones
+    medallion_900 = medallion.resize((900, 900), Image.Resampling.LANCZOS)
+    master_1024.paste(medallion_900, (62, 62), medallion_900)
+    master_1024.save(os.path.join(root, 'assets/images/app_icon_1024.png'))
 
-    base_img = Image.open(master_png).convert('RGBA')
+    # Round master for circular launchers
+    round_1024 = medallion.resize((1024, 1024), Image.Resampling.LANCZOS)
 
     # 1. Android Mipmaps
     android_sizes = {
@@ -38,9 +37,12 @@ def generate_icons():
     for folder, size in android_sizes.items():
         res_dir = os.path.join(root, 'android/app/src/main/res', folder)
         os.makedirs(res_dir, exist_ok=True)
-        icon = base_img.resize((size, size), Image.Resampling.LANCZOS)
-        icon.save(os.path.join(res_dir, 'ic_launcher.png'), 'PNG')
-        icon.save(os.path.join(res_dir, 'ic_launcher_round.png'), 'PNG')
+        # Standard square/adaptive icon with dark background
+        icon_square = master_1024.resize((size, size), Image.Resampling.LANCZOS)
+        icon_square.save(os.path.join(res_dir, 'ic_launcher.png'), 'PNG')
+        # Circular icon fitting the circular medallion
+        icon_round = round_1024.resize((size, size), Image.Resampling.LANCZOS)
+        icon_round.save(os.path.join(res_dir, 'ic_launcher_round.png'), 'PNG')
 
     # 2. iOS AppIcon set
     ios_dir = os.path.join(root, 'ios/Runner/Assets.xcassets/AppIcon.appiconset')
@@ -57,11 +59,11 @@ def generate_icons():
         'Icon-App-60x60@3x.png': 180,
     }
     for name, size in ios_sizes.items():
-        icon = base_img.resize((size, size), Image.Resampling.LANCZOS)
+        icon = master_1024.resize((size, size), Image.Resampling.LANCZOS)
         icon.save(os.path.join(ios_dir, name), 'PNG')
 
     # iOS 1024x1024 App Store marketing (opaque RGB)
-    base_img.convert('RGB').save(os.path.join(ios_dir, 'Icon-App-1024x1024@1x.png'), 'PNG')
+    master_1024.convert('RGB').save(os.path.join(ios_dir, 'Icon-App-1024x1024@1x.png'), 'PNG')
 
     # 3. macOS AppIcon set
     macos_dir = os.path.join(root, 'macos/Runner/Assets.xcassets/AppIcon.appiconset')
@@ -76,14 +78,14 @@ def generate_icons():
         'app_icon_1024.png': 1024,
     }
     for name, size in macos_sizes.items():
-        icon = base_img.resize((size, size), Image.Resampling.LANCZOS)
+        icon = master_1024.resize((size, size), Image.Resampling.LANCZOS)
         icon.save(os.path.join(macos_dir, name), 'PNG')
 
     # 4. Windows ICO
     win_dir = os.path.join(root, 'windows/runner/resources')
     os.makedirs(win_dir, exist_ok=True)
     ico_sizes = [(16, 16), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)]
-    base_img.save(os.path.join(win_dir, 'app_icon.ico'), format='ICO', sizes=ico_sizes)
+    master_1024.save(os.path.join(win_dir, 'app_icon.ico'), format='ICO', sizes=ico_sizes)
 
     # 5. Web icons
     web_dir = os.path.join(root, 'web/icons')
@@ -94,10 +96,10 @@ def generate_icons():
         ('Icon-maskable-192.png', 192),
         ('Icon-maskable-512.png', 512),
     ]:
-        icon = base_img.resize((size, size), Image.Resampling.LANCZOS)
+        icon = master_1024.resize((size, size), Image.Resampling.LANCZOS)
         icon.save(os.path.join(web_dir, name), 'PNG')
 
-    print('[OK] JuwishPro Laravel edition app icons generated across Android, iOS, Windows, macOS, Web.')
+    print('[OK] Official JuwishPro app icons generated across Android, iOS, Windows, macOS, Web.')
 
 if __name__ == '__main__':
     generate_icons()

@@ -14,7 +14,8 @@ class _FuturesViewState extends State<FuturesView> {
   int _leverage = 20;
   String _selectedContract = 'JWC/USDT';
   bool _isCrossMargin = true;
-  final TextEditingController _amountController = TextEditingController(text: '10000');
+  final TextEditingController _amountController =
+      TextEditingController(text: '10000');
   final List<FuturesPosition> _positions = FuturesPosition.getMockPositions();
 
   double get _currentMarkPrice {
@@ -49,7 +50,8 @@ class _FuturesViewState extends State<FuturesView> {
         backgroundColor: _isLong ? AppTheme.gainGreen : AppTheme.lossRed,
         content: Text(
           'Opened ${_leverage}x ${_isLong ? "LONG" : "SHORT"} on $_selectedContract ($size units)',
-          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -64,7 +66,8 @@ class _FuturesViewState extends State<FuturesView> {
         backgroundColor: AppTheme.gold,
         content: Text(
           'Closed position ${pos.id} with PnL: \$${pos.unrealizedPnl.toStringAsFixed(2)}',
-          style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style:
+              const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
       ),
     );
@@ -107,24 +110,29 @@ class _FuturesViewState extends State<FuturesView> {
                               if (sym.contains('JWC'))
                                 const Padding(
                                   padding: EdgeInsets.only(right: 6),
-                                  child: Text('✡', style: TextStyle(color: AppTheme.gold)),
+                                  child: Text('✡',
+                                      style: TextStyle(color: AppTheme.gold)),
                                 ),
                               Text(sym),
                               const SizedBox(width: 6),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 4, vertical: 1),
                                 decoration: BoxDecoration(
                                   color: AppTheme.gold.withOpacity(0.15),
                                   borderRadius: BorderRadius.circular(3),
                                 ),
-                                child: const Text('Perp', style: TextStyle(color: AppTheme.gold, fontSize: 10)),
+                                child: const Text('Perp',
+                                    style: TextStyle(
+                                        color: AppTheme.gold, fontSize: 10)),
                               ),
                             ],
                           ),
                         );
                       }).toList(),
                       onChanged: (val) {
-                        if (val != null) setState(() => _selectedContract = val);
+                        if (val != null)
+                          setState(() => _selectedContract = val);
                       },
                     ),
                   ),
@@ -132,9 +140,11 @@ class _FuturesViewState extends State<FuturesView> {
                     children: [
                       // Margin Mode Toggle
                       GestureDetector(
-                        onTap: () => setState(() => _isCrossMargin = !_isCrossMargin),
+                        onTap: () =>
+                            setState(() => _isCrossMargin = !_isCrossMargin),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 6),
                           decoration: BoxDecoration(
                             color: AppTheme.cardDark,
                             borderRadius: BorderRadius.circular(8),
@@ -142,14 +152,16 @@ class _FuturesViewState extends State<FuturesView> {
                           ),
                           child: Text(
                             _isCrossMargin ? 'Cross' : 'Isolated',
-                            style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+                            style: const TextStyle(
+                                color: AppTheme.textSecondary, fontSize: 12),
                           ),
                         ),
                       ),
                       const SizedBox(width: 8),
                       // Leverage Button
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           color: AppTheme.gold.withOpacity(0.15),
                           borderRadius: BorderRadius.circular(8),
@@ -185,8 +197,14 @@ class _FuturesViewState extends State<FuturesView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Leverage Adjustment', style: TextStyle(color: AppTheme.textSecondary, fontSize: 12)),
-                      Text('${_leverage}x Leverage', style: const TextStyle(color: AppTheme.gold, fontWeight: FontWeight.bold, fontSize: 13)),
+                      const Text('Leverage Adjustment',
+                          style: TextStyle(
+                              color: AppTheme.textSecondary, fontSize: 12)),
+                      Text('${_leverage}x Leverage',
+                          style: const TextStyle(
+                              color: AppTheme.gold,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13)),
                     ],
                   ),
                   Slider(
@@ -206,9 +224,13 @@ class _FuturesViewState extends State<FuturesView> {
                         child: Text(
                           '${lvl}x',
                           style: TextStyle(
-                            color: _leverage == lvl ? AppTheme.gold : AppTheme.textSecondary,
+                            color: _leverage == lvl
+                                ? AppTheme.gold
+                                : AppTheme.textSecondary,
                             fontSize: 11,
-                            fontWeight: _leverage == lvl ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: _leverage == lvl
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         ),
                       );
@@ -244,14 +266,18 @@ class _FuturesViewState extends State<FuturesView> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: _isLong ? AppTheme.gainGreen : Colors.transparent,
+                                color: _isLong
+                                    ? AppTheme.gainGreen
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Center(
                                 child: Text(
                                   'Open Long',
                                   style: TextStyle(
-                                    color: _isLong ? Colors.white : AppTheme.textSecondary,
+                                    color: _isLong
+                                        ? Colors.white
+                                        : AppTheme.textSecondary,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -265,14 +291,18 @@ class _FuturesViewState extends State<FuturesView> {
                             child: Container(
                               padding: const EdgeInsets.symmetric(vertical: 10),
                               decoration: BoxDecoration(
-                                color: !_isLong ? AppTheme.lossRed : Colors.transparent,
+                                color: !_isLong
+                                    ? AppTheme.lossRed
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Center(
                                 child: Text(
                                   'Open Short',
                                   style: TextStyle(
-                                    color: !_isLong ? Colors.white : AppTheme.textSecondary,
+                                    color: !_isLong
+                                        ? Colors.white
+                                        : AppTheme.textSecondary,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -288,15 +318,21 @@ class _FuturesViewState extends State<FuturesView> {
                   TextField(
                     controller: _amountController,
                     keyboardType: TextInputType.number,
-                    style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                        color: AppTheme.textPrimary,
+                        fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
                       labelText: 'Order Size ($_selectedContract)',
-                      labelStyle: const TextStyle(color: AppTheme.textSecondary),
+                      labelStyle:
+                          const TextStyle(color: AppTheme.textSecondary),
                       filled: true,
                       fillColor: AppTheme.cardDark,
-                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide.none),
                       suffixText: _selectedContract.split('/').first,
-                      suffixStyle: const TextStyle(color: AppTheme.gold, fontWeight: FontWeight.bold),
+                      suffixStyle: const TextStyle(
+                          color: AppTheme.gold, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -304,10 +340,13 @@ class _FuturesViewState extends State<FuturesView> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Required Margin', style: TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
+                      const Text('Required Margin',
+                          style: TextStyle(
+                              color: AppTheme.textSecondary, fontSize: 13)),
                       Text(
                         '\$${(((double.tryParse(_amountController.text) ?? 0) * _currentMarkPrice) / _leverage).toStringAsFixed(2)} USDT',
-                        style: const TextStyle(color: AppTheme.gold, fontWeight: FontWeight.bold),
+                        style: const TextStyle(
+                            color: AppTheme.gold, fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -317,13 +356,18 @@ class _FuturesViewState extends State<FuturesView> {
                     height: 48,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: _isLong ? AppTheme.gainGreen : AppTheme.lossRed,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        backgroundColor:
+                            _isLong ? AppTheme.gainGreen : AppTheme.lossRed,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
                       ),
                       onPressed: _executeFuturesOrder,
                       child: Text(
                         'Confirm ${_isLong ? "Long" : "Short"} (${_leverage}x)',
-                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
+                        style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15),
                       ),
                     ),
                   ),
@@ -346,7 +390,10 @@ class _FuturesViewState extends State<FuturesView> {
                 ),
                 Text(
                   '${_positions.length} Active',
-                  style: const TextStyle(color: AppTheme.gold, fontSize: 12, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      color: AppTheme.gold,
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -359,7 +406,9 @@ class _FuturesViewState extends State<FuturesView> {
                   color: AppTheme.surfaceDark,
                   borderRadius: BorderRadius.circular(16),
                   border: Border.all(
-                    color: pos.isInProfit ? AppTheme.gainGreen.withOpacity(0.3) : AppTheme.lossRed.withOpacity(0.3),
+                    color: pos.isInProfit
+                        ? AppTheme.gainGreen.withOpacity(0.3)
+                        : AppTheme.lossRed.withOpacity(0.3),
                   ),
                 ),
                 child: Column(
@@ -370,32 +419,44 @@ class _FuturesViewState extends State<FuturesView> {
                         Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
-                                color: pos.isLong ? AppTheme.gainGreen : AppTheme.lossRed,
+                                color: pos.isLong
+                                    ? AppTheme.gainGreen
+                                    : AppTheme.lossRed,
                                 borderRadius: BorderRadius.circular(4),
                               ),
                               child: Text(
                                 '${pos.isLong ? "LONG" : "SHORT"} ${pos.leverage}x',
-                                style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                             const SizedBox(width: 8),
                             Text(
                               pos.symbol,
-                              style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
+                              style: const TextStyle(
+                                  color: AppTheme.textPrimary,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14),
                             ),
                           ],
                         ),
                         GestureDetector(
                           onTap: () => _closePosition(pos),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 3),
                             decoration: BoxDecoration(
                               color: AppTheme.borderSubtle,
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            child: const Text('Market Close', style: TextStyle(color: AppTheme.textPrimary, fontSize: 11)),
+                            child: const Text('Market Close',
+                                style: TextStyle(
+                                    color: AppTheme.textPrimary, fontSize: 11)),
                           ),
                         ),
                       ],
@@ -407,11 +468,16 @@ class _FuturesViewState extends State<FuturesView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text('Unrealized PnL (ROE %)', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
+                            const Text('Unrealized PnL (ROE %)',
+                                style: TextStyle(
+                                    color: AppTheme.textSecondary,
+                                    fontSize: 11)),
                             Text(
                               '${pos.isInProfit ? "+" : ""}\$${pos.unrealizedPnl.toStringAsFixed(2)} (${pos.returnOnEquityPercent.toStringAsFixed(2)}%)',
                               style: TextStyle(
-                                color: pos.isInProfit ? AppTheme.gainGreen : AppTheme.lossRed,
+                                color: pos.isInProfit
+                                    ? AppTheme.gainGreen
+                                    : AppTheme.lossRed,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 13,
                               ),
@@ -421,10 +487,14 @@ class _FuturesViewState extends State<FuturesView> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            const Text('Entry / Mark', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
+                            const Text('Entry / Mark',
+                                style: TextStyle(
+                                    color: AppTheme.textSecondary,
+                                    fontSize: 11)),
                             Text(
                               '${pos.entryPrice} / ${pos.markPrice}',
-                              style: const TextStyle(color: AppTheme.textPrimary, fontSize: 12),
+                              style: const TextStyle(
+                                  color: AppTheme.textPrimary, fontSize: 12),
                             ),
                           ],
                         ),
@@ -440,4 +510,3 @@ class _FuturesViewState extends State<FuturesView> {
     );
   }
 }
-

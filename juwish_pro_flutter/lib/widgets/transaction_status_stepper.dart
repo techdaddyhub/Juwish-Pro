@@ -30,7 +30,8 @@ class TransactionStatusStepper extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Icon(Icons.hub_outlined, size: 18, color: Color(0xFF3888FF)),
+              const Icon(Icons.hub_outlined,
+                  size: 18, color: Color(0xFF3888FF)),
               const SizedBox(width: 8),
               const Text(
                 'BNB Smart Chain Settlement Status',
@@ -56,7 +57,8 @@ class TransactionStatusStepper extends StatelessWidget {
                     status == PaymentStatus.confirmed,
               ),
               _buildStepConnector(
-                isCompleted: status == PaymentStatus.confirming || status == PaymentStatus.confirmed,
+                isCompleted: status == PaymentStatus.confirming ||
+                    status == PaymentStatus.confirmed,
               ),
               _buildStepNode(
                 stepIndex: 2,
@@ -123,7 +125,10 @@ class TransactionStatusStepper extends StatelessWidget {
           ),
           child: const Text(
             'CONFIRMED (15/15)',
-            style: TextStyle(color: Color(0xFF52B788), fontSize: 11, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Color(0xFF52B788),
+                fontSize: 11,
+                fontWeight: FontWeight.bold),
           ),
         );
       case PaymentStatus.confirming:
@@ -140,12 +145,16 @@ class TransactionStatusStepper extends StatelessWidget {
               const SizedBox(
                 width: 10,
                 height: 10,
-                child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFFFB300)),
+                child: CircularProgressIndicator(
+                    strokeWidth: 2, color: Color(0xFFFFB300)),
               ),
               const SizedBox(width: 6),
               Text(
                 'CONFIRMING ($currentConfirmations/$requiredConfirmations)',
-                style: const TextStyle(color: Color(0xFFFFB300), fontSize: 11, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                    color: Color(0xFFFFB300),
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -159,7 +168,10 @@ class TransactionStatusStepper extends StatelessWidget {
           ),
           child: const Text(
             'TX DETECTED',
-            style: TextStyle(color: Color(0xFF64B5F6), fontSize: 11, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Color(0xFF64B5F6),
+                fontSize: 11,
+                fontWeight: FontWeight.bold),
           ),
         );
       default:
@@ -171,7 +183,10 @@ class TransactionStatusStepper extends StatelessWidget {
           ),
           child: const Text(
             'AWAITING TRANSFER',
-            style: TextStyle(color: Color(0xFF8F9BB3), fontSize: 11, fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: Color(0xFF8F9BB3),
+                fontSize: 11,
+                fontWeight: FontWeight.bold),
           ),
         );
     }
@@ -224,7 +239,8 @@ class TransactionStatusStepper extends StatelessWidget {
           style: TextStyle(
             color: textColor,
             fontSize: 11,
-            fontWeight: isActive || isCompleted ? FontWeight.bold : FontWeight.normal,
+            fontWeight:
+                isActive || isCompleted ? FontWeight.bold : FontWeight.normal,
           ),
         ),
         if (subtitle != null) ...[
@@ -252,4 +268,3 @@ class TransactionStatusStepper extends StatelessWidget {
     );
   }
 }
-

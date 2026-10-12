@@ -18,13 +18,16 @@ class AuthView extends StatefulWidget {
   State<AuthView> createState() => _AuthViewState();
 }
 
-class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin {
+class _AuthViewState extends State<AuthView>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final LaravelApiService _api = LaravelApiService();
 
   // Login form
-  final TextEditingController _loginEmail = TextEditingController(text: 'admin@juwish.pro');
-  final TextEditingController _loginPassword = TextEditingController(text: '••••••••');
+  final TextEditingController _loginEmail =
+      TextEditingController(text: 'admin@juwish.pro');
+  final TextEditingController _loginPassword =
+      TextEditingController(text: '••••••••');
 
   // Register form
   final TextEditingController _regFirst = TextEditingController();
@@ -33,8 +36,10 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
   final TextEditingController _regPassword = TextEditingController();
 
   // KYC form
-  final TextEditingController _kycName = TextEditingController(text: 'Admin JuwishPro');
-  final TextEditingController _kycIdNumber = TextEditingController(text: 'IL-94821048');
+  final TextEditingController _kycName =
+      TextEditingController(text: 'Admin JuwishPro');
+  final TextEditingController _kycIdNumber =
+      TextEditingController(text: 'IL-94821048');
   String _kycIdType = 'Passport';
   bool _isLoading = false;
 
@@ -71,7 +76,8 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: AppTheme.gainGreen,
-          content: Text('Successfully authenticated with 2026.dmillers.org session!'),
+          content: Text(
+              'Successfully authenticated with 2026.dmillers.org session!'),
         ),
       );
     }
@@ -137,7 +143,10 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                         widget.currentUser.firstName.isNotEmpty
                             ? widget.currentUser.firstName[0].toUpperCase()
                             : '✡',
-                        style: const TextStyle(color: AppTheme.gold, fontWeight: FontWeight.bold, fontSize: 20),
+                        style: const TextStyle(
+                            color: AppTheme.gold,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
                       ),
                     ),
                   ),
@@ -148,25 +157,36 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                       children: [
                         Text(
                           widget.currentUser.fullName,
-                          style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 16),
+                          style: const TextStyle(
+                              color: AppTheme.textPrimary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
                         ),
                         Text(
                           widget.currentUser.email,
-                          style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+                          style: const TextStyle(
+                              color: AppTheme.textSecondary, fontSize: 12),
                         ),
                         const SizedBox(height: 4),
                         Row(
                           children: [
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
                                 color: AppTheme.gainGreen.withOpacity(0.15),
                                 borderRadius: BorderRadius.circular(4),
                               ),
-                              child: const Text('KYC Verified', style: TextStyle(color: AppTheme.gainGreen, fontSize: 10, fontWeight: FontWeight.bold)),
+                              child: const Text('KYC Verified',
+                                  style: TextStyle(
+                                      color: AppTheme.gainGreen,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold)),
                             ),
                             const SizedBox(width: 8),
-                            const Text('2FA Active', style: TextStyle(color: AppTheme.gold, fontSize: 10)),
+                            const Text('2FA Active',
+                                style: TextStyle(
+                                    color: AppTheme.gold, fontSize: 10)),
                           ],
                         ),
                       ],
@@ -209,11 +229,15 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                           style: const TextStyle(color: AppTheme.textPrimary),
                           decoration: InputDecoration(
                             labelText: 'Email Address',
-                            labelStyle: const TextStyle(color: AppTheme.textSecondary),
+                            labelStyle:
+                                const TextStyle(color: AppTheme.textSecondary),
                             filled: true,
                             fillColor: AppTheme.surfaceDark,
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                            prefixIcon: const Icon(Icons.email_outlined, color: AppTheme.textSecondary),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none),
+                            prefixIcon: const Icon(Icons.email_outlined,
+                                color: AppTheme.textSecondary),
                           ),
                         ),
                         const SizedBox(height: 14),
@@ -223,11 +247,15 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                           style: const TextStyle(color: AppTheme.textPrimary),
                           decoration: InputDecoration(
                             labelText: 'Password',
-                            labelStyle: const TextStyle(color: AppTheme.textSecondary),
+                            labelStyle:
+                                const TextStyle(color: AppTheme.textSecondary),
                             filled: true,
                             fillColor: AppTheme.surfaceDark,
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                            prefixIcon: const Icon(Icons.lock_outline, color: AppTheme.textSecondary),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none),
+                            prefixIcon: const Icon(Icons.lock_outline,
+                                color: AppTheme.textSecondary),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -237,18 +265,27 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppTheme.gold,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
                             ),
                             onPressed: _isLoading ? null : _handleLogin,
                             child: _isLoading
-                                ? const CircularProgressIndicator(color: Colors.black)
-                                : const Text('Sign In to JuwishPro', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15)),
+                                ? const CircularProgressIndicator(
+                                    color: Colors.black)
+                                : const Text('Sign In to JuwishPro',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15)),
                           ),
                         ),
                         const SizedBox(height: 16),
                         TextButton(
                           onPressed: _launchAdminConsole,
-                          child: const Text('Access Admin Control Panel (2026.dmillers.org)', style: TextStyle(color: AppTheme.gold, fontSize: 13)),
+                          child: const Text(
+                              'Access Admin Control Panel (2026.dmillers.org)',
+                              style: TextStyle(
+                                  color: AppTheme.gold, fontSize: 13)),
                         ),
                       ],
                     ),
@@ -264,10 +301,13 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                           style: const TextStyle(color: AppTheme.textPrimary),
                           decoration: InputDecoration(
                             labelText: 'First Name',
-                            labelStyle: const TextStyle(color: AppTheme.textSecondary),
+                            labelStyle:
+                                const TextStyle(color: AppTheme.textSecondary),
                             filled: true,
                             fillColor: AppTheme.surfaceDark,
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -276,10 +316,13 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                           style: const TextStyle(color: AppTheme.textPrimary),
                           decoration: InputDecoration(
                             labelText: 'Last Name',
-                            labelStyle: const TextStyle(color: AppTheme.textSecondary),
+                            labelStyle:
+                                const TextStyle(color: AppTheme.textSecondary),
                             filled: true,
                             fillColor: AppTheme.surfaceDark,
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -288,10 +331,13 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                           style: const TextStyle(color: AppTheme.textPrimary),
                           decoration: InputDecoration(
                             labelText: 'Email Address',
-                            labelStyle: const TextStyle(color: AppTheme.textSecondary),
+                            labelStyle:
+                                const TextStyle(color: AppTheme.textSecondary),
                             filled: true,
                             fillColor: AppTheme.surfaceDark,
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -301,10 +347,13 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                           style: const TextStyle(color: AppTheme.textPrimary),
                           decoration: InputDecoration(
                             labelText: 'Create Password',
-                            labelStyle: const TextStyle(color: AppTheme.textSecondary),
+                            labelStyle:
+                                const TextStyle(color: AppTheme.textSecondary),
                             filled: true,
                             fillColor: AppTheme.surfaceDark,
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -314,17 +363,23 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppTheme.gold,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
                             ),
                             onPressed: () {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
                                   backgroundColor: AppTheme.gainGreen,
-                                  content: Text('Account registered on 2026.dmillers.org! Please verify email.'),
+                                  content: Text(
+                                      'Account registered on 2026.dmillers.org! Please verify email.'),
                                 ),
                               );
                             },
-                            child: const Text('Create Account', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15)),
+                            child: const Text('Create Account',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15)),
                           ),
                         ),
                       ],
@@ -339,12 +394,16 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                       children: [
                         const Text(
                           'Identity Verification (Tier 2)',
-                          style: TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(
+                              color: AppTheme.textPrimary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
                         ),
                         const SizedBox(height: 4),
                         const Text(
                           'Verify identity to unlock unlimited JuwishCoin & Fiat withdrawals on 2026.dmillers.org',
-                          style: TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+                          style: TextStyle(
+                              color: AppTheme.textSecondary, fontSize: 12),
                         ),
                         const SizedBox(height: 18),
                         TextField(
@@ -352,10 +411,13 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                           style: const TextStyle(color: AppTheme.textPrimary),
                           decoration: InputDecoration(
                             labelText: 'Full Legal Name',
-                            labelStyle: const TextStyle(color: AppTheme.textSecondary),
+                            labelStyle:
+                                const TextStyle(color: AppTheme.textSecondary),
                             filled: true,
                             fillColor: AppTheme.surfaceDark,
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none),
                           ),
                         ),
                         const SizedBox(height: 14),
@@ -370,12 +432,19 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                               value: _kycIdType,
                               isExpanded: true,
                               dropdownColor: AppTheme.surfaceDark,
-                              style: const TextStyle(color: AppTheme.textPrimary),
-                              items: ['Passport', 'National ID Card', "Driver's License"].map((type) {
-                                return DropdownMenuItem(value: type, child: Text(type));
+                              style:
+                                  const TextStyle(color: AppTheme.textPrimary),
+                              items: [
+                                'Passport',
+                                'National ID Card',
+                                "Driver's License"
+                              ].map((type) {
+                                return DropdownMenuItem(
+                                    value: type, child: Text(type));
                               }).toList(),
                               onChanged: (val) {
-                                if (val != null) setState(() => _kycIdType = val);
+                                if (val != null)
+                                  setState(() => _kycIdType = val);
                               },
                             ),
                           ),
@@ -386,10 +455,13 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                           style: const TextStyle(color: AppTheme.textPrimary),
                           decoration: InputDecoration(
                             labelText: 'Document ID Number',
-                            labelStyle: const TextStyle(color: AppTheme.textSecondary),
+                            labelStyle:
+                                const TextStyle(color: AppTheme.textSecondary),
                             filled: true,
                             fillColor: AppTheme.surfaceDark,
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -399,12 +471,18 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppTheme.gold,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
                             ),
                             onPressed: _isLoading ? null : _submitKyc,
                             child: _isLoading
-                                ? const CircularProgressIndicator(color: Colors.black)
-                                : const Text('Submit KYC Verification', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15)),
+                                ? const CircularProgressIndicator(
+                                    color: Colors.black)
+                                : const Text('Submit KYC Verification',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15)),
                           ),
                         ),
                       ],
@@ -419,4 +497,3 @@ class _AuthViewState extends State<AuthView> with SingleTickerProviderStateMixin
     );
   }
 }
-

@@ -10,7 +10,8 @@ class FundingView extends StatefulWidget {
   State<FundingView> createState() => _FundingViewState();
 }
 
-class _FundingViewState extends State<FundingView> with SingleTickerProviderStateMixin {
+class _FundingViewState extends State<FundingView>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final LaravelApiService _api = LaravelApiService();
 
@@ -20,7 +21,8 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
 
   final String _selectedWithdrawAsset = 'JWC';
   final TextEditingController _withdrawAddress = TextEditingController();
-  final TextEditingController _withdrawAmount = TextEditingController(text: '5000');
+  final TextEditingController _withdrawAmount =
+      TextEditingController(text: '5000');
   bool _isWithdrawing = false;
 
   final List<Map<String, dynamic>> _transactions = [
@@ -110,7 +112,8 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
           backgroundColor: AppTheme.gainGreen,
           content: Text(
             'Withdrawal submitted! TX: ${res["txHash"]}',
-            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+                color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
       );
@@ -152,7 +155,8 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
                       children: [
                         // Asset Selector
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 4),
                           decoration: BoxDecoration(
                             color: AppTheme.surfaceDark,
                             borderRadius: BorderRadius.circular(14),
@@ -163,7 +167,9 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
                               value: _selectedDepositAsset,
                               isExpanded: true,
                               dropdownColor: AppTheme.surfaceDark,
-                              style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  color: AppTheme.textPrimary,
+                                  fontWeight: FontWeight.bold),
                               items: ['JWC', 'USDT', 'BTC', 'ETH'].map((coin) {
                                 return DropdownMenuItem(
                                   value: coin,
@@ -172,15 +178,21 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
                                       if (coin == 'JWC')
                                         const Padding(
                                           padding: EdgeInsets.only(right: 6),
-                                          child: Text('✡', style: TextStyle(color: AppTheme.gold, fontSize: 16)),
+                                          child: Text('✡',
+                                              style: TextStyle(
+                                                  color: AppTheme.gold,
+                                                  fontSize: 16)),
                                         ),
-                                      Text(coin == 'JWC' ? 'JuwishCoin (JWC)' : coin),
+                                      Text(coin == 'JWC'
+                                          ? 'JuwishCoin (JWC)'
+                                          : coin),
                                     ],
                                   ),
                                 );
                               }).toList(),
                               onChanged: (val) {
-                                if (val != null) setState(() => _selectedDepositAsset = val);
+                                if (val != null)
+                                  setState(() => _selectedDepositAsset = val);
                               },
                             ),
                           ),
@@ -196,12 +208,15 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.info_outline, color: AppTheme.gold, size: 18),
+                              const Icon(Icons.info_outline,
+                                  color: AppTheme.gold, size: 18),
                               const SizedBox(width: 8),
                               Expanded(
                                 child: Text(
                                   'Network: $_selectedDepositNetwork\nContract: 0x71c...6511a',
-                                  style: const TextStyle(color: AppTheme.textSecondary, fontSize: 12),
+                                  style: const TextStyle(
+                                      color: AppTheme.textSecondary,
+                                      fontSize: 12),
                                 ),
                               ),
                             ],
@@ -241,7 +256,10 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text('Deposit Address', style: TextStyle(color: AppTheme.textSecondary, fontSize: 11)),
+                              const Text('Deposit Address',
+                                  style: TextStyle(
+                                      color: AppTheme.textSecondary,
+                                      fontSize: 11)),
                               const SizedBox(height: 4),
                               Row(
                                 children: [
@@ -257,12 +275,15 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
                                     ),
                                   ),
                                   IconButton(
-                                    icon: const Icon(Icons.copy, color: AppTheme.gold, size: 18),
+                                    icon: const Icon(Icons.copy,
+                                        color: AppTheme.gold, size: 18),
                                     onPressed: () {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         const SnackBar(
                                           backgroundColor: AppTheme.gainGreen,
-                                          content: Text('Deposit address copied to clipboard!'),
+                                          content: Text(
+                                              'Deposit address copied to clipboard!'),
                                         ),
                                       );
                                     },
@@ -283,30 +304,45 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
                       children: [
                         TextField(
                           controller: _withdrawAddress,
-                          style: const TextStyle(color: AppTheme.textPrimary, fontFamily: 'monospace', fontSize: 13),
+                          style: const TextStyle(
+                              color: AppTheme.textPrimary,
+                              fontFamily: 'monospace',
+                              fontSize: 13),
                           decoration: InputDecoration(
                             labelText: 'Destination Wallet Address',
                             hintText: '0x...',
-                            labelStyle: const TextStyle(color: AppTheme.textSecondary),
+                            labelStyle:
+                                const TextStyle(color: AppTheme.textSecondary),
                             filled: true,
                             fillColor: AppTheme.surfaceDark,
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
-                            prefixIcon: const Icon(Icons.account_balance_wallet_outlined, color: AppTheme.textSecondary),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none),
+                            prefixIcon: const Icon(
+                                Icons.account_balance_wallet_outlined,
+                                color: AppTheme.textSecondary),
                           ),
                         ),
                         const SizedBox(height: 14),
                         TextField(
                           controller: _withdrawAmount,
                           keyboardType: TextInputType.number,
-                          style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                              color: AppTheme.textPrimary,
+                              fontWeight: FontWeight.bold),
                           decoration: InputDecoration(
                             labelText: 'Amount to Withdraw',
-                            labelStyle: const TextStyle(color: AppTheme.textSecondary),
+                            labelStyle:
+                                const TextStyle(color: AppTheme.textSecondary),
                             filled: true,
                             fillColor: AppTheme.surfaceDark,
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(12),
+                                borderSide: BorderSide.none),
                             suffixText: _selectedWithdrawAsset,
-                            suffixStyle: const TextStyle(color: AppTheme.gold, fontWeight: FontWeight.bold),
+                            suffixStyle: const TextStyle(
+                                color: AppTheme.gold,
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                         const SizedBox(height: 14),
@@ -319,8 +355,14 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('Network Fee', style: TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
-                              Text('0.0005 BNB (~0.30 USDT)', style: TextStyle(color: AppTheme.textPrimary, fontSize: 13)),
+                              Text('Network Fee',
+                                  style: TextStyle(
+                                      color: AppTheme.textSecondary,
+                                      fontSize: 13)),
+                              Text('0.0005 BNB (~0.30 USDT)',
+                                  style: TextStyle(
+                                      color: AppTheme.textPrimary,
+                                      fontSize: 13)),
                             ],
                           ),
                         ),
@@ -331,12 +373,19 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppTheme.gold,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
                             ),
-                            onPressed: _isWithdrawing ? null : _handleWithdrawal,
+                            onPressed:
+                                _isWithdrawing ? null : _handleWithdrawal,
                             child: _isWithdrawing
-                                ? const CircularProgressIndicator(color: Colors.black)
-                                : const Text('Confirm Instant Withdrawal', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 15)),
+                                ? const CircularProgressIndicator(
+                                    color: Colors.black)
+                                : const Text('Confirm Instant Withdrawal',
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15)),
                           ),
                         ),
                       ],
@@ -349,7 +398,9 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
                     itemCount: _transactions.length,
                     itemBuilder: (context, idx) {
                       final tx = _transactions[idx];
-                      final isDeposit = tx['type'].toString().contains('Deposit') || tx['type'].toString().contains('Reward');
+                      final isDeposit =
+                          tx['type'].toString().contains('Deposit') ||
+                              tx['type'].toString().contains('Reward');
                       return Container(
                         margin: const EdgeInsets.only(bottom: 10),
                         padding: const EdgeInsets.all(14),
@@ -372,8 +423,12 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
                                     shape: BoxShape.circle,
                                   ),
                                   child: Icon(
-                                    isDeposit ? Icons.arrow_downward : Icons.arrow_upward,
-                                    color: isDeposit ? AppTheme.gainGreen : AppTheme.lossRed,
+                                    isDeposit
+                                        ? Icons.arrow_downward
+                                        : Icons.arrow_upward,
+                                    color: isDeposit
+                                        ? AppTheme.gainGreen
+                                        : AppTheme.lossRed,
                                     size: 18,
                                   ),
                                 ),
@@ -383,11 +438,16 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
                                   children: [
                                     Text(
                                       tx['type'] as String,
-                                      style: const TextStyle(color: AppTheme.textPrimary, fontWeight: FontWeight.bold, fontSize: 14),
+                                      style: const TextStyle(
+                                          color: AppTheme.textPrimary,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14),
                                     ),
                                     Text(
                                       '${tx["date"]} • ${tx["ref"]}',
-                                      style: const TextStyle(color: AppTheme.textSecondary, fontSize: 11),
+                                      style: const TextStyle(
+                                          color: AppTheme.textSecondary,
+                                          fontSize: 11),
                                     ),
                                   ],
                                 ),
@@ -399,14 +459,19 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
                                 Text(
                                   tx['amount'] as String,
                                   style: TextStyle(
-                                    color: isDeposit ? AppTheme.gainGreen : AppTheme.textPrimary,
+                                    color: isDeposit
+                                        ? AppTheme.gainGreen
+                                        : AppTheme.textPrimary,
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
                                   ),
                                 ),
                                 Text(
                                   tx['status'] as String,
-                                  style: const TextStyle(color: AppTheme.gainGreen, fontSize: 11, fontWeight: FontWeight.w600),
+                                  style: const TextStyle(
+                                      color: AppTheme.gainGreen,
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600),
                                 ),
                               ],
                             ),
@@ -424,4 +489,3 @@ class _FundingViewState extends State<FundingView> with SingleTickerProviderStat
     );
   }
 }
-
