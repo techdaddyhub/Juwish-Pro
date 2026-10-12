@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../theme/app_theme.dart';
+import '../services/laravel_api_service.dart';
 
 class VaultTab extends StatefulWidget {
   final double jwcBalance;
@@ -20,6 +21,26 @@ class _VaultTabState extends State<VaultTab>
     with AutomaticKeepAliveClientMixin {
   double _stakedAmount = 10000.0;
   static const double _fixedApy = 14.50; // 14.5%
+
+  List<Map<String, dynamic>> _liveBackendPlans = [];
+  bool _isLoadingPlans = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchLivePlans();
+  }
+
+  Future<void> _fetchLivePlans() async {
+    setState(() => _isLoadingPlans = true);
+    final plans = await LaravelApiService().fetchLivePlans();
+    if (mounted) {
+      setState(() {
+        _liveBackendPlans = plans;
+        _isLoadingPlans = false;
+      });
+    }
+  }
 
   @override
   bool get wantKeepAlive => true;
@@ -73,6 +94,10 @@ class _VaultTabState extends State<VaultTab>
 
           // Staking Tiers
           _buildTiersCard(),
+          const SizedBox(height: 16),
+
+          // Live Backend Staking Plans
+          _buildLivePlansCard(),
         ],
       ),
     );
@@ -211,14 +236,20 @@ class _VaultTabState extends State<VaultTab>
           // Yield Projections
           Row(
             children: [
-              _buildYieldTile('Daily Yield',
-                  '${_dailyYield.toStringAsFixed(2)} JWC', '≈ \$${(_dailyYield * 1.425).toStringAsFixed(2)}'),
+              _buildYieldTile(
+                  'Daily Yield',
+                  '${_dailyYield.toStringAsFixed(2)} JWC',
+                  '≈ \$${(_dailyYield * 1.425).toStringAsFixed(2)}'),
               const SizedBox(width: 8),
-              _buildYieldTile('Monthly',
-                  '${_monthlyYield.toStringAsFixed(1)} JWC', '≈ \$${(_monthlyYield * 1.425).toStringAsFixed(2)}'),
+              _buildYieldTile(
+                  'Monthly',
+                  '${_monthlyYield.toStringAsFixed(1)} JWC',
+                  '≈ \$${(_monthlyYield * 1.425).toStringAsFixed(2)}'),
               const SizedBox(width: 8),
-              _buildYieldTile('Annual (1Y)',
-                  '${_yearlyYield.toStringAsFixed(0)} JWC', '≈ \$${(_yearlyYield * 1.425).toStringAsFixed(0)}'),
+              _buildYieldTile(
+                  'Annual (1Y)',
+                  '${_yearlyYield.toStringAsFixed(0)} JWC',
+                  '≈ \$${(_yearlyYield * 1.425).toStringAsFixed(0)}'),
             ],
           ),
           const SizedBox(height: 18),
@@ -372,6 +403,126 @@ class _VaultTabState extends State<VaultTab>
               ),
             );
           }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLivePlansCard() {
+    return Container(
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: AppTheme.surfaceCharcoal,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppTheme.borderSubtle),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Image.asset('assets/images/laravel_logo.png',
+                      width: 18, height: 18),
+                  const SizedBox(width: 8),
+                  const Text(
+                    'Live Staking Plans (2026.dmillers.org)',
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
+              IconButton(
+                icon: const Icon(Icons.refresh, size: 18, color: AppTheme.gold),
+                onPressed: _fetchLivePlans,
+                tooltip: 'Refresh Plans',
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          if (_isLoadingPlans)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 20),
+              child: Center(
+                child: CircularProgressIndicator(color: AppTheme.gold),
+              ),
+            )
+          else if (_liveBackendPlans.isEmpty)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 12),
+              child: Text(
+                'Connected to 2026.dmillers.org. Synchronizing plans...',
+                style: TextStyle(fontSize: 12, color: AppTheme.textSecondary),
+              ),
+            )
+          else
+            ..._liveBackendPlans.take(4).map((plan) {
+              final name = plan['name']?.toString() ?? 'Plan';
+              final returnPct = plan['return_percent']?.toString() ?? '10.0';
+              final duration = plan['duration_days']?.toString() ?? '30';
+              final minInvest = plan['min_investment']?.toString() ?? '100';
+              return Container(
+                margin: const EdgeInsets.symmetric(vertical: 6),
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppTheme.nightObsidian,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: AppTheme.borderSubtle),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            style: const TextStyle(
+                              color: AppTheme.textPrimary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 13,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          const SizedBox(height: 3),
+                          Text(
+                            'Duration: $duration days • Min: \$$minInvest',
+                            style: const TextStyle(
+                              color: AppTheme.textSecondary,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: AppTheme.greenBullish.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: AppTheme.greenBullish),
+                      ),
+                      child: Text(
+                        '+$returnPct%',
+                        style: const TextStyle(
+                          color: AppTheme.greenBullish,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
         ],
       ),
     );

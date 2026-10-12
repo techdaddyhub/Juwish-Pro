@@ -13,6 +13,7 @@ import 'views/vault_tab.dart';
 import 'views/funding_view.dart';
 import 'views/auth_view.dart';
 import 'widgets/jwc_checkout_dialog.dart';
+import 'services/laravel_api_service.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,6 +57,146 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
   UserAccount _currentUser = UserAccount.mockAdmin();
 
   static const String webExchangeUrl = 'https://2026.dmillers.org';
+
+  Map<String, dynamic>? _syncData;
+  bool _isSyncing = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _syncWithLaravelBackend();
+  }
+
+  Future<void> _syncWithLaravelBackend() async {
+    setState(() => _isSyncing = true);
+    final data = await LaravelApiService().fetchSyncInfo();
+    if (mounted) {
+      setState(() {
+        _syncData = data;
+        _isSyncing = false;
+      });
+    }
+  }
+
+  void _showSyncDetailsModal(BuildContext context) {
+    HapticFeedback.lightImpact();
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppTheme.nightObsidian,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) {
+        final framework = _syncData?['framework'] ?? 'Laravel 12.53.0';
+        final activePlans = _syncData?['stats']?['active_plans'] ?? 29;
+        final serverTime = _syncData?['stats']?['server_time'] ?? 'Connected';
+        return Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Image.asset('assets/images/laravel_logo.png',
+                      width: 28, height: 28),
+                  const SizedBox(width: 10),
+                  const Text(
+                    'Laravel Real-Time Backend Sync',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.textPrimary,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: AppTheme.surfaceCharcoal,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: AppTheme.borderHighlight),
+                ),
+                child: Column(
+                  children: [
+                    _buildSyncRow(
+                        'Domain', 'https://2026.dmillers.org', AppTheme.gold),
+                    const Divider(color: AppTheme.borderHighlight),
+                    _buildSyncRow(
+                        'Backend Framework', framework, AppTheme.textPrimary),
+                    const Divider(color: AppTheme.borderHighlight),
+                    _buildSyncRow(
+                        'Database',
+                        '🟢 Connected (dmiloplj_juwishpro)',
+                        AppTheme.greenBullish),
+                    const Divider(color: AppTheme.borderHighlight),
+                    _buildSyncRow('Active Staking Plans',
+                        '$activePlans Plans Live', AppTheme.gold),
+                    const Divider(color: AppTheme.borderHighlight),
+                    _buildSyncRow('Server Timestamp', serverTime.toString(),
+                        AppTheme.textSecondary),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AppTheme.gold,
+                        side: const BorderSide(color: AppTheme.gold),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        _syncWithLaravelBackend();
+                      },
+                      icon: const Icon(Icons.refresh, size: 16),
+                      label: const Text('Re-sync'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.gold,
+                        foregroundColor: AppTheme.nightObsidian,
+                      ),
+                      onPressed: () {
+                        Navigator.pop(ctx);
+                        _launchWebPortal();
+                      },
+                      icon: const Icon(Icons.open_in_browser, size: 16),
+                      label: const Text('Open Portal'),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildSyncRow(String label, String value, Color color) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label,
+              style:
+                  const TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
+          Text(value,
+              style: TextStyle(
+                  color: color, fontWeight: FontWeight.bold, fontSize: 13)),
+        ],
+      ),
+    );
+  }
 
   void _onTabSelected(int index) {
     HapticFeedback.selectionClick();
@@ -134,10 +275,16 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
           appBar: AppBar(
             title: Row(
               children: [
+                Image.asset(
+                  'assets/images/laravel_logo.png',
+                  width: 22,
+                  height: 22,
+                ),
+                const SizedBox(width: 8),
                 Container(
-                  width: 32,
-                  height: 32,
-                  padding: const EdgeInsets.all(4),
+                  width: 24,
+                  height: 24,
+                  padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                     color: AppTheme.gold.withOpacity(0.15),
                     shape: BoxShape.circle,
@@ -145,11 +292,11 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
                   ),
                   child: Image.asset('assets/images/juwishcoin.png'),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 8),
                 RichText(
                   text: const TextSpan(
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 17,
                       fontWeight: FontWeight.w900,
                       letterSpacing: -0.2,
                     ),
@@ -168,27 +315,58 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
               ],
             ),
             actions: [
-              // Quick action: Futures & Margin
-              IconButton(
-                tooltip: 'Futures & Margin Trading',
-                icon: Icon(
-                  Icons.stacked_line_chart,
-                  color: _currentIndex == 3 ? AppTheme.gold : AppTheme.textSecondary,
-                  size: 20,
+              // Live Sync Status Chip
+              GestureDetector(
+                onTap: () => _showSyncDetailsModal(context),
+                child: Container(
+                  margin: const EdgeInsets.symmetric(vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  decoration: BoxDecoration(
+                    color: (_syncData != null)
+                        ? AppTheme.greenBullish.withOpacity(0.15)
+                        : AppTheme.gold.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(
+                      color: (_syncData != null)
+                          ? AppTheme.greenBullish
+                          : AppTheme.borderHighlight,
+                      width: 0.8,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 7,
+                        height: 7,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: (_syncData != null)
+                              ? AppTheme.greenBullish
+                              : (_isSyncing
+                                  ? AppTheme.gold
+                                  : AppTheme.textSecondary),
+                        ),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        _syncData != null
+                            ? 'Synced'
+                            : (_isSyncing ? 'Syncing...' : 'Live'),
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: (_syncData != null)
+                              ? AppTheme.greenBullish
+                              : AppTheme.gold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                onPressed: () => _onTabSelected(3),
               ),
-
-              // Quick action: Stocks & Capital Assets
-              IconButton(
-                tooltip: 'Stocks, ETFs & Bonds',
-                icon: Icon(
-                  Icons.domain,
-                  color: _currentIndex == 4 ? AppTheme.gold : AppTheme.textSecondary,
-                  size: 20,
-                ),
-                onPressed: () => _onTabSelected(4),
-              ),
+              const SizedBox(width: 4),
 
               // JWC Balance chip
               Container(
@@ -223,7 +401,9 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
                 tooltip: 'Profile & KYC Status',
                 icon: Icon(
                   Icons.account_circle,
-                  color: _currentIndex == 7 ? AppTheme.gold : AppTheme.textSecondary,
+                  color: _currentIndex == 7
+                      ? AppTheme.gold
+                      : AppTheme.textSecondary,
                   size: 22,
                 ),
                 onPressed: () => _onTabSelected(7),

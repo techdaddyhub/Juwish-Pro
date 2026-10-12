@@ -1,18 +1,31 @@
 #!/usr/bin/env python3
+"""
+JuwishPro - Multi-Platform App Icon Generator (Laravel Edition)
+Generates high-resolution smart app icons featuring the official Laravel logo
+across Android, iOS, macOS, Windows, and Web.
+"""
+
 import os
+import subprocess
 from PIL import Image
 
 def generate_icons():
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    src_path = os.path.join(root, 'assets/images/logo-square.png')
-    if not os.path.exists(src_path):
-        src_path = os.path.join(root, 'assets/images/juwishcoin.png')
-    
-    base_img = Image.open(src_path).convert('RGBA')
+    master_png = os.path.join(root, 'assets/images/app_icon_1024.png')
+    svg_file = os.path.join(root, 'assets/images/app_icon.svg')
 
-    # Save 1024x1024 master
-    base_1024 = base_img.resize((1024, 1024), Image.Resampling.LANCZOS)
-    base_1024.save(os.path.join(root, 'assets/images/app_icon_1024.png'))
+    # If master PNG doesn't exist, try rasterizing from SVG if convert is available
+    if not os.path.exists(master_png) and os.path.exists(svg_file):
+        try:
+            subprocess.run(['convert', svg_file, master_png], check=True)
+            print('[INFO] Rasterized master icon from app_icon.svg')
+        except Exception as e:
+            print(f'[WARN] convert not available, falling back: {e}')
+
+    if not os.path.exists(master_png):
+        raise FileNotFoundError(f"Master app icon not found at {master_png}")
+
+    base_img = Image.open(master_png).convert('RGBA')
 
     # 1. Android Mipmaps
     android_sizes = {
@@ -47,11 +60,8 @@ def generate_icons():
         icon = base_img.resize((size, size), Image.Resampling.LANCZOS)
         icon.save(os.path.join(ios_dir, name), 'PNG')
 
-    # iOS 1024x1024 marketing (opaque background required by App Store)
-    bg = Image.new('RGB', (1024, 1024), (11, 14, 17))
-    medallion = base_img.resize((960, 960), Image.Resampling.LANCZOS)
-    bg.paste(medallion, (32, 32), medallion)
-    bg.save(os.path.join(ios_dir, 'Icon-App-1024x1024@1x.png'), 'PNG')
+    # iOS 1024x1024 App Store marketing (opaque RGB)
+    base_img.convert('RGB').save(os.path.join(ios_dir, 'Icon-App-1024x1024@1x.png'), 'PNG')
 
     # 3. macOS AppIcon set
     macos_dir = os.path.join(root, 'macos/Runner/Assets.xcassets/AppIcon.appiconset')
@@ -78,12 +88,16 @@ def generate_icons():
     # 5. Web icons
     web_dir = os.path.join(root, 'web/icons')
     os.makedirs(web_dir, exist_ok=True)
-    for name, size in [('Icon-192.png', 192), ('Icon-512.png', 512), ('Icon-maskable-192.png', 192), ('Icon-maskable-512.png', 512)]:
+    for name, size in [
+        ('Icon-192.png', 192),
+        ('Icon-512.png', 512),
+        ('Icon-maskable-192.png', 192),
+        ('Icon-maskable-512.png', 512),
+    ]:
         icon = base_img.resize((size, size), Image.Resampling.LANCZOS)
         icon.save(os.path.join(web_dir, name), 'PNG')
 
-    print('[OK] JuwishPro icons generated successfully across all platforms.')
+    print('[OK] JuwishPro Laravel edition app icons generated across Android, iOS, Windows, macOS, Web.')
 
 if __name__ == '__main__':
     generate_icons()
-
