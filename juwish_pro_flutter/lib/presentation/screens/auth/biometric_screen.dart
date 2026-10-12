@@ -14,7 +14,6 @@ class _BiometricScreenState extends State<BiometricScreen> {
   bool _biometricsEnabled = true;
   bool _twoFactorEnabled = true;
   bool _requireBioOnTrading = true;
-  String _autoLockInterval = 'Immediately on background';
 
   void _testBiometrics() async {
     HapticFeedback.mediumImpact();

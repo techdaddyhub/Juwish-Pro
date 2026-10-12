@@ -18,8 +18,8 @@ class _KycScreenState extends State<KycScreen> {
   final TextEditingController _idNumberController =
       TextEditingController(text: 'P-98421092');
   String _selectedIdType = 'Passport';
-  bool _documentFrontAttached = true;
-  bool _documentBackAttached = true;
+  final bool _documentFrontAttached = true;
+  final bool _documentBackAttached = true;
   bool _isSubmitting = false;
 
   @override

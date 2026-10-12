@@ -53,4 +53,9 @@ class Validators {
     }
     return null;
   }
+
+  static bool isValidEmail(String email) => validateEmail(email) == null;
 }
+
+// Backward compatibility alias
+typedef AppValidators = Validators;

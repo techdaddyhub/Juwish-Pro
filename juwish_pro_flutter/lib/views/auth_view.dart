@@ -443,8 +443,9 @@ class _AuthViewState extends State<AuthView>
                                     value: type, child: Text(type));
                               }).toList(),
                               onChanged: (val) {
-                                if (val != null)
+                                if (val != null) {
                                   setState(() => _kycIdType = val);
+                                }
                               },
                             ),
                           ),

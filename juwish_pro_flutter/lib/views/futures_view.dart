@@ -131,8 +131,9 @@ class _FuturesViewState extends State<FuturesView> {
                         );
                       }).toList(),
                       onChanged: (val) {
-                        if (val != null)
+                        if (val != null) {
                           setState(() => _selectedContract = val);
+                        }
                       },
                     ),
                   ),

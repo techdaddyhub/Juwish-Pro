@@ -20,13 +20,18 @@ class ApiResponse<T> {
 
 class ApiClient {
   static final ApiClient _instance = ApiClient._internal();
-  factory ApiClient() => _instance;
+  factory ApiClient({http.Client? client}) {
+    if (client != null) {
+      return ApiClient._withClient(client);
+    }
+    return _instance;
+  }
 
   final http.Client _httpClient;
   final SecureStorageService _storage = SecureStorageService();
 
-  ApiClient({http.Client? client}) : _httpClient = client ?? http.Client();
   ApiClient._internal() : _httpClient = http.Client();
+  ApiClient._withClient(http.Client client) : _httpClient = client;
 
   Map<String, String> _buildHeaders({String? token}) {
     final activeToken = token ?? _storage.getAuthToken();

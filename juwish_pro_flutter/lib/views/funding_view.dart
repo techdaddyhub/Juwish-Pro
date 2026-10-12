@@ -191,8 +191,9 @@ class _FundingViewState extends State<FundingView>
                                 );
                               }).toList(),
                               onChanged: (val) {
-                                if (val != null)
+                                if (val != null) {
                                   setState(() => _selectedDepositAsset = val);
+                                }
                               },
                             ),
                           ),

@@ -20,7 +20,6 @@ import '../presentation/screens/wallet/crypto_deposit_screen.dart';
 import '../presentation/screens/wallet/withdrawal_screen.dart';
 import '../presentation/screens/wallet/transaction_history_screen.dart';
 import '../presentation/screens/auth/kyc_screen.dart';
-import '../presentation/screens/auth/biometric_screen.dart';
 
 class HomeTab extends StatefulWidget {
   final double jwcBalance;
