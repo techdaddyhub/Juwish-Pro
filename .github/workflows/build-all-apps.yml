@@ -174,18 +174,13 @@ jobs:
   # -------------------------------------------------------------
   build-windows:
     name: Build Windows Application
-    runs-on: windows-latest
+    runs-on: windows-2022
     defaults:
       run:
         working-directory: juwish_pro_flutter
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
-      - name: Set up Visual Studio Environment
-        uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: x64
 
       - name: Set up Python
         uses: actions/setup-python@v5
