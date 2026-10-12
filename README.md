@@ -45,10 +45,6 @@
 
 ## 🌐 Live Deployment
 
-- **Production Portal**: [https://2026.dmillers.org](https://2026.dmillers.org)
-- **Automated Initializer**: [https://2026.dmillers.org/cpanel-setup.php](https://2026.dmillers.org/cpanel-setup.php)
-- **System Installer**: [https://2026.dmillers.org/install/index.php](https://2026.dmillers.org/install/index.php)
-
 ---
 
 ## 📄 License & Ownership
