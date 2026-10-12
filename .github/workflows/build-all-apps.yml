@@ -178,12 +178,14 @@ jobs:
     defaults:
       run:
         working-directory: juwish_pro_flutter
-    env:
-      CMAKE_GENERATOR: "Visual Studio 17 2022"
-      CMAKE_GENERATOR_PLATFORM: "x64"
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+
+      - name: Set up Visual Studio Environment
+        uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -203,8 +205,10 @@ jobs:
       - name: Enable Windows Desktop
         run: flutter config --enable-windows-desktop
 
-      - name: Scaffold Windows Project & Inject Icons
+      - name: Scaffold Clean Windows Project & Inject Icons
+        shell: pwsh
         run: |
+          if (Test-Path windows) { Remove-Item -Recurse -Force windows }
           flutter create --platforms=windows --org org.dmillers.juwishpro .
           python scripts/generate_app_icons.py
 

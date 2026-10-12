@@ -56,7 +56,8 @@ class DashboardController extends Controller
         ];
 
         // convert all to system currency,
-        $rate = rateConverter(1, 'USD', getSetting('currency'), 'gen')['converted_amount'];
+        $conversion = rateConverter(1, 'USD', getSetting('currency') ?: 'USD', 'gen');
+        $rate = (float) ($conversion['converted_amount'] ?? 1.0);
         $futures_conversion = $system_equity_metrics['futures_balance'] * $rate;
         $margin_conversion = $system_equity_metrics['margin_balance'] * $rate;
         $forex_conversion = $system_equity_metrics['forex_balance'] * $rate;

@@ -19,7 +19,8 @@ class DashboardController extends Controller
 
         // 1. Hero Stats
         $balance = $user->balance;
-        $rate = rateConverter(1, 'USD', getSetting('currency'), 'gen')['converted_amount'];
+        $conversion = rateConverter(1, 'USD', getSetting('currency') ?: 'USD', 'gen');
+        $rate = (float) ($conversion['converted_amount'] ?? 1.0);
         $trading_equity = $user->tradingAccounts()->sum('equity') * $rate;
         $bond_holdings_value = $user->bondHoldings()->active()->sum('amount');
         // Total Equity = Balance + Trading Equity + Bonds
