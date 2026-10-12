@@ -353,7 +353,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lozand | System Installation</title>
+    <title>JuwishPro | System Installation</title>
     <link rel="icon" type="image/png" href="/assets/images/favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
@@ -511,7 +511,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <!-- Sidebar -->
             <div class="lg:col-span-3 space-y-4">
                 <div class="mb-10 px-2 text-center lg:text-left">
-                    <img src="/assets/images/logo-rectangle.png" alt="Lozand Logo"
+                    <img src="/assets/images/logo-rectangle.png" alt="JuwishPro Logo"
                         class="h-10 w-auto mb-3 mx-auto lg:mx-0 drop-shadow-2xl">
                     <div class="flex items-center gap-2 justify-center lg:justify-start">
                         <span class="h-px w-8 bg-indigo-500/30"></span>
