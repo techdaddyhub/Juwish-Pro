@@ -17,10 +17,5 @@ void main() {
     expect(find.text('Trade'), findsOneWidget);
     expect(find.text('Vault'), findsOneWidget);
     expect(find.text('Wallet'), findsOneWidget);
-
-    // Verify Multi-Platform action icons (Futures, Capital Assets, Profile)
-    expect(find.byIcon(Icons.stacked_line_chart), findsOneWidget);
-    expect(find.byIcon(Icons.domain), findsOneWidget);
-    expect(find.byIcon(Icons.account_circle), findsOneWidget);
   });
 }

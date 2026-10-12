@@ -294,7 +294,7 @@ class _MainResponsiveShellState extends State<MainResponsiveShell> {
                         NavigationRailDestination(
                           icon: Icon(Icons.account_balance_wallet_outlined),
                           selectedIcon: Icon(Icons.account_balance_wallet),
-                          label: Text('Funding'),
+                          label: Text('Wallet'),
                         ),
                         NavigationRailDestination(
                           icon: Icon(Icons.person_outline),
