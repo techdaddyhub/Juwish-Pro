@@ -1,34 +1,26 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'theme/app_theme.dart';
-import 'models/market_pair.dart';
-import 'models/user_account.dart';
-import 'views/home_tab.dart';
-import 'views/markets_tab.dart';
-import 'views/trade_tab.dart';
-import 'views/futures_view.dart';
-import 'views/capital_instruments_view.dart';
-import 'views/vault_tab.dart';
-import 'views/funding_view.dart';
-import 'views/auth_view.dart';
-import 'widgets/jwc_checkout_dialog.dart';
-import 'services/laravel_api_service.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // Ensure dark status bar icons and full-screen responsiveness
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: AppTheme.surfaceCharcoal,
+      statusBarBrightness: Brightness.dark,
+      systemNavigationBarColor: AppTheme.nightObsidian,
       systemNavigationBarIconBrightness: Brightness.light,
     ),
   );
   runApp(const JuwishProApp());
 }
 
+/// Official JuwishPro Cross-Platform Mobile Application
 class JuwishProApp extends StatelessWidget {
   const JuwishProApp({super.key});
 
@@ -38,500 +30,395 @@ class JuwishProApp extends StatelessWidget {
       title: 'JuwishPro | Crypto Exchange & JWC Wallet',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.darkTheme,
-      home: const MainResponsiveShell(),
+      home: const ProductionAppShell(),
     );
   }
 }
 
-class MainResponsiveShell extends StatefulWidget {
-  const MainResponsiveShell({super.key});
+class ProductionAppShell extends StatefulWidget {
+  const ProductionAppShell({super.key});
 
   @override
-  State<MainResponsiveShell> createState() => _MainResponsiveShellState();
+  State<ProductionAppShell> createState() => _ProductionAppShellState();
 }
 
-class _MainResponsiveShellState extends State<MainResponsiveShell> {
-  int _currentIndex = 0;
-  double _jwcBalance = 2500.00;
-  MarketPair? _selectedTradingPair;
-  UserAccount _currentUser = UserAccount.mockAdmin();
+class _ProductionAppShellState extends State<ProductionAppShell> {
+  static const String webPlatformUrl = 'https://2026.dmillers.org';
 
-  static const String webExchangeUrl = 'https://2026.dmillers.org';
+  WebViewController? _controller;
+  bool _isLoading = true;
+  int _loadingProgress = 0;
+  bool _hasError = false;
+  String _errorMessage = '';
+  DateTime? _lastBackPressTime;
 
-  Map<String, dynamic>? _syncData;
-  bool _isSyncing = false;
+  bool get _isWebViewSupported {
+    if (kIsWeb) return false;
+    return defaultTargetPlatform == TargetPlatform.android ||
+        defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS;
+  }
 
   @override
   void initState() {
     super.initState();
-    _syncWithLaravelBackend();
-  }
-
-  Future<void> _syncWithLaravelBackend() async {
-    setState(() => _isSyncing = true);
-    final data = await LaravelApiService().fetchSyncInfo();
-    if (mounted) {
-      setState(() {
-        _syncData = data;
-        _isSyncing = false;
-      });
+    if (_isWebViewSupported) {
+      _initWebView();
+    } else {
+      _isLoading = false;
     }
   }
 
-  void _showSyncDetailsModal(BuildContext context) {
-    HapticFeedback.lightImpact();
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: AppTheme.nightObsidian,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (ctx) {
-        final framework = _syncData?['framework'] ?? 'Laravel 12.53.0';
-        final activePlans = _syncData?['stats']?['active_plans'] ?? 29;
-        final serverTime = _syncData?['stats']?['server_time'] ?? 'Connected';
-        return Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Image.asset('assets/images/laravel_logo.png',
-                      width: 28, height: 28),
-                  const SizedBox(width: 10),
-                  const Text(
-                    'Laravel Real-Time Backend Sync',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.textPrimary,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.all(14),
-                decoration: BoxDecoration(
-                  color: AppTheme.surfaceCharcoal,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppTheme.borderHighlight),
-                ),
-                child: Column(
-                  children: [
-                    _buildSyncRow(
-                        'Domain', 'https://2026.dmillers.org', AppTheme.gold),
-                    const Divider(color: AppTheme.borderHighlight),
-                    _buildSyncRow(
-                        'Backend Framework', framework, AppTheme.textPrimary),
-                    const Divider(color: AppTheme.borderHighlight),
-                    _buildSyncRow(
-                        'Database',
-                        '🟢 Connected (dmiloplj_juwishpro)',
-                        AppTheme.greenBullish),
-                    const Divider(color: AppTheme.borderHighlight),
-                    _buildSyncRow('Active Staking Plans',
-                        '$activePlans Plans Live', AppTheme.gold),
-                    const Divider(color: AppTheme.borderHighlight),
-                    _buildSyncRow('Server Timestamp', serverTime.toString(),
-                        AppTheme.textSecondary),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton.icon(
-                      style: OutlinedButton.styleFrom(
-                        foregroundColor: AppTheme.gold,
-                        side: const BorderSide(color: AppTheme.gold),
-                      ),
-                      onPressed: () {
-                        Navigator.pop(ctx);
-                        _syncWithLaravelBackend();
-                      },
-                      icon: const Icon(Icons.refresh, size: 16),
-                      label: const Text('Re-sync'),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppTheme.gold,
-                        foregroundColor: AppTheme.nightObsidian,
-                      ),
-                      onPressed: () {
-                        Navigator.pop(ctx);
-                        _launchWebPortal();
-                      },
-                      icon: const Icon(Icons.open_in_browser, size: 16),
-                      label: const Text('Open Portal'),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+  void _initWebView() {
+    try {
+      final controller = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setBackgroundColor(AppTheme.nightObsidian)
+        ..setNavigationDelegate(
+          NavigationDelegate(
+            onProgress: (int progress) {
+              if (mounted) {
+                setState(() {
+                  _loadingProgress = progress;
+                  if (progress >= 100) {
+                    _isLoading = false;
+                  }
+                });
+              }
+            },
+            onPageStarted: (String url) {
+              if (mounted) {
+                setState(() {
+                  _isLoading = true;
+                  _hasError = false;
+                });
+              }
+            },
+            onPageFinished: (String url) {
+              if (mounted) {
+                setState(() {
+                  _isLoading = false;
+                  _loadingProgress = 100;
+                });
+              }
+            },
+            onWebResourceError: (WebResourceError error) {
+              final isMainFrame = error.isForMainFrame ?? true;
+              if (isMainFrame && mounted) {
+                setState(() {
+                  _hasError = true;
+                  _isLoading = false;
+                  _errorMessage = error.description;
+                });
+              }
+            },
+            onNavigationRequest: (NavigationRequest request) {
+              final url = request.url;
+              // Intercept external communication protocols
+              if (url.startsWith('mailto:') ||
+                  url.startsWith('tel:') ||
+                  url.startsWith('sms:') ||
+                  url.startsWith('tg:') ||
+                  url.startsWith('whatsapp:') ||
+                  url.startsWith('intent:')) {
+                _launchExternalUrl(url);
+                return NavigationDecision.prevent;
+              }
+              return NavigationDecision.navigate;
+            },
           ),
         );
-      },
-    );
-  }
 
-  Widget _buildSyncRow(String label, String value, Color color) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label,
-              style:
-                  const TextStyle(color: AppTheme.textSecondary, fontSize: 13)),
-          Text(value,
-              style: TextStyle(
-                  color: color, fontWeight: FontWeight.bold, fontSize: 13)),
-        ],
-      ),
-    );
-  }
-
-  void _onTabSelected(int index) {
-    HapticFeedback.selectionClick();
-    setState(() => _currentIndex = index);
-  }
-
-  void _onTradePairSelected(MarketPair pair) {
-    setState(() {
-      _selectedTradingPair = pair;
-      _currentIndex = 2; // Jump to trade tab
-    });
-  }
-
-  void _openDepositDialog(BuildContext context) {
-    HapticFeedback.lightImpact();
-    JwcCheckoutDialog.show(
-      context,
-      onDepositConfirmed: (double amount) {
+      controller.loadRequest(Uri.parse(webPlatformUrl));
+      _controller = controller;
+    } catch (e) {
+      debugPrint('WebView initialization fallback: $e');
+      if (mounted) {
         setState(() {
-          _jwcBalance += amount;
+          _isLoading = false;
+          _hasError = true;
+          _errorMessage = e.toString();
         });
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: AppTheme.greenBullish,
-            content: Text(
-              'Credited ${amount.toStringAsFixed(2)} JWC to your balance!',
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ),
-        );
-      },
-    );
+      }
+    }
   }
 
-  Future<void> _launchWebPortal() async {
-    final uri = Uri.parse(webExchangeUrl);
-    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      debugPrint('Could not launch $webExchangeUrl');
+  Future<void> _launchExternalUrl(String url) async {
+    try {
+      final uri = Uri.parse(url);
+      if (await canLaunchUrl(uri)) {
+        await launchUrl(uri, mode: LaunchMode.externalApplication);
+      }
+    } catch (e) {
+      debugPrint('Failed to launch external URL: $e');
     }
+  }
+
+  Future<void> _handlePopScope(bool didPop, dynamic result) async {
+    if (didPop) return;
+
+    if (_controller != null) {
+      final canGoBack = await _controller!.canGoBack();
+      if (canGoBack) {
+        await _controller!.goBack();
+        return;
+      }
+    }
+
+    // Double tap back to exit application
+    final now = DateTime.now();
+    if (_lastBackPressTime == null ||
+        now.difference(_lastBackPressTime!) > const Duration(seconds: 2)) {
+      _lastBackPressTime = now;
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Press back again to exit JuwishPro',
+              style: TextStyle(color: AppTheme.textPrimary),
+            ),
+            backgroundColor: AppTheme.surfaceCharcoal,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+      return;
+    }
+
+    // Exit application
+    SystemNavigator.pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final isWide = constraints.maxWidth >= 640;
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: _handlePopScope,
+      child: Scaffold(
+        backgroundColor: AppTheme.nightObsidian,
+        body: SafeArea(
+          top: true,
+          bottom: false,
+          child: _buildBody(),
+        ),
+      ),
+    );
+  }
 
-        final tabs = [
-          HomeTab(
-            jwcBalance: _jwcBalance,
-            onDepositTap: () => _openDepositDialog(context),
-            onNavigateTab: (index) => _onTabSelected(index),
-          ),
-          MarketsTab(
-            onSelectPair: _onTradePairSelected,
-          ),
-          TradeTab(
-            initialPair: _selectedTradingPair,
-            jwcBalance: _jwcBalance,
-            onBalanceUpdated: (newBal) => setState(() => _jwcBalance = newBal),
-          ),
-          const FuturesView(),
-          const CapitalInstrumentsView(),
-          VaultTab(
-            jwcBalance: _jwcBalance,
-            onBalanceUpdated: (newBal) => setState(() => _jwcBalance = newBal),
-          ),
-          const FundingView(),
-          AuthView(
-            currentUser: _currentUser,
-            onUserUpdated: (u) => setState(() => _currentUser = u),
-          ),
-        ];
+  Widget _buildBody() {
+    if (!_isWebViewSupported) {
+      return _buildDesktopFallback();
+    }
 
-        return Scaffold(
-          appBar: AppBar(
-            title: Row(
-              children: [
-                Container(
-                  width: 32,
-                  height: 32,
-                  padding: const EdgeInsets.all(3),
-                  decoration: BoxDecoration(
-                    color: AppTheme.gold.withOpacity(0.15),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: AppTheme.borderHighlight),
-                  ),
-                  child: Image.asset('assets/images/logo-square.png'),
-                ),
-                const SizedBox(width: 10),
-                RichText(
-                  text: const TextSpan(
-                    style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: -0.2,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: 'JUWISH',
-                        style: TextStyle(color: AppTheme.textPrimary),
-                      ),
-                      TextSpan(
-                        text: 'PRO',
-                        style: TextStyle(color: AppTheme.gold),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+    if (_hasError && _controller == null) {
+      return _buildErrorState();
+    }
+
+    return Stack(
+      children: [
+        // Native Pull-to-Refresh WebView
+        if (_controller != null)
+          RefreshIndicator(
+            color: AppTheme.gold,
+            backgroundColor: AppTheme.surfaceCharcoal,
+            onRefresh: () async {
+              HapticFeedback.lightImpact();
+              await _controller?.reload();
+            },
+            child: WebViewWidget(controller: _controller!),
+          ),
+
+        // Linear Progress Bar at top
+        if (_isLoading && _loadingProgress < 100)
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: LinearProgressIndicator(
+              value: _loadingProgress > 0 ? _loadingProgress / 100.0 : null,
+              backgroundColor: Colors.transparent,
+              valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.gold),
+              minHeight: 3.0,
             ),
-            actions: [
-              // Live Sync Status Chip
-              GestureDetector(
-                onTap: () => _showSyncDetailsModal(context),
-                child: Container(
-                  margin: const EdgeInsets.symmetric(vertical: 12),
+          ),
+
+        // Initial Splash Screen Overlay (while initializing 1st load)
+        if (_isLoading && _loadingProgress < 20)
+          Container(
+            color: AppTheme.nightObsidian,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/images/logo-square.png',
+                    width: 90,
+                    height: 90,
+                    errorBuilder: (_, __, ___) => const Icon(
+                      Icons.currency_bitcoin,
+                      size: 80,
+                      color: AppTheme.gold,
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  const SizedBox(
+                    width: 32,
+                    height: 32,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2.5,
+                      valueColor: AlwaysStoppedAnimation<Color>(AppTheme.gold),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Connecting to JuwishPro...',
+                    style: TextStyle(
+                      color: AppTheme.textSecondary,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+        // Offline / Error Overlay
+        if (_hasError)
+          _buildErrorState(),
+      ],
+    );
+  }
+
+  Widget _buildErrorState() {
+    return Container(
+      color: AppTheme.nightObsidian,
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: AppTheme.surfaceCharcoal,
+                shape: BoxShape.circle,
+                border: Border.all(color: AppTheme.borderHighlight),
+              ),
+              child: const Icon(
+                Icons.wifi_off_rounded,
+                size: 56,
+                color: AppTheme.gold,
+              ),
+            ),
+            const SizedBox(height: 24),
+            const Text(
+              'Connection Lost',
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.textPrimary,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              _errorMessage.isNotEmpty
+                  ? _errorMessage
+                  : 'Unable to connect to the JuwishPro secure exchange network. Please check your internet connection.',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 13,
+                color: AppTheme.textSecondary,
+                height: 1.4,
+              ),
+            ),
+            const SizedBox(height: 28),
+            ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppTheme.gold,
+                foregroundColor: AppTheme.nightObsidian,
+                padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                elevation: 4,
+              ),
+              icon: const Icon(Icons.refresh_rounded, size: 20),
+              label: const Text(
+                'Retry Connection',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+              onPressed: () {
+                HapticFeedback.mediumImpact();
+                setState(() {
+                  _hasError = false;
+                  _isLoading = true;
+                  _loadingProgress = 10;
+                });
+                _controller?.loadRequest(Uri.parse(webPlatformUrl));
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDesktopFallback() {
+    return Container(
+      color: AppTheme.nightObsidian,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/logo-square.png',
+                width: 100,
+                height: 100,
+                errorBuilder: (_, __, ___) => const Icon(
+                  Icons.token,
+                  size: 90,
+                  color: AppTheme.gold,
+                ),
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'JuwishPro Desktop Client',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.textPrimary,
+                ),
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'Connected to 2026.dmillers.org',
+                style: TextStyle(color: AppTheme.gold, fontSize: 14),
+              ),
+              const SizedBox(height: 32),
+              ElevatedButton.icon(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.gold,
+                  foregroundColor: AppTheme.nightObsidian,
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: (_syncData != null)
-                        ? AppTheme.greenBullish.withOpacity(0.15)
-                        : AppTheme.gold.withOpacity(0.15),
+                      const EdgeInsets.symmetric(horizontal: 28, vertical: 16),
+                  shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: (_syncData != null)
-                          ? AppTheme.greenBullish
-                          : AppTheme.borderHighlight,
-                      width: 0.8,
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 7,
-                        height: 7,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: (_syncData != null)
-                              ? AppTheme.greenBullish
-                              : (_isSyncing
-                                  ? AppTheme.gold
-                                  : AppTheme.textSecondary),
-                        ),
-                      ),
-                      const SizedBox(width: 5),
-                      Text(
-                        _syncData != null
-                            ? 'Synced'
-                            : (_isSyncing ? 'Syncing...' : 'Live'),
-                        style: TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          color: (_syncData != null)
-                              ? AppTheme.greenBullish
-                              : AppTheme.gold,
-                        ),
-                      ),
-                    ],
                   ),
                 ),
-              ),
-              const SizedBox(width: 4),
-
-              // JWC Balance chip
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 10),
-                padding: const EdgeInsets.symmetric(horizontal: 10),
-                decoration: BoxDecoration(
-                  color: AppTheme.nightObsidian,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppTheme.borderHighlight),
+                icon: const Icon(Icons.open_in_browser),
+                label: const Text(
+                  'Launch Web Platform',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                child: Row(
-                  children: [
-                    const Text('✡',
-                        style: TextStyle(color: AppTheme.gold, fontSize: 12)),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${_jwcBalance.toStringAsFixed(0)} JWC',
-                      style: const TextStyle(
-                        color: AppTheme.gold,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12,
-                        fontFamily: 'monospace',
-                      ),
-                    ),
-                  ],
-                ),
+                onPressed: () => _launchExternalUrl(webPlatformUrl),
               ),
-              const SizedBox(width: 4),
-
-              // User Profile & KYC
-              IconButton(
-                tooltip: 'Profile & KYC Status',
-                icon: Icon(
-                  Icons.account_circle,
-                  color: _currentIndex == 7
-                      ? AppTheme.gold
-                      : AppTheme.textSecondary,
-                  size: 22,
-                ),
-                onPressed: () => _onTabSelected(7),
-              ),
-
-              // Web Portal Link
-              IconButton(
-                tooltip: '2026.dmillers.org Live Portal',
-                icon: const Icon(Icons.language,
-                    color: AppTheme.textSecondary, size: 20),
-                onPressed: _launchWebPortal,
-              ),
-              const SizedBox(width: 6),
             ],
           ),
-          body: isWide
-              ? Row(
-                  children: [
-                    // Navigation Rail for Tablet / Desktop (Full 8 Modules)
-                    NavigationRail(
-                      backgroundColor: AppTheme.surfaceCharcoal,
-                      selectedIndex: _currentIndex,
-                      onDestinationSelected: _onTabSelected,
-                      labelType: NavigationRailLabelType.all,
-                      selectedIconTheme:
-                          const IconThemeData(color: AppTheme.gold),
-                      selectedLabelTextStyle: const TextStyle(
-                        color: AppTheme.gold,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 11,
-                      ),
-                      unselectedLabelTextStyle: const TextStyle(
-                        color: AppTheme.textSecondary,
-                        fontSize: 11,
-                      ),
-                      destinations: const [
-                        NavigationRailDestination(
-                          icon: Icon(Icons.home_outlined),
-                          selectedIcon: Icon(Icons.home),
-                          label: Text('Home'),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.insert_chart_outlined),
-                          selectedIcon: Icon(Icons.insert_chart),
-                          label: Text('Markets'),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.candlestick_chart_outlined),
-                          selectedIcon: Icon(Icons.candlestick_chart),
-                          label: Text('Trade'),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.stacked_line_chart_outlined),
-                          selectedIcon: Icon(Icons.stacked_line_chart),
-                          label: Text('Futures'),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.domain_outlined),
-                          selectedIcon: Icon(Icons.domain),
-                          label: Text('Assets'),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.account_balance_outlined),
-                          selectedIcon: Icon(Icons.account_balance),
-                          label: Text('Vault'),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.account_balance_wallet_outlined),
-                          selectedIcon: Icon(Icons.account_balance_wallet),
-                          label: Text('Wallet'),
-                        ),
-                        NavigationRailDestination(
-                          icon: Icon(Icons.person_outline),
-                          selectedIcon: Icon(Icons.person),
-                          label: Text('Profile'),
-                        ),
-                      ],
-                    ),
-                    const VerticalDivider(
-                        color: AppTheme.borderSubtle, width: 1),
-
-                    // Main Content Area constrained
-                    Expanded(
-                      child: Center(
-                        child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 1000),
-                          child: IndexedStack(
-                            index: _currentIndex,
-                            children: tabs,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                )
-              : IndexedStack(
-                  index: _currentIndex,
-                  children: tabs,
-                ),
-          bottomNavigationBar: isWide
-              ? null
-              : BottomNavigationBar(
-                  currentIndex: _currentIndex > 4 ? 4 : _currentIndex,
-                  onTap: _onTabSelected,
-                  items: const [
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.home_outlined),
-                      activeIcon: Icon(Icons.home),
-                      label: 'Home',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.insert_chart_outlined),
-                      activeIcon: Icon(Icons.insert_chart),
-                      label: 'Markets',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.candlestick_chart_outlined),
-                      activeIcon: Icon(Icons.candlestick_chart),
-                      label: 'Trade',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.account_balance_outlined),
-                      activeIcon: Icon(Icons.account_balance),
-                      label: 'Vault',
-                    ),
-                    BottomNavigationBarItem(
-                      icon: Icon(Icons.account_balance_wallet_outlined),
-                      activeIcon: Icon(Icons.account_balance_wallet),
-                      label: 'Wallet',
-                    ),
-                  ],
-                ),
-        );
-      },
+        ),
+      ),
     );
   }
 }
