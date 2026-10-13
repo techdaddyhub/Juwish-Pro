@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
         settings.setAllowFileAccess(true);
         settings.setAllowContentAccess(true);
         settings.setLoadWithOverviewMode(true);
-        settings.setUseWideViewPort = true;
+        settings.setUseWideViewPort(true);
         settings.setBuiltInZoomControls(false);
         settings.setDisplayZoomControls(false);
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
