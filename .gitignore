@@ -40,3 +40,4 @@ release-apks/
 macos/build/
 ios/build/
 *.ipa
+build-releases/
