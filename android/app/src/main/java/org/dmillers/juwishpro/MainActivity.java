@@ -33,7 +33,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String TARGET_URL = "https://2026.dmillers.org";
+    public static final String TARGET_URL = BuildConfig.TARGET_URL;
 
     private WebView webView;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -112,6 +112,10 @@ public class MainActivity extends AppCompatActivity {
         // Append JuwishPro Mobile App identifier for server attribution
         String defaultUa = settings.getUserAgentString();
         settings.setUserAgentString(defaultUa + " JuwishProMobile/1.0.0 (Android Native)");
+
+        // Disable context menu and URL copying
+        webView.setLongClickable(false);
+        webView.setOnLongClickListener(v -> true);
 
         // Enable Cookies & Third-party cookies for Laravel Sanctum sessions
         CookieManager cookieManager = CookieManager.getInstance();

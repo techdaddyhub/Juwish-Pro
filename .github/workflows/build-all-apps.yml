@@ -1,4 +1,4 @@
-name: Build JuwishPro Production Mobile App
+name: Build JuwishPro Multi-Platform Suite (Android, Windows, macOS, iOS)
 
 on:
   push:
@@ -11,10 +11,10 @@ permissions:
 
 jobs:
   # -------------------------------------------------------------
-  # NATIVE ANDROID BUILD (APK) - Mobile App
+  # 1. NATIVE ANDROID BUILD (Client & Admin APKs)
   # -------------------------------------------------------------
   build-android:
-    name: Build Native Android APK
+    name: Build Native Android APKs (Client & Admin)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -25,13 +25,13 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Pillow & Generate JuwishPro Icons
+      - name: Generate Official JuwishPro Icons
         run: |
           pip install Pillow
           python3 android/scripts/generate_android_icons.py
 
       - name: Set up Java
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -41,13 +41,149 @@ jobs:
         with:
           gradle-version: '8.5'
 
-      - name: Build Android APK
+      - name: Build Android APKs (All Flavors)
         working-directory: android
         run: gradle assembleDebug --stacktrace
 
-      - name: Upload Android APK
+      - name: Prepare APK Artifacts
+        run: |
+          mkdir -p release-apks
+          if [ -f android/app/build/outputs/apk/client/debug/app-client-debug.apk ]; then
+            cp android/app/build/outputs/apk/client/debug/app-client-debug.apk release-apks/JuwishPro-Client.apk
+          fi
+          if [ -f android/app/build/outputs/apk/admin/debug/app-admin-debug.apk ]; then
+            cp android/app/build/outputs/apk/admin/debug/app-admin-debug.apk release-apks/JuwishPro-Admin.apk
+          fi
+
+      - name: Upload Android Client APK
         uses: actions/upload-artifact@v4
         with:
-          name: JuwishPro-Android-APK
-          path: android/app/build/outputs/apk/debug/*.apk
+          name: JuwishPro-Android-Client-APK
+          path: release-apks/JuwishPro-Client.apk
+          if-no-files-found: error
+
+      - name: Upload Android Admin APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-Android-Admin-APK
+          path: release-apks/JuwishPro-Admin.apk
+          if-no-files-found: error
+
+  # -------------------------------------------------------------
+  # 2. NATIVE WINDOWS BUILD (Client & Admin EXEs)
+  # -------------------------------------------------------------
+  build-windows:
+    name: Build Native Windows Executables (Client & Admin)
+    runs-on: windows-2022
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Generate Windows Icons
+        run: |
+          python -m pip install --upgrade pip Pillow
+          python windows/scripts/generate_windows_icons.py
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish JuwishPro Client Executable
+        run: |
+          dotnet publish windows/JuwishPro.Client/JuwishPro.Client.csproj -c Release -r win-x64 -p:PublishSingleFile=true --self-contained false -o dist/client
+
+      - name: Publish JuwishPro Admin Executable
+        run: |
+          dotnet publish windows/JuwishPro.Admin/JuwishPro.Admin.csproj -c Release -r win-x64 -p:PublishSingleFile=true --self-contained false -o dist/admin
+
+      - name: Upload Windows Client Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-Windows-Client-EXE
+          path: dist/client/
+          if-no-files-found: error
+
+      - name: Upload Windows Admin Executable
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-Windows-Admin-EXE
+          path: dist/admin/
+          if-no-files-found: error
+
+  # -------------------------------------------------------------
+  # 3. NATIVE macOS BUILD (Client & Admin Desktop Apps)
+  # -------------------------------------------------------------
+  build-macos:
+    name: Build Native macOS Applications (Client & Admin)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: pip install Pillow
+
+      - name: Build macOS Applications
+        run: bash macos/scripts/build_macos.sh
+
+      - name: Upload macOS Client App
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-macOS-Client
+          path: macos/build/JuwishPro-macOS-Client.zip
+          if-no-files-found: error
+
+      - name: Upload macOS Admin App
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-macOS-Admin
+          path: macos/build/JuwishPro-macOS-Admin.zip
+          if-no-files-found: error
+
+  # -------------------------------------------------------------
+  # 4. NATIVE iOS BUILD (Client & Admin IPAs)
+  # -------------------------------------------------------------
+  build-ios:
+    name: Build Native iOS Applications (Client & Admin)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies & Generate Icons
+        run: |
+          pip install Pillow
+          python3 ios/scripts/generate_ios_icons.py
+
+      - name: Build iOS Application IPAs
+        run: bash ios/scripts/build_ios.sh
+
+      - name: Upload iOS Client IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-iOS-Client-IPA
+          path: ios/build/JuwishPro-Client.ipa
+          if-no-files-found: error
+
+      - name: Upload iOS Admin IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-iOS-Admin-IPA
+          path: ios/build/JuwishPro-Admin.ipa
           if-no-files-found: error

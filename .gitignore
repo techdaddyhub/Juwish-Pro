@@ -23,3 +23,20 @@ Homestead.yaml
 Thumbs.db
 *.zip
 cpanel_deploy.py
+
+# Multiplatform build outputs
+android/.gradle/
+android/app/build/
+android/build/
+*.apk
+*.aab
+
+windows/**/bin/
+windows/**/obj/
+windows/**/dist/
+dist/
+release-apks/
+
+macos/build/
+ios/build/
+*.ipa
