@@ -36,7 +36,7 @@
         'Current: ' . PHP_VERSION . ' | Recommended: 8.3',
     );
     $checks[] = row('Laravel version', true, app()->version());
-    $checks[] = row('Lozand version', true, '1.0.0');
+    $checks[] = row('Foxtech Engine version', true, config('site.version', '2.4.0'));
     $checks[] = row('Server software', true, $_SERVER['SERVER_SOFTWARE'] ?? 'Unknown');
     $checks[] = row(
         'Disk free space',

@@ -31,10 +31,10 @@
                                 </svg>
                             </div>
                             <h3 class="text-xl font-bold text-white tracking-tight uppercase">
-                                {{ __('System Demonstration') }}</h3>
+                                {{ __('Institutional Architecture & System Integrity') }}</h3>
                         </div>
                         <p class="text-slate-400 font-medium leading-relaxed opacity-90">
-                            {{ __('Lozand Architects developed this software as a high-fidelity demonstration of institutional financial infrastructure and custom engine architecture. It is designed to illustrate the capabilities, visual aesthetics, and complex workflows of a live system operating with integrated custom engines.') }}
+                            {{ __('Foxtech developed this software as an institutional-grade financial infrastructure and custom engine architecture platform. The builders of this software (Foxtech) have engineered every module for high-fidelity performance, continuous real-time execution, and bank-grade operational resilience.') }}
                         </p>
                     </div>
                 </div>
@@ -43,24 +43,24 @@
                 <div class="py-6 border-b border-white/5 last:border-0">
                     <div class="relative z-10">
                         <div class="flex items-center gap-4 mb-6">
-                            <div class="w-10 h-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500">
+                            <div class="w-10 h-10 rounded-xl bg-accent-primary/10 flex items-center justify-center text-accent-primary">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.153-2.05-.438-3.016z" />
                                 </svg>
                             </div>
                             <h3 class="text-xl font-bold text-white tracking-tight uppercase">
-                                {{ __('Full Indemnification & Liability') }}</h3>
+                                {{ __('Platform Terms & Operational Guidelines') }}</h3>
                         </div>
                         <div class="space-y-4">
-                            <div class="p-6 rounded-2xl bg-white/5 border border-white/10 border-l-4 border-l-red-500">
+                            <div class="p-6 rounded-2xl bg-white/5 border border-white/10 border-l-4 border-l-accent-primary">
                                 <p
                                     class="text-slate-300 font-bold leading-relaxed opacity-90 uppercase tracking-widest text-xs">
-                                    {{ __('The Lozand Team and its architects are hereby fully indemnified from any and all damages, financial losses, regulatory penalties, or legal repercussions arising from the purchaser\'s choice of usage, deployment strategies, or operational decisions.') }}
+                                    {{ __('Foxtech, the builders of this software, provides this financial software architecture under enterprise license standards. Operational compliance, account configuration, risk management rules, and trading parameters are under the direct governance of platform administrators.') }}
                                 </p>
                             </div>
                             <p class="text-slate-400 font-medium leading-relaxed opacity-80">
-                                {{ __('By acquiring and utilizing this software, the purchaser acknowledges that they bear sole responsibility for ensuring the platform\'s usage complies with all applicable local and international financial regulations. Any diversion from the intended demonstration purpose is done at the purchaser\'s exclusive risk.') }}
+                                {{ __('Platform administrators bear responsibility for ensuring that deployment adheres to applicable financial regulations, AML/KYC policies, and institutional licensing requirements within their jurisdiction.') }}
                             </p>
                         </div>
                     </div>

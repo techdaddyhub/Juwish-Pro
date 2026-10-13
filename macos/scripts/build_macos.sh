@@ -49,3 +49,4 @@ zip -r -y "JuwishPro-macOS-Admin.zip" "JuwishProAdmin.app"
 cd "$ROOT"
 
 echo "[OK] macOS Client and Admin applications built successfully in $BUILD_DIR"
+

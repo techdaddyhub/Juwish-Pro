@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Standalone Installer for Lozand
+ * Standalone Installer for Foxtech Enterprise
  * Operating independently of Laravel to ensure requirement checks run first.
  */
 

@@ -94,7 +94,7 @@
                                     </div>
                                     <div class="flex items-center gap-2">
                                         <span class="text-xs text-slate-400 font-medium">{{ __('Local Instance:') }}</span>
-                                        <code class="text-[11px] text-accent-primary font-mono font-bold" id="local-cron-cmd">php artisan lozand:initiate-cron</code>
+                                        <code class="text-[11px] text-accent-primary font-mono font-bold" id="local-cron-cmd">php artisan foxtech:initiate-cron</code>
                                     </div>
                                 </div>
                             </div>

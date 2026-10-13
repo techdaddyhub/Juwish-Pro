@@ -63,7 +63,7 @@
                         <h4 class="text-xl font-black text-emerald-500 tracking-tighter uppercase">
                             {{ __('System Up To Date') }}</h4>
                         <p class="text-xs text-slate-400 font-medium leading-relaxed max-w-2xl">
-                            {{ __('Great news! You are currently running the latest version of Lozand. Your system is fully optimized and secure.') }}
+                            {{ __('Great news! You are currently running the latest version of Foxtech Enterprise. Your system is fully optimized and secure.') }}
                         </p>
                     </div>
                     <div class="shrink-0">

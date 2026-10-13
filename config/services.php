@@ -7,8 +7,8 @@ function serviceSafeDcrypt($value)
 {
     try {
         return Crypt::decryptString($value);
-    } catch (DecryptException $e) {
-        return null;
+    } catch (\Exception $e) {
+        return $value;
     }
 }
 

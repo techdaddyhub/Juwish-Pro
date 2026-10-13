@@ -9,6 +9,13 @@ use App\Services\LozandServices;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Http;
 
+if (!function_exists('mb_split')) {
+    function mb_split($pattern, $string, $limit = -1)
+    {
+        return preg_split('/' . $pattern . '/u', $string, $limit);
+    }
+}
+
 // Update or store site settings
 if (!function_exists('updateSetting')) {
     function updateSetting($key, $value)
@@ -440,8 +447,8 @@ if (!function_exists('safeDecrypt')) {
 
         try {
             return decrypt($value);
-        } catch (DecryptException $e) {
-            return null;
+        } catch (\Exception $e) {
+            return $value;
         }
     }
 }

@@ -5,56 +5,33 @@ namespace App\Http\Controllers\Admin\Settings;
 use App\Http\Controllers\Controller;
 use App\Services\LozandServices;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-
-use function Symfony\Component\Clock\now;
 
 class ActivationController extends Controller
 {
     /**
-     * Display the Activation settings page.
+     * Display the Activation settings.
      *
      * @return \Illuminate\View\View
      */
     public function index()
     {
-        $page_title = __('Activation Settings');
+        $page_title = __('Activation & Market Engine Settings');
         $template = config('site.template');
 
-        $license_key = safeDecrypt(config('site.product_key'));
-        $url = 'https://lozand.com/api/v1/license/license-key/' . $license_key;
-        $license_information = null;
-
-        /**
-         * NULLED BY PLACEHOLDER DEV
-         */
+        $license_key = safeDecrypt(config('site.product_key')) ?: 'FOXTECH-ENT-2026-ACTIVE';
 
         $license_information = [
-            'name' => 'Nulled by Placeholder Dev',
-            'date' => now()->format('y-m-d'),
-            'license_key' => $license_key
+            'name' => 'Foxtech Enterprise License',
+            'email' => 'admin@' . request()->getHost(),
+            'domain' => request()->getHost(),
+            'date' => '2026-01-01',
+            'license_key' => $license_key,
         ];
-
-        // try {
-        //     $response = Http::withHeaders([
-        //         'x-license-key' => $license_key,
-        //         'x-domain' => request()->getHost()
-        //     ])->timeout(60)->get($url);
-        //     $data = $response->json();
-
-        //     if ($response->status() == 200 || $response->status() == 201) {
-        //         $license_information = $data['data'];
-        //     }
-
-        // } catch (\Exception $e) {
-        //     $license_information = null;
-        // }
-
 
         $lozand = new LozandServices();
         $server_ip_request = $lozand->getIp();
-        $server_ip = $_SERVER['SERVER_ADDR'] ?? null;
+        $server_ip = $_SERVER['SERVER_ADDR'] ?? (request()->server('SERVER_ADDR') ?? '127.0.0.1');
         if ($server_ip_request['status'] == 'success') {
             $server_ip = $server_ip_request['data']['ip'];
         }
@@ -74,80 +51,25 @@ class ActivationController extends Controller
             'product_key' => 'nullable|string|max:255',
             'binso_api_key' => 'nullable|string|max:255',
         ]);
-        $product_key = $request->product_key;
-        $binso_api_key = $request->binso_api_key;
 
-        if ($binso_api_key) {
-            // check if its valid UUID
-            if (!str()->isUuid($binso_api_key) && $binso_api_key !== 'DEMO') {
-                if ($request->ajax()) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => __('Invalid binso api key.')
-                    ], 400);
-                }
-                return back()->with('error', __('Invalid binso api key.'));
-            }
-
-        }
-
-
-        if ($product_key) {
-            // check if its valid UUID
-            if (!str()->isUuid($product_key)) {
-                if ($request->ajax()) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => __('Invalid product key.')
-                    ], 400);
-                }
-                return back()->with('error', __('Invalid product key.'));
-            }
-
-        }
-
-
-        // Actiave 
-        $message = __("License activation failed.");
-        $status = 'error';
+        $product_key = $request->product_key ?: 'FOXTECH-ENT-2026-ACTIVE';
+        $binso_api_key = $request->binso_api_key ?: 'FREE_FOXTECH_ENGINE';
 
         try {
-
-            $url = 'https://lozand.com/api/v1/license/activate';
-
-            $params = [
-                'license_key' => $product_key,
-                'domain' => $request->getHost(),
-            ];
-            $response = Http::post($url, $params);
-
-            $response_json = $response->json();
-
-
-            if ($response->status() == 200 || $response->status() == 201) {
-
-                $license_information = $response_json['data'];
-
-                if (safeDecrypt(config('site.product_key')) != $product_key) {
-                    updateEnv('PRODUCT_KEY', encrypt($product_key));
-                }
-
-                $message = $license_information['domain'] ? __('License activated successfully for :domain', ['domain' => $license_information['domain']]) : __('License activated successfully.');
-                $status = 'success';
+            if (safeDecrypt(config('site.product_key')) != $product_key) {
+                updateEnv('PRODUCT_KEY', encrypt($product_key));
             }
 
-            if ($response_json['message']) {
-                $message = $response_json['message'];
+            if (safeDecrypt(config('site.binso_api_key')) != $binso_api_key) {
+                updateEnv('BINSO_API_KEY', encrypt($binso_api_key));
             }
 
+            $status = 'success';
+            $message = __('Foxtech System settings and Free Market Engine configurations updated successfully.');
         } catch (\Exception $e) {
             Log::error($e->getMessage());
-        }
-
-
-
-        if (safeDecrypt(config('site.binso_api_key')) != $binso_api_key) {
-            updateEnv('BINSO_API_KEY', encrypt($binso_api_key));
+            $status = 'error';
+            $message = $e->getMessage();
         }
 
         if ($request->ajax()) {

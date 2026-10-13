@@ -59,7 +59,7 @@
                         <span class="text-xs text-accent-primary font-mono uppercase tracking-wider mb-2 block">Body
                             Text</span>
                         <p class="font-body text-lg text-text-secondary leading-relaxed">
-                            Lozand provides a premium investment experience through a curated selection of high-yield
+                            Foxtech provides a premium investment experience through a curated selection of high-yield
                             opportunities. Our platform leverages cutting-edge technology to ensure security,
                             transparency, and optimal performance for every portfolio.
                         </p>

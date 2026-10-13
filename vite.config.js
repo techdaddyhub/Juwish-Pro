@@ -32,12 +32,8 @@ export default defineConfig({
         tailwindcss(),
     ],
     server: {
-        host: 'lozand.local',
+        host: 'localhost',
         cors: true,
-        https: {
-            key: fs.readFileSync('C:/laragon/etc/ssl/laragon.key'),
-            cert: fs.readFileSync('C:/laragon/etc/ssl/laragon.crt'),
-        },
         watch: {
             ignored: ['**/storage/framework/views/**'],
         },

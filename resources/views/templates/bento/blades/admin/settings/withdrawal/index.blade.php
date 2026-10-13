@@ -338,9 +338,9 @@
                                     <p class="text-slate-400 text-xs font-medium leading-relaxed max-w-md">
                                         {{ __('Missing a payment gateway you need? Contact us and we will add it within 48 hours for free. No additional charges.') }}
                                     </p>
-                                    <a href="https://lozand.com/contact" target="_blank"
+                                    <a href="{{ route('admin.settings.financial') }}"
                                         class="flex items-center gap-2 text-accent-primary text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors w-max group/link">
-                                        {{ __('Contact Support') }}
+                                        {{ __('Configure Methods') }}
                                         <svg class="w-3 h-3 transform group-hover/link:translate-x-1 transition-transform"
                                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3"

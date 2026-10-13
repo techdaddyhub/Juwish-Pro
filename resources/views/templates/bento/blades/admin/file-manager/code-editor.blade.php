@@ -71,7 +71,7 @@
                 </div>
             </div>
             <div class="text-[9px] text-white/20 font-black italic select-none">
-                Lozand Code Engine v1.0
+                Foxtech Code Engine v2.4
             </div>
         </div>
     </div>
@@ -108,7 +108,7 @@
 
             require(['vs/editor/editor.main'], function() {
                 // Define Theme
-                monaco.editor.defineTheme('lozand-dark', {
+                monaco.editor.defineTheme('foxtech-dark', {
                     base: 'vs-dark',
                     inherit: true,
                     rules: [{
@@ -146,7 +146,7 @@
                 editor = monaco.editor.create(document.getElementById('monaco-editor'), {
                     value: @json($code),
                     language: language,
-                    theme: 'lozand-dark',
+                    theme: 'foxtech-dark',
                     fontSize: 14,
                     fontFamily: "'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace",
                     lineHeight: 24,

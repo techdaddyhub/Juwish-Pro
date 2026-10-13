@@ -437,7 +437,7 @@
                         @else
                             <img src="{{ asset('assets/templates/bento/images/dashboard-mockup-dark.png') }}"
                                 class="w-full h-auto shrink-0" alt="Dashboard Interface"
-                                onerror="this.src='https://placehold.co/1200x800/1e293b/FFFFFF?text=Lozand+Dashboard+Interface'">
+                                onerror="this.src='https://placehold.co/1200x800/1e293b/FFFFFF?text=Foxtech+Dashboard+Interface'">
                         @endif
                     </div>
                 </div>

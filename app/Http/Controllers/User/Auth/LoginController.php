@@ -435,21 +435,12 @@ class LoginController extends Controller
      */
     public function redirectToSocial($provider)
     {
-        // check sandbox
-        if (config('app.env') === 'sandbox' && $provider !== 'google') {
-            return redirect()->route('user.login')->with('error', __('Website in sandbox mode, login using :provider', ['provider' => 'Google']));
+        $login_methods = json_decode(getSetting('login_methods'), true) ?? [];
+        if (!empty($login_methods) && array_key_exists($provider, $login_methods)) {
+            if ($login_methods[$provider]['status'] !== 'enabled') {
+                return redirect()->route('user.login')->with('error', __("Login via :provider is disabled", ['provider' => ucfirst($provider)]));
+            }
         }
-
-        $login_methods = json_decode(getSetting('login_methods'), true);
-        if (!array_key_exists($provider, $login_methods)) {
-            return redirect()->route('user.login')->with('error', __("Login via :provider is disabled", ['provider' => ucfirst($provider)]));
-        }
-
-        if ($login_methods[$provider]['status'] !== 'enabled') {
-            return redirect()->route('user.login')->with('error', __("Login via :provider is disabled", ['provider' => ucfirst($provider)]));
-        }
-
-
 
         return Socialite::driver($provider)
             ->redirectUrl(route('user.login.social.callback', ['provider' => $provider]))
@@ -474,46 +465,49 @@ class LoginController extends Controller
                     return redirect()->route('user.login')->with('error', __('No user accounts available.'));
                 }
             } else {
-                // In production, proper login or create
-                $user = User::where('email', $socialUser->getEmail())->first();
+                // Determine email (Twitter may not return email if not requested in developer app)
+                $email = $socialUser->getEmail();
+                if (!$email) {
+                    $handle = $socialUser->getNickname() ?: $socialUser->getId();
+                    $email = strtolower($handle) . '@' . $provider . '.com';
+                }
+
+                $user = User::where('email', $email)
+                    ->orWhere(function ($query) use ($provider, $socialUser) {
+                        $query->where('provider_name', $provider)
+                            ->where('provider_id', $socialUser->getId());
+                    })->first();
 
                 if ($user) {
-                    // Security Check: If the account is already linked to a different provider, block login
-                    if ($user->provider_name && $user->provider_name !== $provider) {
-                        return redirect()->route('user.login')->with('error', __('This account is linked with :provider. Please login using :provider.', ['provider' => ucfirst($user->provider_name)]));
-                    }
-
                     // Update social fields
                     $user->update([
                         'provider_id' => $socialUser->getId(),
                         'provider_name' => $provider,
-                        'social_token' => $socialUser->token,
+                        'social_token' => $socialUser->token ?? null,
                     ]);
                 } else {
                     // Create new user
-                    // Split name if possible
-                    $nameParts = explode(' ', $socialUser->getName(), 2);
+                    $fullName = $socialUser->getName() ?: ($socialUser->getNickname() ?: 'User');
+                    $nameParts = explode(' ', trim($fullName), 2);
                     $firstName = $nameParts[0] ?? 'User';
-                    $lastName = $nameParts[1] ?? 'Social';
+                    $lastName = $nameParts[1] ?? ucfirst($provider);
 
                     $validated = [
                         'first_name' => $firstName,
                         'last_name' => $lastName,
-                        'email' => $socialUser->getEmail(),
-                        'password' => Hash::make(Str::random(16)),
+                        'email' => $email,
+                        'password' => Hash::make(Str::random(24)),
                         'provider_id' => $socialUser->getId(),
                         'provider_name' => $provider,
-                        'social_token' => $socialUser->token,
+                        'social_token' => $socialUser->token ?? null,
                         'status' => 'active',
                         'email_verified_at' => now(),
-                        'balance' => getSetting('welcome_bonus'),
+                        'balance' => getSetting('welcome_bonus', 0),
                     ];
 
                     $referrer_id = null;
-
                     $referrar_code = session()->get('referrer_code') ?? null;
 
-                    // check if the referral code is valid and get the referrer
                     if ($referrar_code) {
                         $referrer_code = strtoupper($referrar_code);
                         $referrer = User::where('referral_code', $referrer_code)->first();
@@ -523,23 +517,22 @@ class LoginController extends Controller
                     }
 
                     $validated['referrer_id'] = $referrer_id;
-
                     $user = $this->storeUser($validated);
                 }
             }
 
             Auth::login($user);
-            // forget referrer code from session
             session()->forget('referrer_code');
             session()->regenerate();
-            // in sandbox, do not set otp to verified so users can see  the otp page
+
             if (config('app.env') !== 'sandbox') {
                 session()->put('user_otp_verified', true);
             }
 
             return redirect()->route('user.dashboard');
         } catch (\Exception $e) {
-            return redirect()->route('user.login')->with('error', __('Social authentication failed.'));
+            Log::error('Social authentication failed (' . $provider . '): ' . $e->getMessage());
+            return redirect()->route('user.login')->with('error', __('Social authentication failed. Please try again or use email sign in.'));
         }
     }
 

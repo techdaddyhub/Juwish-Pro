@@ -11,21 +11,22 @@ class LocalCronInitiator extends Command
      *
      * @var string
      */
-    protected $signature = 'lozand:initiate-cron';
+    protected $signature = 'foxtech:initiate-cron';
+    protected $aliases = ['lozand:initiate-cron'];
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Initiate cron jobs for local development';
+    protected $description = 'Initiate Foxtech cron jobs for local development';
 
     /**
      * Execute the console command.
      */
     public function handle()
     {
-        $this->components->info('Lozand Local Cron Ecosystem');
+        $this->components->info('Foxtech Local Cron Ecosystem');
 
         $this->line('  <bg=blue;fg=white> INFO </> Local Scheduler is active.');
         $this->line('  <bg=yellow;fg=black> WARN </> Simulating system cron every 60 seconds.');
