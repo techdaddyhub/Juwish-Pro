@@ -5,6 +5,10 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BUILD_DIR="$ROOT/build"
 mkdir -p "$BUILD_DIR"
 
+if [ -d "/Applications/Xcode.app/Contents/Developer" ]; then
+    export DEVELOPER_DIR="/Applications/Xcode.app/Contents/Developer"
+fi
+
 SDK="iphoneos"
 SDK_PATH=$(xcrun --sdk "$SDK" --show-sdk-path 2>/dev/null || true)
 TARGET_ARCH="arm64-apple-ios15.0"

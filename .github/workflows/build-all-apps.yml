@@ -49,12 +49,9 @@ jobs:
       - name: Prepare APK Artifacts
         run: |
           mkdir -p release-apks
-          if [ -f android/app/build/outputs/apk/client/debug/app-client-debug.apk ]; then
-            cp android/app/build/outputs/apk/client/debug/app-client-debug.apk release-apks/JuwishPro-Client.apk
-          fi
-          if [ -f android/app/build/outputs/apk/admin/debug/app-admin-debug.apk ]; then
-            cp android/app/build/outputs/apk/admin/debug/app-admin-debug.apk release-apks/JuwishPro-Admin.apk
-          fi
+          find android/app/build/outputs/apk -type f -name "*client*debug*.apk" -exec cp {} release-apks/JuwishPro-Client.apk \;
+          find android/app/build/outputs/apk -type f -name "*admin*debug*.apk" -exec cp {} release-apks/JuwishPro-Admin.apk \;
+          ls -la release-apks/
 
       - name: Upload Android Client APK
         uses: actions/upload-artifact@v4
@@ -173,6 +170,8 @@ jobs:
           python3 ios/scripts/generate_ios_icons.py
 
       - name: Build iOS Application IPAs
+        env:
+          DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
         run: bash ios/scripts/build_ios.sh
 
       - name: Upload iOS Client IPA
