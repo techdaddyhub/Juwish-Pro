@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="night_obsidian">#0B0E11</color>
+    <color name="surface_charcoal">#181A20</color>
+    <color name="binance_gold">#F0B90B</color>
+    <color name="binance_gold_light">#FCD535</color>
+    <color name="text_primary">#EAECEF</color>
+    <color name="text_secondary">#848E9C</color>
+</resources>

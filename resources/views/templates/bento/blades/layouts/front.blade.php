@@ -76,6 +76,11 @@
     <link rel="icon" type="image/png" href="{{ $favicon }}">
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/images/apple-touch-icon.png') }}">
     <link rel="mask-icon" href="{{ asset('assets/images/safari-pinned-tab.svg') }}" color="{{ $brandAccent }}">
+    <link rel="manifest" href="{{ asset('manifest.json') }}">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="JuwishPro">
 
     {{-- Theme Color (Dark Mode Only) --}}
     <meta name="theme-color" content="{{ $themeColorDark }}">

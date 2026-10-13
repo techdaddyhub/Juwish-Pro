@@ -1,4 +1,4 @@
-name: Build JuwishPro Multi-Platform Apps
+name: Build JuwishPro Production Mobile App
 
 on:
   push:
@@ -11,14 +11,11 @@ permissions:
 
 jobs:
   # -------------------------------------------------------------
-  # 1. ANDROID BUILD (APK) - Mobile App
+  # NATIVE ANDROID BUILD (APK) - Mobile App
   # -------------------------------------------------------------
   build-android:
-    name: Build Android APK
+    name: Build Native Android APK
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: juwish_pro_flutter
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -28,11 +25,10 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Pillow
-        run: pip install Pillow
-
-      - name: Generate JuwishPro Icons
-        run: python scripts/generate_app_icons.py
+      - name: Install Pillow & Generate JuwishPro Icons
+        run: |
+          pip install Pillow
+          python3 android/scripts/generate_android_icons.py
 
       - name: Set up Java
         uses: actions/setup-java@v5
@@ -40,233 +36,19 @@ jobs:
           distribution: 'zulu'
           java-version: '17'
 
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.24.x'
-          channel: 'stable'
-          cache: true
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
 
-      - name: Get Dependencies
-        run: flutter pub get
-
-      - name: Run Flutter Analyze & Tests
-        run: |
-          flutter analyze
-          flutter test
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
 
       - name: Build Android APK
-        run: flutter build apk --release
+        working-directory: android
+        run: gradle assembleDebug --stacktrace
 
       - name: Upload Android APK
         uses: actions/upload-artifact@v4
         with:
           name: JuwishPro-Android-APK
-          path: juwish_pro_flutter/build/app/outputs/flutter-apk/app-release.apk
-          if-no-files-found: warn
-
-  # -------------------------------------------------------------
-  # 2. iOS BUILD (Runner.app) - Mobile App
-  # -------------------------------------------------------------
-  build-ios:
-    name: Build iOS Application
-    runs-on: macos-latest
-    defaults:
-      run:
-        working-directory: juwish_pro_flutter
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install Pillow
-        run: pip install Pillow
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.24.x'
-          channel: 'stable'
-          cache: true
-
-      - name: Scaffold Official iOS Project & Inject Icons
-        run: |
-          rm -rf ios
-          flutter create --platforms=ios --org org.dmillers.juwishpro .
-          python3 scripts/generate_app_icons.py
-
-      - name: Get Dependencies
-        run: flutter pub get
-
-      - name: Build iOS Application
-        run: flutter build ios --release --no-codesign
-
-      - name: Package iOS App
-        run: |
-          cd build/ios/iphoneos
-          tar -czf "$GITHUB_WORKSPACE/juwish_pro_flutter/JuwishPro-iOS-Runner.tar.gz" Runner.app
-
-      - name: Upload iOS Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: JuwishPro-iOS-TAR
-          path: juwish_pro_flutter/JuwishPro-iOS-Runner.tar.gz
-          if-no-files-found: warn
-
-  # -------------------------------------------------------------
-  # 3. macOS BUILD (.tar.gz) - Desktop App
-  # -------------------------------------------------------------
-  build-macos:
-    name: Build macOS Application
-    runs-on: macos-latest
-    defaults:
-      run:
-        working-directory: juwish_pro_flutter
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install Pillow
-        run: pip install Pillow
-
-      - name: Generate JuwishPro Icons
-        run: python3 scripts/generate_app_icons.py
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.24.x'
-          channel: 'stable'
-          cache: true
-
-      - name: Enable macOS Desktop
-        run: flutter config --enable-macos-desktop
-
-      - name: Get Dependencies
-        run: flutter pub get
-
-      - name: Build macOS App
-        run: flutter build macos --release
-
-      - name: Package macOS App
-        run: |
-          cd build/macos/Build/Products/Release
-          tar -czf "$GITHUB_WORKSPACE/juwish_pro_flutter/JuwishPro-macOS-universal.tar.gz" *.app
-
-      - name: Upload macOS Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: JuwishPro-macOS-TAR
-          path: juwish_pro_flutter/JuwishPro-macOS-universal.tar.gz
-          if-no-files-found: warn
-
-  # -------------------------------------------------------------
-  # 4. WINDOWS BUILD (.zip) - Desktop App
-  # -------------------------------------------------------------
-  build-windows:
-    name: Build Windows Application
-    runs-on: windows-2022
-    defaults:
-      run:
-        working-directory: juwish_pro_flutter
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-
-      - name: Install Pillow
-        run: pip install Pillow
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.24.x'
-          channel: 'stable'
-          cache: true
-
-      - name: Enable Windows Desktop
-        run: flutter config --enable-windows-desktop
-
-      - name: Scaffold Clean Windows Project & Inject Icons
-        shell: pwsh
-        run: |
-          if (Test-Path windows) { Remove-Item -Recurse -Force windows }
-          flutter create --platforms=windows --org org.dmillers.juwishpro .
-          python scripts/generate_app_icons.py
-
-      - name: Get Dependencies
-        run: flutter pub get
-
-      - name: Build Windows App
-        run: flutter build windows --release
-
-      - name: Package Windows App
-        shell: pwsh
-        run: |
-          Compress-Archive -Path build\windows\x64\runner\Release\* -DestinationPath JuwishPro-Windows-x64.zip
-
-      - name: Upload Windows Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: JuwishPro-Windows-ZIP
-          path: juwish_pro_flutter/JuwishPro-Windows-x64.zip
-          if-no-files-found: warn
-
-  # -------------------------------------------------------------
-  # 5. LINUX BUILD (.tar.gz) - Desktop App
-  # -------------------------------------------------------------
-  build-linux:
-    name: Build Linux Application
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: juwish_pro_flutter
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Install Linux Build Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.24.x'
-          channel: 'stable'
-          cache: true
-
-      - name: Enable Linux Desktop
-        run: flutter config --enable-linux-desktop
-
-      - name: Get Dependencies
-        run: flutter pub get
-
-      - name: Build Linux Bundle
-        run: flutter build linux --release
-
-      - name: Package Linux Bundle
-        run: |
-          cd build/linux/x64/release/bundle
-          tar -czf "$GITHUB_WORKSPACE/juwish_pro_flutter/JuwishPro-Linux-x64.tar.gz" .
-
-      - name: Upload Linux Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: JuwishPro-Linux-TAR
-          path: juwish_pro_flutter/JuwishPro-Linux-x64.tar.gz
-          if-no-files-found: warn
+          path: android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
