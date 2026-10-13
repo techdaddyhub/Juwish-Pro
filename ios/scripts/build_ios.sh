@@ -26,7 +26,7 @@ echo "--> Using SDK: $SDK at $SDK_PATH"
 echo "--> Compiling JuwishPro Client iOS..."
 rm -rf "$BUILD_DIR/client-payload"
 mkdir -p "$BUILD_DIR/client-payload/Payload/JuwishPro.app"
-xcrun -sdk "$SDK" swiftc -O \
+xcrun -sdk "$SDK" swiftc -O -parse-as-library \
     -target "$TARGET_ARCH" \
     -sdk "$SDK_PATH" \
     -framework UIKit \
@@ -45,7 +45,7 @@ cd "$ROOT"
 echo "--> Compiling JuwishPro Admin iOS..."
 rm -rf "$BUILD_DIR/admin-payload"
 mkdir -p "$BUILD_DIR/admin-payload/Payload/JuwishProAdmin.app"
-xcrun -sdk "$SDK" swiftc -O \
+xcrun -sdk "$SDK" swiftc -O -parse-as-library \
     -target "$TARGET_ARCH" \
     -sdk "$SDK_PATH" \
     -framework UIKit \
