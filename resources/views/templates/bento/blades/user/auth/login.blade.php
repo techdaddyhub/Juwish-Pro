@@ -11,38 +11,25 @@
                 {{ __('Sign in to access your dashboard.') }}</p>
         </div>
 
-        {{-- Login Options Selection --}}
-        <div id="auth-selection" class="space-y-3" @if ($only_email) style="display: none;" @endif>
-            @foreach ($login_methods as $method => $data)
-                @if ($method === 'email')
-                    <button type="button" onclick="toggleEmailForm()"
-                        class="flex items-center justify-center gap-3 w-full bg-slate-800/50 text-white border border-white/10 font-semibold py-3 px-4 rounded-xl shadow-sm transition-all duration-300 transform hover:-translate-y-0.5 hover:bg-slate-800/80 cursor-pointer">
-                        {!! $data['icon'] !!}
-                        <span>{{ __('Continue with Email') }}</span>
-                    </button>
-                @else
-                    <a href="{{ route('user.login.social', ['provider' => $method]) }}"
-                        class="flex items-center justify-center gap-3 w-full {{ $method === 'google' ? 'bg-white text-slate-900 border-slate-200 hover:bg-slate-50' : 'bg-slate-800/50 text-white border-white/10 hover:bg-slate-800/80' }} font-semibold py-3 px-4 rounded-xl shadow-sm transition-all duration-300 transform hover:-translate-y-0.5 border cursor-pointer">
-                        {!! $data['icon'] !!}
-                        <span>{{ __('Continue with ' . $data['name']) }}</span>
-                    </a>
-                @endif
-            @endforeach
-        </div>
+        {{-- 1-Click Google Sign In --}}
+        @if (isset($login_methods['google']) && $login_methods['google']['status'] === 'enabled')
+            <div>
+                <a href="{{ route('user.login.social', ['provider' => 'google']) }}"
+                    class="flex items-center justify-center gap-3 w-full bg-white text-slate-900 border border-slate-200 hover:bg-slate-100 font-semibold py-3.5 px-4 rounded-xl shadow-sm transition-all duration-300 transform hover:-translate-y-0.5 cursor-pointer">
+                    {!! $login_methods['google']['icon'] !!}
+                    <span class="text-sm font-bold text-slate-900">{{ __('Sign in with Google') }}</span>
+                </a>
+
+                <div class="relative flex items-center justify-center my-5">
+                    <div class="border-t border-white/10 w-full"></div>
+                    <span class="bg-[#0B0E11] px-4 text-xs font-mono uppercase tracking-wider text-text-secondary whitespace-nowrap">{{ __('or sign in with email') }}</span>
+                    <div class="border-t border-white/10 w-full"></div>
+                </div>
+            </div>
+        @endif
 
         {{-- Email Login Form Container --}}
-        <div id="email-login-container" @if (!$only_email) style="display: none;" @endif class="space-y-6">
-            @if (!$only_email)
-                <button type="button" onclick="toggleSelection()"
-                    class="text-accent-primary hover:text-accent-glow text-sm flex items-center gap-2 transition-colors cursor-pointer group">
-                    <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7">
-                        </path>
-                    </svg>
-                    {{ __('Back to options') }}
-                </button>
-            @endif
+        <div id="email-login-container" class="space-y-6">
 
             <form action="{{ route('user.login.validate') }}" method="POST" class="ajax-form space-y-4"
                 data-action="redirect">
