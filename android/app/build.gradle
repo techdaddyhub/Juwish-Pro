@@ -31,7 +31,7 @@ android {
             dimension "role"
             applicationId "org.dmillers.juwishpro.admin"
             manifestPlaceholders = [appName: "JuwishPro Admin"]
-            buildConfigField "String", "TARGET_URL", "\"https://2026.dmillers.org/admin\""
+            buildConfigField "String", "TARGET_URL", "\"https://2026.dmillers.org/admin/dashboard\""
         }
     }
 

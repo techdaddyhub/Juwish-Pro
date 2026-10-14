@@ -14,12 +14,13 @@
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch" />
         
-        <!-- Offline / Loading overlay if network fails -->
+        <!-- Offline / Loading overlay if network fails (domain completely hidden) -->
         <Border Name="errorPanel" Background="#0B0E11" Visibility="Collapsed" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <TextBlock Text="Connection Lost" Foreground="#EAECEF" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10" />
-                <TextBlock Text="Unable to connect to JuwishPro Admin console." Foreground="#848E9C" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,20" />
-                <Button Content="Retry Connection" Click="OnRetryClick" Background="#F0B90B" Foreground="#0B0E11" FontWeight="Bold" Padding="20,10" HorizontalAlignment="Center" />
+                <Image Source="app.ico" Width="96" Height="96" HorizontalAlignment="Center" Margin="0,0,0,24" />
+                <TextBlock Text="Connection Offline" Foreground="#EAECEF" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,10" />
+                <TextBlock Text="Network connection is currently unavailable. Please check your internet settings." Foreground="#848E9C" FontSize="14" HorizontalAlignment="Center" Margin="0,0,0,24" />
+                <Button Content="Retry Connection" Click="OnRetryClick" Background="#F0B90B" Foreground="#0B0E11" FontWeight="Bold" Padding="32,12" FontSize="14" HorizontalAlignment="Center" />
             </StackPanel>
         </Border>
     </Grid>

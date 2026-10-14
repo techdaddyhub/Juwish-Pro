@@ -39,6 +39,14 @@ use App\Http\Controllers\Admin\Update\PrecheckController;
 use App\Http\Controllers\Admin\Update\UpdateController;
 use Illuminate\Support\Facades\Route;
 
+// Admin Root: Redirect to dashboard if logged in, or login if guest
+Route::get('/', function () {
+    if (auth()->guard('admin')->check()) {
+        return redirect()->route('admin.dashboard');
+    }
+    return redirect()->route('admin.login');
+})->name('root');
+
 // Guests only — logged-in admins cannot access these
 Route::middleware(['guest:admin', 'sandbox'])->group(function () {
     Route::get('/login', [LoginController::class, 'index'])->name('login');

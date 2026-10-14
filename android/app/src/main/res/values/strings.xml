@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">JuwishPro</string>
-    <string name="connection_error_title">Connection Lost</string>
-    <string name="connection_error_desc">Unable to connect to JuwishPro secure exchange network. Please check your internet connection.</string>
+    <string name="connection_error_title">Connection Offline</string>
+    <string name="connection_error_desc">Network connection is currently unavailable. Please verify your internet connection and tap retry.</string>
     <string name="retry">Retry Connection</string>
     <string name="exit_prompt">Press back again to exit JuwishPro</string>
 </resources>

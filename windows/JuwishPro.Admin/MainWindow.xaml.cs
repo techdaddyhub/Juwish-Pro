@@ -7,7 +7,7 @@ namespace JuwishPro.Admin
 {
     public partial class MainWindow : Window
     {
-        private const string TargetUrl = "https://2026.dmillers.org/admin";
+        private const string TargetUrl = "https://2026.dmillers.org/admin/dashboard";
 
         public MainWindow()
         {
@@ -57,6 +57,18 @@ namespace JuwishPro.Admin
                     catch { }
                     e.Cancel = true;
                     return;
+                }
+
+                // Dedicated Admin Panel lock: prevent admin app from falling back to client homepage
+                if (uri.Host.Equals("2026.dmillers.org", StringComparison.OrdinalIgnoreCase))
+                {
+                    var path = uri.AbsolutePath;
+                    if (string.IsNullOrEmpty(path) || path == "/" || path == "/home" || path.StartsWith("/user", StringComparison.OrdinalIgnoreCase))
+                    {
+                        e.Cancel = true;
+                        webView.Source = new Uri(TargetUrl);
+                        return;
+                    }
                 }
 
                 // If navigating outside JuwishPro platform

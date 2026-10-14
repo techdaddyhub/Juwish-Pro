@@ -166,6 +166,14 @@ public class MainActivity extends AppCompatActivity {
 
                 // If navigating within JuwishPro platform
                 if (host != null && (host.equals("2026.dmillers.org") || host.endsWith(".dmillers.org"))) {
+                    // Dedicated Admin Panel lock: prevent admin app from falling back to client homepage
+                    if (TARGET_URL.contains("/admin")) {
+                        String path = uri.getPath();
+                        if (path == null || path.isEmpty() || path.equals("/") || path.equals("/home") || path.startsWith("/user")) {
+                            view.loadUrl("https://2026.dmillers.org/admin/dashboard");
+                            return true;
+                        }
+                    }
                     return false;
                 }
 
@@ -182,9 +190,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                progressBar.setVisibility(View.VISIBLE);
-                errorLayout.setVisibility(View.GONE);
-                webView.setVisibility(View.VISIBLE);
+                if (url != null && !url.equals("about:blank")) {
+                    progressBar.setVisibility(View.VISIBLE);
+                    errorLayout.setVisibility(View.GONE);
+                    webView.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -198,14 +208,37 @@ public class MainActivity extends AppCompatActivity {
             public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
                 super.onReceivedError(view, request, error);
                 if (request.isForMainFrame()) {
-                    progressBar.setVisibility(View.GONE);
-                    swipeRefreshLayout.setRefreshing(false);
-                    webView.setVisibility(View.GONE);
-                    errorLayout.setVisibility(View.VISIBLE);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        errorDescription.setText(error.getDescription());
-                    }
+                    showOfflineError(view);
                 }
+            }
+
+            @SuppressWarnings("deprecation")
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                super.onReceivedError(view, errorCode, description, failingUrl);
+                showOfflineError(view);
+            }
+
+            @Override
+            public void onReceivedHttpError(WebView view, WebResourceRequest request, android.webkit.WebResourceResponse errorResponse) {
+                super.onReceivedHttpError(view, request, errorResponse);
+                if (request.isForMainFrame() && errorResponse != null && errorResponse.getStatusCode() >= 500) {
+                    showOfflineError(view);
+                }
+            }
+
+            private void showOfflineError(WebView view) {
+                progressBar.setVisibility(View.GONE);
+                swipeRefreshLayout.setRefreshing(false);
+                // Clear the default Chromium error page immediately to prevent exposing the domain
+                try {
+                    view.stopLoading();
+                    view.loadUrl("about:blank");
+                } catch (Exception ignored) {}
+                webView.setVisibility(View.GONE);
+                errorLayout.setVisibility(View.VISIBLE);
+                // Keep domain name completely hidden: use localized string without domain
+                errorDescription.setText(R.string.connection_error_desc);
             }
         });
 

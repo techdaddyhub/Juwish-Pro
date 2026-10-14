@@ -1,0 +1,11 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="64dp"
+    android:height="64dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Broken WiFi Disconnected Symbol in Warning Red/Gold -->
+    <path
+        android:fillColor="#F6465D"
+        android:pathData="M22.99,9C20.89,7.32 16.99,5 12,5C10.74,5 9.54,5.18 8.44,5.49L10.36,7.41C10.89,7.35 11.43,7.31 12,7.31C16.02,7.31 19.34,9.08 20.91,10.36L22.99,9ZM1,3.27L3.28,5.55C1.86,6.67 0.73,7.9 0.01,9L12,24L17.27,17.41L20.73,20.87L22,19.6L2.27,2L1,3.27ZM12,19.37L4.35,9.81C5.69,8.77 7.27,8.04 8.99,7.66L15.65,14.32L12,19.37ZM15.54,12.59L17.51,14.56L18.49,13.33C17.58,12.53 16.59,11.96 15.54,12.59Z" />
+</vector>
+
