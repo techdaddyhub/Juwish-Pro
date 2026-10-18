@@ -5,74 +5,82 @@
         $isRtl = config('languages.' . app()->getLocale() . '.rtl', false);
     @endphp
 
-    <div
-        style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; margin-bottom: 24px; text-align: {{ $isRtl ? 'right' : 'left' }};">
-        <span
-            style="display: inline-block; padding: 4px 12px; border-radius: 9999px; background-color: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); color: #3b82f6; font-size: 10px; font-weight: 900; letter-spacing: 0.1em; text-transform: uppercase;">
-            {{ __('New Contact Inquiry') }}
+    {{-- Category Badge (Binance Gold) --}}
+    <div style="margin-bottom: 20px; text-align: {{ $isRtl ? 'right' : 'left' }};">
+        <span style="display: inline-block; padding: 4px 12px; background-color: rgba(240, 185, 11, 0.12); border: 1px solid rgba(240, 185, 11, 0.3); border-radius: 9999px; font-size: 11px; font-weight: 700; color: #F0B90B; letter-spacing: 0.08em; text-transform: uppercase;">
+            {{ __('New Support Inquiry') }}
         </span>
     </div>
 
-    <h1
-        style="box-sizing: border-box; font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; color: #ffffff; font-size: 28px; font-weight: bold; margin-top: 0; text-align: {{ $isRtl ? 'right' : 'left' }}; letter-spacing: -0.02em;">
+    {{-- Main Heading --}}
+    <h1 style="box-sizing: border-box; color: #EAECEF; font-size: 26px; font-weight: 700; margin: 0 0 16px 0; text-align: {{ $isRtl ? 'right' : 'left' }}; letter-spacing: -0.02em; line-height: 1.3;">
         {{ $title }}
     </h1>
 
-    <p
-        style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; font-size: 16px; line-height: 1.6em; margin-top: 16px; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #cbd5e1;">
+    {{-- Greeting & Intro --}}
+    <p style="box-sizing: border-box; font-size: 15px; line-height: 1.6; margin: 0 0 12px 0; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #EAECEF;">
         {{ __('Hello Admin,') }}
     </p>
 
-    <p
-        style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; font-size: 16px; line-height: 1.6em; margin-top: 0; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #cbd5e1; margin-bottom: 24px;">
-        {{ __('You have received a new message from the contact form on your website. Please find the details of the inquiry below.') }}
+    <p style="box-sizing: border-box; font-size: 15px; line-height: 1.6; margin: 0 0 28px 0; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #B7BDC6;">
+        {{ __('A visitor has submitted a new inquiry via the public contact terminal. Review the sender credentials and message contents below:') }}
     </p>
 
-    {{-- Sender Details Box --}}
-    <div
-        style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+    {{-- Sender Details Box (Binance Card Surface #1E2329) --}}
+    <div style="box-sizing: border-box; background-color: #1E2329; border: 1px solid #2B313A; border-radius: 12px; padding: 22px 24px; margin-bottom: 24px;">
+        <p style="margin: 0 0 18px 0; font-size: 12px; font-weight: 700; color: #F0B90B; text-transform: uppercase; letter-spacing: 0.08em; text-align: {{ $isRtl ? 'right' : 'left' }};">
+            {{ __('Sender Information') }}
+        </p>
 
-        <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
             <tr>
-                <td
-                    style="padding-bottom: 12px; color: #94a3b8; font-size: 14px; text-align: {{ $isRtl ? 'right' : 'left' }}; vertical-align: top; width: 120px;">
-                    {{ __('Sender Name') }}</td>
-                <td
-                    style="padding-bottom: 12px; color: #f8fafc; font-size: 14px; font-weight: 600; text-align: {{ $isRtl ? 'left' : 'right' }};">
-                    {{ $sender_name }}</td>
+                <td style="padding-bottom: 12px; color: #848E9C; font-size: 13px; text-align: {{ $isRtl ? 'right' : 'left' }}; width: 130px;">
+                    {{ __('Sender Name') }}
+                </td>
+                <td style="padding-bottom: 12px; color: #EAECEF; font-size: 14px; font-weight: 700; text-align: {{ $isRtl ? 'left' : 'right' }};">
+                    {{ $sender_name }}
+                </td>
             </tr>
             <tr>
-                <td
-                    style="padding-bottom: 12px; color: #94a3b8; font-size: 14px; text-align: {{ $isRtl ? 'right' : 'left' }}; vertical-align: top;">
-                    {{ __('Email Address') }}</td>
-                <td
-                    style="padding-bottom: 12px; color: #3b82f6; font-size: 14px; font-weight: 600; text-align: {{ $isRtl ? 'left' : 'right' }};">
-                    <a href="mailto:{{ $sender_email }}"
-                        style="color: #3b82f6; text-decoration: none;">{{ $sender_email }}</a>
+                <td style="padding-top: 10px; border-top: 1px solid #2B313A; color: #848E9C; font-size: 13px; text-align: {{ $isRtl ? 'right' : 'left' }};">
+                    {{ __('Email Address') }}
+                </td>
+                <td style="padding-top: 10px; border-top: 1px solid #2B313A; text-align: {{ $isRtl ? 'left' : 'right' }};">
+                    <a href="mailto:{{ $sender_email }}" style="color: #F0B90B; text-decoration: none; font-size: 13px; font-weight: 600;">
+                        {{ $sender_email }}
+                    </a>
                 </td>
             </tr>
         </table>
-
     </div>
 
-    {{-- Message Box --}}
-    <div
-        style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
-        <h3
-            style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; color: #94a3b8; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 0; margin-bottom: 12px; text-align: {{ $isRtl ? 'right' : 'left' }};">
-            {{ __('Message') }}
-        </h3>
-        <p
-            style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; color: #f8fafc; font-size: 14px; line-height: 1.6em; margin: 0; text-align: {{ $isRtl ? 'right' : 'left' }}; white-space: pre-wrap;">
-            {{ $sender_message }}</p>
+    {{-- Message Box (Binance Card Surface #1E2329) --}}
+    <div style="box-sizing: border-box; background-color: #1E2329; border: 1px solid #2B313A; border-radius: 12px; padding: 22px 24px; margin-bottom: 28px;">
+        <p style="margin: 0 0 12px 0; font-size: 12px; font-weight: 700; color: #848E9C; text-transform: uppercase; letter-spacing: 0.08em; text-align: {{ $isRtl ? 'right' : 'left' }};">
+            {{ __('Inquiry Body') }}
+        </p>
+        <p style="box-sizing: border-box; color: #EAECEF; font-size: 14px; line-height: 1.6; margin: 0; text-align: {{ $isRtl ? 'right' : 'left' }}; white-space: pre-wrap;">
+            {{ $sender_message }}
+        </p>
     </div>
 
-    <div
-        style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-        <p
-            style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; font-size: 14px; line-height: 1.5em; margin-top: 0; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #94a3b8;">
-            {{ __('Regards,') }}<br>
-            <span style="color: #f8fafc; font-weight: 600;">{{ getSetting('name') }} System</span>
+    {{-- CTA Button to reply --}}
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin: 28px 0;">
+        <tr>
+            <td align="{{ $isRtl ? 'right' : 'left' }}">
+                <a href="mailto:{{ $sender_email }}?subject={{ urlencode('Re: ' . $title) }}" target="_blank"
+                    style="box-sizing: border-box; display: inline-block; padding: 14px 34px; background-color: #FCD535; color: #0B0E11; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 15px; letter-spacing: 0.02em; text-align: center; box-shadow: 0 4px 16px rgba(240, 185, 11, 0.3);">
+                    {{ __('Reply via Email') }} &rarr;
+                </a>
+            </td>
+        </tr>
+    </table>
+
+    {{-- Regards Block --}}
+    <div style="box-sizing: border-box; margin-top: 32px; padding-top: 24px; border-top: 1px solid #2B313A;">
+        <p style="box-sizing: border-box; font-size: 13px; line-height: 1.5; margin: 0; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #848E9C;">
+            {{ __('Automated Notification generated by') }}<br>
+            <strong style="color: #F0B90B; font-size: 14px;">{{ getSetting('name', 'JuwishPro') }} Web Services</strong>
         </p>
     </div>
 @endsection

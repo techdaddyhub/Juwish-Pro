@@ -61,5 +61,18 @@ Route::get('privacy-policy', [HomeController::class, 'privacyPolicy'])->name('pr
 Route::get('terms-and-conditions', [HomeController::class, 'termsAndConditions'])->name('terms-and-conditions');
 Route::get('risk-disclosure', [HomeController::class, 'riskDisclosure'])->name('risk-disclosure');
 
-
-// Auth Routes
+// Cron routes aliases
+Route::get('cronjob', function () {
+    \Illuminate\Support\Facades\Artisan::call('lozand:start-schedule');
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Cron job started successfully',
+    ]);
+});
+Route::get('cron', function () {
+    \Illuminate\Support\Facades\Artisan::call('lozand:start-schedule');
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Cron job started successfully',
+    ]);
+});

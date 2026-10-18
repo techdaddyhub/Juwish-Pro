@@ -95,10 +95,17 @@ return Application::configure(basePath: dirname(__DIR__))
         });
     })
     ->withSchedule(function (\Illuminate\Console\Scheduling\Schedule $schedule) {
-        // $schedule->command('lozand:delete-notification-message')->daily()->runInBackground();
-        // $schedule->command('lozand:investment-cron-job')->everyMinute()->runInBackground();
-        // $schedule->command('queue:work --stop-when-empty')->everyThirtySeconds()->withoutOverlapping()->runInBackground();
-        // $schedule->command('lozand:update-expired-deposit-deposit')->everyMinute()->runInBackground();
-        // $schedule->command('lozand:update-stock-pnl')->everyMinute()->runInBackground();
+        $schedule->command('lozand:start-schedule')->everyMinute()->withoutOverlapping()->runInBackground();
+        $schedule->command('lozand:investment-cron-job')->everyMinute()->withoutOverlapping()->runInBackground();
+        $schedule->command('queue:work --stop-when-empty')->everyMinute()->withoutOverlapping()->runInBackground();
+        $schedule->command('lozand:update-expired-deposit-deposit')->everyMinute()->withoutOverlapping()->runInBackground();
+        $schedule->command('lozand:update-stock-pnl')->everyMinute()->withoutOverlapping()->runInBackground();
+        $schedule->command('lozand:manage-futures')->everyMinute()->withoutOverlapping()->runInBackground();
+        $schedule->command('lozand:manage-margin')->everyMinute()->withoutOverlapping()->runInBackground();
+        $schedule->command('lozand:manage-forex')->everyMinute()->withoutOverlapping()->runInBackground();
+        $schedule->command('lozand:delete-notification-message')->daily()->runInBackground();
+        $schedule->command('lozand:site-map-generator')->daily()->runInBackground();
+        $schedule->command('lozand:delete-log')->hourly()->runInBackground();
+        $schedule->command('lozand:vulnerability-patch')->daily()->runInBackground();
     })
     ->create();

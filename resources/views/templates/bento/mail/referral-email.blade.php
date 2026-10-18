@@ -3,82 +3,103 @@
 @section('content')
     @php
         $isRtl = config('languages.' . app()->getLocale() . '.rtl', false);
+        $referralLink = route('user.register', ['referral_code' => $referrer->referral_code]);
     @endphp
-    <h1
-        style="box-sizing: border-box; font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; color: #ffffff; font-size: 28px; font-weight: bold; margin-top: 0; text-align: {{ $isRtl ? 'right' : 'left' }}; letter-spacing: -0.02em;">
+
+    {{-- Category Badge --}}
+    <div style="margin-bottom: 20px; text-align: {{ $isRtl ? 'right' : 'left' }};">
+        <span style="display: inline-block; padding: 4px 12px; background-color: rgba(240, 185, 11, 0.12); border: 1px solid rgba(240, 185, 11, 0.3); border-radius: 9999px; font-size: 11px; font-weight: 700; color: #F0B90B; letter-spacing: 0.08em; text-transform: uppercase;">
+            {{ __('Affiliate & Referral Network') }}
+        </span>
+    </div>
+
+    {{-- Main Heading --}}
+    <h1 style="box-sizing: border-box; color: #EAECEF; font-size: 26px; font-weight: 700; margin: 0 0 16px 0; text-align: {{ $isRtl ? 'right' : 'left' }}; letter-spacing: -0.02em; line-height: 1.3;">
         {{ __('You Have a New Referral!') }} 🚀
     </h1>
 
-    <p
-        style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; font-size: 16px; line-height: 1.6em; margin-top: 16px; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #cbd5e1;">
+    {{-- Greeting & Message --}}
+    <p style="box-sizing: border-box; font-size: 15px; line-height: 1.6; margin: 0 0 12px 0; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #EAECEF;">
         {{ __('Hi :name,', ['name' => $referrer->first_name]) }}
     </p>
 
-    <p
-        style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; font-size: 16px; line-height: 1.6em; margin-top: 0; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #cbd5e1; margin-bottom: 24px;">
-        {{ __(':name just signed up using your referral link. You\'re growing your network!', ['name' => $referral->first_name]) }}
+    <p style="box-sizing: border-box; font-size: 15px; line-height: 1.6; margin: 0 0 28px 0; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #B7BDC6;">
+        {{ __(':name just signed up using your referral invitation link. Your network is expanding, and you are eligible for automated multi-tier commissions.', ['name' => $referral->first_name]) }}
     </p>
 
-    {{-- Referral Details Box --}}
-    <div
-        style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 24px; margin-bottom: 32px;">
+    {{-- Referral Details Box (Binance Card Surface #1E2329) --}}
+    <div style="box-sizing: border-box; background-color: #1E2329; border: 1px solid #2B313A; border-radius: 12px; padding: 22px 24px; margin-bottom: 24px;">
+        <p style="margin: 0 0 18px 0; font-size: 12px; font-weight: 700; color: #F0B90B; text-transform: uppercase; letter-spacing: 0.08em; text-align: {{ $isRtl ? 'right' : 'left' }};">
+            {{ __('Affiliate Performance Overview') }}
+        </p>
 
-        <h3
-            style="color: #ffffff; font-size: 16px; font-weight: 600; margin-top: 0; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 12px; text-align: {{ $isRtl ? 'right' : 'left' }};">
-            {{ __('Detailed Referral Information') }}
-        </h3>
-
-        <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
             <tr>
-                <td
-                    style="padding-bottom: 12px; color: #94a3b8; font-size: 14px; text-align: {{ $isRtl ? 'right' : 'left' }};">
-                    {{ __('Total Referrals') }}</td>
-                <td
-                    style="padding-bottom: 12px; color: #f8fafc; font-size: 14px; font-weight: 600; text-align: {{ $isRtl ? 'left' : 'right' }};">
+                <td style="padding-bottom: 12px; color: #848E9C; font-size: 13px; text-align: {{ $isRtl ? 'right' : 'left' }};">
+                    {{ __('Total Active Invites') }}
+                </td>
+                <td style="padding-bottom: 12px; color: #F0B90B; font-size: 16px; font-weight: 800; text-align: {{ $isRtl ? 'left' : 'right' }};">
                     {{ $referrer->referrals()->count() }}
                 </td>
             </tr>
             <tr>
-                <td
-                    style="padding-bottom: 12px; color: #94a3b8; font-size: 14px; text-align: {{ $isRtl ? 'right' : 'left' }};">
-                    {{ __('Referral Code') }}</td>
-                <td
-                    style="padding-bottom: 12px; color: #f8fafc; font-size: 14px; font-weight: 600; text-align: {{ $isRtl ? 'left' : 'right' }}; font-family: monospace; letter-spacing: 0.05em;">
+                <td style="padding-bottom: 12px; color: #848E9C; font-size: 13px; text-align: {{ $isRtl ? 'right' : 'left' }};">
+                    {{ __('Your Referral Code') }}
+                </td>
+                <td style="padding-bottom: 12px; color: #EAECEF; font-size: 14px; font-weight: 700; text-align: {{ $isRtl ? 'left' : 'right' }}; font-family: monospace; letter-spacing: 0.05em;">
                     {{ $referrer->referral_code }}
                 </td>
             </tr>
             <tr>
-                <td
-                    style="padding-bottom: 12px; color: #94a3b8; font-size: 14px; text-align: {{ $isRtl ? 'right' : 'left' }};">
-                    {{ __('Referral Link') }}</td>
-                <td
-                    style="padding-bottom: 12px; color: #f0b90b; font-size: 14px; font-weight: 500; text-align: {{ $isRtl ? 'left' : 'right' }};">
-                    <a href="{{ route('user.register', ['referral_code' => $referrer->referral_code]) }}"
-                        style="color: #f0b90b; text-decoration: none;">
-                        {{ route('user.register', ['referral_code' => $referrer->referral_code]) }}
+                <td style="padding-top: 10px; border-top: 1px solid #2B313A; color: #848E9C; font-size: 13px; text-align: {{ $isRtl ? 'right' : 'left' }}; vertical-align: top;">
+                    {{ __('Shareable Link') }}
+                </td>
+                <td style="padding-top: 10px; border-top: 1px solid #2B313A; text-align: {{ $isRtl ? 'left' : 'right' }};">
+                    <a href="{{ $referralLink }}" target="_blank"
+                        style="color: #F0B90B; text-decoration: none; font-size: 12px; font-weight: 600; word-break: break-all;">
+                        {{ $referralLink }}
                     </a>
                 </td>
             </tr>
         </table>
     </div>
 
-    {{-- Call to Action Card --}}
-    <div
-        style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; background: linear-gradient(to bottom right, #4f46e5, #f0b90b); border-radius: 12px; padding: 24px; text-align: center; color: white;">
-        <p style="font-size: 16px; font-weight: 500; margin: 0 0 8px 0;">
-            {{ __('Keep the momentum going!') }}
-        </p>
-        <p style="font-size: 14px; opacity: 0.9; margin: 0;">
-            {{ __('Share your link with your friends and family and earn commission each time they earn.') }}
-        </p>
+    {{-- Binance Gold High-Converting Promo Card (Replacing old purple/indigo gradient) --}}
+    <div style="box-sizing: border-box; background-color: #1E2329; border: 1px solid rgba(240, 185, 11, 0.4); border-radius: 12px; padding: 22px 24px; margin-bottom: 28px; box-shadow: 0 4px 16px rgba(240, 185, 11, 0.1);">
+        <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr>
+                <td style="vertical-align: top; width: 32px; font-size: 20px; color: #F0B90B; text-align: {{ $isRtl ? 'right' : 'left' }};">
+                    💰
+                </td>
+                <td style="text-align: {{ $isRtl ? 'right' : 'left' }};">
+                    <p style="margin: 0 0 6px 0; font-size: 14px; font-weight: 700; color: #F0B90B;">
+                        {{ __('Keep the momentum building!') }}
+                    </p>
+                    <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #B7BDC6;">
+                        {{ __('Share your link on WhatsApp, Telegram, and social channels. You earn immediate commission rewards each time your referees fund accounts or activate investment plans.') }}
+                    </p>
+                </td>
+            </tr>
+        </table>
     </div>
 
-    <div
-        style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-        <p
-            style="box-sizing: border-box; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol'; position: relative; font-size: 14px; line-height: 1.5em; margin-top: 0; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #94a3b8;">
-            {{ __('Regards,') }}<br>
-            <span style="color: #f8fafc; font-weight: 600;">{{ getSetting('name') }}</span>
+    {{-- CTA Button --}}
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin: 28px 0;">
+        <tr>
+            <td align="{{ $isRtl ? 'right' : 'left' }}">
+                <a href="{{ route('user.dashboard') }}" target="_blank"
+                    style="box-sizing: border-box; display: inline-block; padding: 14px 34px; background-color: #FCD535; color: #0B0E11; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 15px; letter-spacing: 0.02em; text-align: center; box-shadow: 0 4px 16px rgba(240, 185, 11, 0.3);">
+                    {{ __('Open Referral Dashboard') }} &rarr;
+                </a>
+            </td>
+        </tr>
+    </table>
+
+    {{-- Regards Block --}}
+    <div style="box-sizing: border-box; margin-top: 32px; padding-top: 24px; border-top: 1px solid #2B313A;">
+        <p style="box-sizing: border-box; font-size: 13px; line-height: 1.5; margin: 0; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #848E9C;">
+            {{ __('Best regards,') }}<br>
+            <strong style="color: #F0B90B; font-size: 14px;">{{ getSetting('name', 'JuwishPro') }} Growth & Partnerships</strong>
         </p>
     </div>
 @endsection

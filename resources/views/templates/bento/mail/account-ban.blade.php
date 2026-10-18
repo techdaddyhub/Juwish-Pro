@@ -1,96 +1,68 @@
-@php
-    $isRtl = config('languages.' . app()->getLocale() . '.rtl', false);
-    $fontFamily = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
-    $headingFamily =
-        "'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
-    $isBan = ($action ?? 'ban') === 'ban';
-@endphp
-
 @extends('templates.bento.mail.layout')
 
 @section('content')
-    {{-- Icon Header --}}
-    <div style="text-align: center; margin-bottom: 32px;">
-        @if ($isBan)
-            <div
-                style="display: inline-flex; align-items: center; justify-content: center; width: 72px; height: 72px; border-radius: 50%; background-color: rgba(239, 68, 68, 0.15); border: 2px solid rgba(239, 68, 68, 0.3);">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"></line>
-                </svg>
-            </div>
-        @else
-            <div
-                style="display: inline-flex; align-items: center; justify-content: center; width: 72px; height: 72px; border-radius: 50%; background-color: rgba(16, 185, 129, 0.15); border: 2px solid rgba(16, 185, 129, 0.3);">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                    <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                </svg>
-            </div>
-        @endif
+    @php
+        $isRtl = config('languages.' . app()->getLocale() . '.rtl', false);
+        $isBan = ($action ?? 'ban') === 'ban';
+        $accentColor = $isBan ? '#F6465D' : '#0ECB81';
+        $accentBg = $isBan ? 'rgba(246, 70, 93, 0.12)' : 'rgba(14, 203, 129, 0.12)';
+        $accentBorder = $isBan ? 'rgba(246, 70, 93, 0.25)' : 'rgba(14, 203, 129, 0.25)';
+    @endphp
+
+    {{-- Category Badge --}}
+    <div style="margin-bottom: 20px; text-align: {{ $isRtl ? 'right' : 'left' }};">
+        <span style="display: inline-block; padding: 4px 12px; background-color: {{ $accentBg }}; border: 1px solid {{ $accentBorder }}; border-radius: 9999px; font-size: 11px; font-weight: 700; color: {{ $accentColor }}; letter-spacing: 0.08em; text-transform: uppercase;">
+            {{ $isBan ? __('Security Suspension') : __('Account Restored') }}
+        </span>
     </div>
 
-    {{-- Heading --}}
-    <h1
-        style="box-sizing: border-box; font-family: {{ $headingFamily }}; color: #ffffff; font-size: 26px; font-weight: 700; margin-top: 0; margin-bottom: 8px; text-align: {{ $isRtl ? 'right' : 'left' }}; letter-spacing: -0.02em;">
-        @if ($isBan)
-            {{ __('Your Account Has Been Suspended') }}
-        @else
-            {{ __('Your Account Has Been Reactivated') }}
-        @endif
+    {{-- Main Heading --}}
+    <h1 style="box-sizing: border-box; color: #EAECEF; font-size: 26px; font-weight: 700; margin: 0 0 16px 0; text-align: {{ $isRtl ? 'right' : 'left' }}; letter-spacing: -0.02em; line-height: 1.3;">
+        {{ $isBan ? __('Your Account Has Been Suspended') : __('Your Account Has Been Reactivated') }}
     </h1>
 
-    {{-- Greeting --}}
-    <p
-        style="box-sizing: border-box; font-family: {{ $fontFamily }}; font-size: 16px; line-height: 1.6em; margin-top: 0; margin-bottom: 20px; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #cbd5e1;">
+    {{-- Greeting & Text --}}
+    <p style="box-sizing: border-box; font-size: 15px; line-height: 1.6; margin: 0 0 12px 0; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #EAECEF;">
         {{ __('Hello :name,', ['name' => $user->first_name]) }}
     </p>
 
-    {{-- Intro paragraph --}}
-    <p
-        style="box-sizing: border-box; font-family: {{ $fontFamily }}; font-size: 16px; line-height: 1.6em; margin-top: 0; margin-bottom: 28px; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #cbd5e1;">
+    <p style="box-sizing: border-box; font-size: 15px; line-height: 1.6; margin: 0 0 28px 0; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #B7BDC6;">
         @if ($isBan)
-            {{ __('We are writing to inform you that your account on :site has been suspended by an administrator. Access to your account and all related services has been restricted.', ['site' => getSetting('name')]) }}
+            {{ __('We are writing to inform you that access to your :site account has been suspended following a compliance or security review. Active trading sessions have been revoked.', ['site' => getSetting('name', 'JuwishPro')]) }}
         @else
-            {{ __('We are pleased to inform you that your account on :site has been reactivated by an administrator. You now have full access to all services.', ['site' => getSetting('name')]) }}
+            {{ __('We are pleased to inform you that your :site account has been fully reactivated. All restrictions have been lifted, and you can resume normal trading and investment operations.', ['site' => getSetting('name', 'JuwishPro')]) }}
         @endif
     </p>
 
-    {{-- Account Details Card --}}
-    <div
-        style="background-color: {{ $isBan ? 'rgba(239, 68, 68, 0.05)' : 'rgba(16, 185, 129, 0.05)' }}; border: 1px solid {{ $isBan ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)' }}; border-radius: 12px; padding: 24px; margin-bottom: 28px;">
-        <p
-            style="font-family: {{ $headingFamily }}; font-size: 13px; font-weight: 600; color: {{ $isBan ? '#ef4444' : '#10b981' }}; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0; margin-bottom: 16px; text-align: {{ $isRtl ? 'right' : 'left' }};">
-            {{ __('Account Details') }}
+    {{-- Account Details Box (Binance Card Surface #1E2329) --}}
+    <div style="box-sizing: border-box; background-color: #1E2329; border: 1px solid #2B313A; border-radius: 12px; padding: 22px 24px; margin-bottom: 24px;">
+        <p style="margin: 0 0 18px 0; font-size: 12px; font-weight: 700; color: #F0B90B; text-transform: uppercase; letter-spacing: 0.08em; text-align: {{ $isRtl ? 'right' : 'left' }};">
+            {{ __('Account Record') }}
         </p>
-        <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+
+        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="border-collapse: collapse;">
             <tr>
-                <td
-                    style="padding-bottom: 12px; color: #94a3b8; font-family: {{ $fontFamily }}; font-size: 14px; text-align: {{ $isRtl ? 'right' : 'left' }};">
-                    {{ __('Full Name') }}</td>
-                <td
-                    style="padding-bottom: 12px; color: #f8fafc; font-family: {{ $fontFamily }}; font-size: 14px; font-weight: 600; text-align: {{ $isRtl ? 'left' : 'right' }};">
-                    {{ $user->first_name }} {{ $user->last_name }}</td>
+                <td style="padding-bottom: 12px; color: #848E9C; font-size: 13px; text-align: {{ $isRtl ? 'right' : 'left' }}; width: 130px;">
+                    {{ __('Account Holder') }}
+                </td>
+                <td style="padding-bottom: 12px; color: #EAECEF; font-size: 14px; font-weight: 700; text-align: {{ $isRtl ? 'left' : 'right' }};">
+                    {{ $user->first_name }} {{ $user->last_name }}
+                </td>
             </tr>
             <tr>
-                <td
-                    style="padding-bottom: 12px; color: #94a3b8; font-family: {{ $fontFamily }}; font-size: 14px; text-align: {{ $isRtl ? 'right' : 'left' }};">
-                    {{ __('Username') }}</td>
-                <td
-                    style="padding-bottom: 12px; color: #f8fafc; font-family: {{ $fontFamily }}; font-size: 14px; font-weight: 600; text-align: {{ $isRtl ? 'left' : 'right' }};">
-                    {{ $user->username }}</td>
+                <td style="padding-bottom: 12px; color: #848E9C; font-size: 13px; text-align: {{ $isRtl ? 'right' : 'left' }};">
+                    {{ __('Username') }}
+                </td>
+                <td style="padding-bottom: 12px; color: #EAECEF; font-size: 13px; font-weight: 600; text-align: {{ $isRtl ? 'left' : 'right' }}; font-family: monospace;">
+                    {{ $user->username }}
+                </td>
             </tr>
             <tr>
-                <td
-                    style="padding-bottom: 0; color: #94a3b8; font-family: {{ $fontFamily }}; font-size: 14px; text-align: {{ $isRtl ? 'right' : 'left' }};">
-                    {{ __('Status') }}</td>
-                <td style="padding-bottom: 0; text-align: {{ $isRtl ? 'left' : 'right' }};">
-                    <span
-                        style="display: inline-block; padding: 4px 12px; border-radius: 20px; font-family: {{ $fontFamily }}; font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
-                        background-color: {{ $isBan ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)' }};
-                        color: {{ $isBan ? '#ef4444' : '#10b981' }};">
+                <td style="padding-top: 10px; border-top: 1px solid #2B313A; color: #848E9C; font-size: 13px; text-align: {{ $isRtl ? 'right' : 'left' }};">
+                    {{ __('Account Status') }}
+                </td>
+                <td style="padding-top: 10px; border-top: 1px solid #2B313A; text-align: {{ $isRtl ? 'left' : 'right' }};">
+                    <span style="display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; background-color: {{ $accentBg }}; border: 1px solid {{ $accentBorder }}; color: {{ $accentColor }};">
                         {{ $isBan ? __('Suspended') : __('Active') }}
                     </span>
                 </td>
@@ -98,61 +70,51 @@
         </table>
     </div>
 
-    {{-- What This Means --}}
-    <div
-        style="background-color: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 24px; margin-bottom: 28px;">
-        <p
-            style="font-family: {{ $headingFamily }}; font-size: 13px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0; margin-bottom: 16px; text-align: {{ $isRtl ? 'right' : 'left' }};">
+    {{-- What This Means Box (Binance Card Surface #1E2329) --}}
+    <div style="box-sizing: border-box; background-color: #1E2329; border: 1px solid #2B313A; border-radius: 12px; padding: 22px 24px; margin-bottom: 28px;">
+        <p style="margin: 0 0 12px 0; font-size: 12px; font-weight: 700; color: #848E9C; text-transform: uppercase; letter-spacing: 0.08em; text-align: {{ $isRtl ? 'right' : 'left' }};">
             {{ __('What This Means') }}
         </p>
+
         @if ($isBan)
-            <ul
-                style="margin: 0; padding-{{ $isRtl ? 'right' : 'left' }}: 20px; color: #cbd5e1; font-family: {{ $fontFamily }}; font-size: 14px; line-height: 1.8em;">
-                <li>{{ __('You cannot log in to your account.') }}</li>
-                <li>{{ __('All active sessions have been terminated.') }}</li>
-                <li>{{ __('Scheduled or pending transactions may be paused.') }}</li>
+            <ul style="margin: 0; padding-{{ $isRtl ? 'right' : 'left' }}: 18px; font-size: 13px; line-height: 1.7; color: #B7BDC6;">
+                <li>{{ __('Account authentication and new sessions are blocked.') }}</li>
+                <li>{{ __('Withdrawal processing is temporarily halted pending verification.') }}</li>
+                <li>{{ __('If you believe this was done in error, you may file an appeal with our compliance office.') }}</li>
             </ul>
         @else
-            <ul
-                style="margin: 0; padding-{{ $isRtl ? 'right' : 'left' }}: 20px; color: #cbd5e1; font-family: {{ $fontFamily }}; font-size: 14px; line-height: 1.8em;">
-                <li>{{ __('You can now log in to your account normally.') }}</li>
-                <li>{{ __('All account features have been fully restored.') }}</li>
-                <li>{{ __('Any previously paused transactions may resume.') }}</li>
+            <ul style="margin: 0; padding-{{ $isRtl ? 'right' : 'left' }}: 18px; font-size: 13px; line-height: 1.7; color: #B7BDC6;">
+                <li>{{ __('You can now log in normally using your regular credentials.') }}</li>
+                <li>{{ __('All deposit, trading, and withdrawal modules are active.') }}</li>
+                <li>{{ __('We recommend enabling two-factor authentication for enhanced protection.') }}</li>
             </ul>
         @endif
     </div>
-
-    {{-- Closing paragraph --}}
-    <p
-        style="font-family: {{ $fontFamily }}; font-size: 15px; line-height: 1.6em; margin-top: 0; margin-bottom: 24px; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #cbd5e1;">
-        @if ($isBan)
-            {{ __('If you believe this is a mistake or would like to appeal this decision, please contact our support team immediately.') }}
-        @else
-            {{ __('If you have any questions or need assistance, our support team is always here to help.') }}
-        @endif
-    </p>
 
     {{-- CTA Button --}}
-    <div style="text-align: {{ $isRtl ? 'right' : 'left' }}; margin-bottom: 40px;">
-        @if ($isBan)
-            <a href="mailto:{{ getSetting('email') ?? config('mail.from.address') }}"
-                style="display: inline-block; padding: 14px 32px; background-color: #f0b90b; color: #ffffff; text-decoration: none; border-radius: 12px; font-family: {{ $headingFamily }}; font-weight: 700; font-size: 15px; box-shadow: 0 4px 12px rgba(240, 185, 11, 0.3);">
-                {{ __('Contact Support') }}
-            </a>
-        @else
-            <a href="{{ route('user.dashboard') }}"
-                style="display: inline-block; padding: 14px 32px; background-color: #f0b90b; color: #ffffff; text-decoration: none; border-radius: 12px; font-family: {{ $headingFamily }}; font-weight: 700; font-size: 15px; box-shadow: 0 4px 12px rgba(240, 185, 11, 0.3);">
-                {{ __('Go to Dashboard') }}
-            </a>
-        @endif
-    </div>
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation" style="margin: 28px 0;">
+        <tr>
+            <td align="{{ $isRtl ? 'right' : 'left' }}">
+                @if ($isBan)
+                    <a href="mailto:{{ getSetting('email') ?? config('mail.from.address') }}" target="_blank"
+                        style="box-sizing: border-box; display: inline-block; padding: 14px 34px; background-color: #FCD535; color: #0B0E11; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 15px; letter-spacing: 0.02em; text-align: center; box-shadow: 0 4px 16px rgba(240, 185, 11, 0.3);">
+                        {{ __('Contact Security Compliance') }} &rarr;
+                    </a>
+                @else
+                    <a href="{{ route('user.dashboard') }}" target="_blank"
+                        style="box-sizing: border-box; display: inline-block; padding: 14px 34px; background-color: #FCD535; color: #0B0E11; text-decoration: none; border-radius: 8px; font-weight: 700; font-size: 15px; letter-spacing: 0.02em; text-align: center; box-shadow: 0 4px 16px rgba(240, 185, 11, 0.3);">
+                        {{ __('Go to Dashboard') }} &rarr;
+                    </a>
+                @endif
+            </td>
+        </tr>
+    </table>
 
-    {{-- Footer --}}
-    <div style="margin-top: 40px; padding-top: 32px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-        <p
-            style="font-family: {{ $fontFamily }}; font-size: 14px; line-height: 1.5em; margin-top: 0; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #94a3b8;">
-            {{ __('Regards,') }}<br>
-            <span style="color: #f8fafc; font-weight: 600;">{{ getSetting('name') }}</span>
+    {{-- Regards Block --}}
+    <div style="box-sizing: border-box; margin-top: 32px; padding-top: 24px; border-top: 1px solid #2B313A;">
+        <p style="box-sizing: border-box; font-size: 13px; line-height: 1.5; margin: 0; text-align: {{ $isRtl ? 'right' : 'left' }}; color: #848E9C;">
+            {{ __('Best regards,') }}<br>
+            <strong style="color: #F0B90B; font-size: 14px;">{{ getSetting('name', 'JuwishPro') }} Compliance Authority</strong>
         </p>
     </div>
 @endsection

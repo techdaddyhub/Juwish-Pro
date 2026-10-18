@@ -113,14 +113,21 @@ class StartSchedule extends Command
 
             //use artisan call
             $this->info('Executing ' . $commandName);
-            Artisan::call($commandName, $command['flags']);
-            Cache::put($cache_key, true, $command['delay']);
-
+            try {
+                Artisan::call($commandName, $command['flags']);
+                Cache::put($cache_key, true, $command['delay']);
+            } catch (\Throwable $e) {
+                $this->error('Error executing ' . $commandName . ': ' . $e->getMessage());
+                \Illuminate\Support\Facades\Log::error('Cron execution failed for ' . $commandName, [
+                    'message' => $e->getMessage(),
+                    'file' => $e->getFile(),
+                    'line' => $e->getLine(),
+                ]);
+            }
         }
 
         updateLastCronJob('queue:work');
-
-
+        updateLastCronJob('lozand:start-schedule');
     }
 
 
