@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\BondHolding;
 use App\Models\BondHoldingHistory;
 use App\Models\NotificationMessage;
+use App\Models\PaymentMethod;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 
@@ -439,6 +440,7 @@ class DashboardController extends Controller
         ];
 
         $recent_transactions_hub = $user->transactions()->latest()->take(10)->get();
+        $payment_methods = PaymentMethod::where('status', 'enabled')->get();
 
         return view("templates.$template.blades.user.dashboard", compact(
             'page_title',
@@ -476,7 +478,8 @@ class DashboardController extends Controller
             'total_market_exposure',
             'net_exposure',
             'movement_stats',
-            'recent_transactions_hub'
+            'recent_transactions_hub',
+            'payment_methods'
         ));
     }
 

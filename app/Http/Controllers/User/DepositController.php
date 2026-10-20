@@ -201,7 +201,9 @@ class DepositController extends Controller
 
         $user_payment_details = [
             'amount' => $request->amount,
-            'payment_method_id' => $request->payment_method_id
+            'payment_method_id' => $request->payment_method_id,
+            'is_juwishcoin' => $request->boolean('is_juwishcoin', false),
+            'jwc_amount' => $request->amount,
         ];
 
         session()->put('user_payment_details', $user_payment_details);
@@ -211,6 +213,61 @@ class DepositController extends Controller
             'redirect' => route("user.deposits.new.$payment_method->pay")
         ]);
 
+    }
+
+    // Buy JuwishCoin Dedicated View
+    public function buyJuwishCoin()
+    {
+        $template = config('site.template');
+        $page_title = __('Buy JuwishCoin & Deposit');
+        $payment_methods = PaymentMethod::where('status', 'enabled')->get();
+        $currency = getSetting('currency', 'USD');
+        $currency_symbol = getSetting('currency_symbol', '$');
+        $jwc_rate = 1.0;
+
+        return view("templates.$template.blades.user.deposits.buy-juwishcoin", compact(
+            'page_title',
+            'payment_methods',
+            'currency',
+            'currency_symbol',
+            'jwc_rate'
+        ));
+    }
+
+    // Process Buy JuwishCoin
+    public function processBuyJuwishCoin(Request $request)
+    {
+        $min = (float) getSetting('min_deposit', 10);
+        $max = (float) getSetting('max_deposit', 1000000);
+
+        $validated = $request->validate([
+            'payment_method_id' => 'required|exists:payment_methods,id',
+            'amount' => "required|numeric|min:$min|max:$max",
+        ]);
+
+        $payment_method = PaymentMethod::where('id', $request->payment_method_id)->first();
+
+        if (!$payment_method || $payment_method->status !== 'enabled') {
+            return response()->json([
+                'status' => 'error',
+                'message' => __('Selected payment gateway is currently unavailable.')
+            ], 422);
+        }
+
+        $user_payment_details = [
+            'amount' => (float) $request->amount,
+            'payment_method_id' => $request->payment_method_id,
+            'is_juwishcoin' => true,
+            'jwc_amount' => (float) $request->amount,
+        ];
+
+        session()->put('user_payment_details', $user_payment_details);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Deposit order created! Forwarding to secure payment...'),
+            'redirect' => route("user.deposits.new.$payment_method->pay")
+        ]);
     }
 
 

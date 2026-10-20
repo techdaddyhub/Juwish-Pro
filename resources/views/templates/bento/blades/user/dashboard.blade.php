@@ -197,9 +197,17 @@
                 </div>
             </div>
 
-            {{-- Quick Actions (Minimalist Grid) - Moved Below Stats on Mobile --}}
+            {{-- Quick Actions (Minimalist Grid with Buy JuwishCoin Flagship) --}}
             <div class="col-span-12 order-last lg:order-none mb-2 md:mb-0">
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 w-full">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3 w-full">
+                    {{-- Buy JuwishCoin (Flagship Gold CTA) --}}
+                    <button type="button" onclick="openBuyJuwishCoinModal()"
+                        class="col-span-2 sm:col-span-1 group flex items-center justify-center gap-2 md:gap-2.5 px-3 md:px-4 py-2.5 md:py-3 bg-gradient-to-r from-[#F0B90B]/20 via-[#FCD535]/15 to-[#F0B90B]/10 border border-[#F0B90B]/50 rounded-xl transition-all hover:bg-[#F0B90B]/30 hover:border-[#FCD535] hover:shadow-[0_0_20px_rgba(240,185,11,0.25)] cursor-pointer">
+                        <img src="{{ asset('assets/images/juwishcoin.png') }}" class="h-4 w-4 object-contain group-hover:scale-110 transition-transform" alt="JWC">
+                        <span class="text-[#FCD535] text-[10px] md:text-xs font-black tracking-widest uppercase">{{ __('Buy JWC') }}</span>
+                        <span class="px-1 py-0.2 rounded bg-black/30 text-[#FCD535] text-[8px] font-bold uppercase tracking-tight">{{ __('Deposit') }}</span>
+                    </button>
+
                     {{-- Deposit --}}
                     <a href="{{ route('user.deposits.new') }}"
                         class="group flex items-center justify-center gap-2 md:gap-3 px-3 md:px-5 py-2.5 md:py-3 bg-emerald-500/10 border border-emerald-500/20 rounded-xl transition-all hover:bg-emerald-500/20 hover:border-emerald-500/30 cursor-pointer">
@@ -245,6 +253,185 @@
                         <span
                             class="text-purple-50 text-[10px] md:text-xs font-bold tracking-widest uppercase">{{ __('Invest') }}</span>
                     </a>
+                </div>
+            </div>
+
+            {{-- BUY JUWISHCOIN (JWC) • DIRECT DEPOSIT TERMINAL WIDGET --}}
+            <div class="col-span-12 relative group" id="buy-juwishcoin-section">
+                <div class="relative bg-gradient-to-br from-[#0B0E11] via-[#12161C] to-[#181A20] border border-[#F0B90B]/30 hover:border-[#F0B90B]/60 rounded-3xl p-6 sm:p-8 overflow-hidden shadow-[0_10px_40px_rgba(240,185,11,0.12)] transition-all duration-300">
+                    
+                    {{-- Mesh & Noise Overlay --}}
+                    <div class="absolute inset-0 bg-[url('{{ asset('/assets/images/noise.svg') }}')] opacity-15 pointer-events-none"></div>
+
+                    {{-- Ambient Gold Glows --}}
+                    <div class="absolute -top-20 -right-20 w-80 h-80 bg-[#F0B90B]/15 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-[#FCD535]/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center">
+                        
+                        {{-- Left Column: Coin Identity & Market Telemetry --}}
+                        <div class="lg:col-span-5 flex flex-col justify-between space-y-5">
+                            <div>
+                                <div class="flex flex-wrap items-center gap-2 sm:gap-3 mb-4">
+                                    <div class="px-3 py-1 rounded-full bg-[#F0B90B]/15 border border-[#F0B90B]/30 text-[#FCD535] text-[10px] font-black uppercase tracking-widest flex items-center gap-2 shadow-[0_0_12px_rgba(240,185,11,0.25)]">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-[#FCD535] animate-ping"></span>
+                                        {{ __('Direct Balance Funding') }}
+                                    </div>
+                                    <span class="text-emerald-400 text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 rounded-full">
+                                        {{ __('0% Deposit Fee') }}
+                                    </span>
+                                </div>
+
+                                <div class="flex items-center gap-4 mb-3">
+                                    <div class="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0">
+                                        <div class="absolute inset-0 bg-gradient-to-tr from-[#F0B90B]/40 to-[#FCD535]/20 rounded-full blur-xl animate-pulse"></div>
+                                        <img src="{{ asset('assets/images/juwishcoin.png') }}"
+                                            alt="JuwishCoin (JWC)"
+                                            class="w-full h-full object-contain drop-shadow-[0_10px_25px_rgba(240,185,11,0.45)] transform hover:scale-105 transition-transform duration-300">
+                                    </div>
+                                    <div>
+                                        <h3 class="text-2xl sm:text-3xl font-black text-white tracking-tight flex items-center gap-2">
+                                            <span>{{ __('Buy JuwishCoin') }}</span>
+                                            <span class="text-xs px-2 py-0.5 rounded-md bg-[#F0B90B]/20 text-[#FCD535] border border-[#F0B90B]/30 font-mono font-bold">JWC</span>
+                                        </h3>
+                                        <p class="text-slate-400 text-xs mt-1">
+                                            {{ __('Instant conversion directly credited to your cash balance.') }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Highlights --}}
+                            <div class="grid grid-cols-3 gap-2.5">
+                                <div class="bg-white/[0.03] border border-white/5 rounded-xl p-3">
+                                    <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-1">{{ __('Peg Rate') }}</span>
+                                    <span class="text-xs sm:text-sm font-mono font-bold text-white tracking-tight">1:1 USD</span>
+                                </div>
+                                <div class="bg-white/[0.03] border border-white/5 rounded-xl p-3">
+                                    <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-1">{{ __('Settlement') }}</span>
+                                    <span class="text-xs sm:text-sm font-bold text-emerald-400 flex items-center gap-1">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                        {{ __('Instant') }}
+                                    </span>
+                                </div>
+                                <div class="bg-white/[0.03] border border-white/5 rounded-xl p-3">
+                                    <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-1">{{ __('Staking') }}</span>
+                                    <span class="text-xs sm:text-sm font-mono font-bold text-[#FCD535]">+14.5% APY</span>
+                                </div>
+                            </div>
+
+                            <p class="text-[11px] text-slate-500 font-medium">
+                                {{ __('Purchased JuwishCoin is immediately deposited into your Wallet Balance, fully tradable across Forex, Futures, Stocks, ETFs and Bonds.') }}
+                            </p>
+                        </div>
+
+                        {{-- Right Column: Interactive Buy Widget --}}
+                        <div class="lg:col-span-7 bg-[#181A20]/90 backdrop-blur-md border border-white/10 rounded-2xl p-5 sm:p-6 shadow-2xl">
+                            <form action="{{ route('user.deposits.buy-juwishcoin-process') }}" method="POST" class="ajax-form space-y-4" data-action="redirect">
+                                @csrf
+                                <input type="hidden" name="is_juwishcoin" value="1">
+                                <input type="hidden" name="payment_method_id" id="dash-buy-jwc-payment-id" value="{{ ($payment_methods ?? $enabled_payment_methods ?? collect())->first()?->id ?? 16 }}">
+
+                                <!-- Amount Inputs Grid -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <!-- You Pay -->
+                                    <div>
+                                        <div class="flex justify-between items-center mb-1.5">
+                                            <label class="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+                                                {{ __('You Pay (USD)') }}
+                                            </label>
+                                            <span class="text-[10px] font-mono text-slate-400">
+                                                {{ __('Min') }}: {{ getSetting('currency_symbol', '$') }}{{ number_format(getSetting('min_deposit', 10)) }}
+                                            </span>
+                                        </div>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                                <span class="text-lg font-bold text-[#FCD535]">{{ getSetting('currency_symbol', '$') }}</span>
+                                            </div>
+                                            <input type="number" name="amount" id="dash-buy-jwc-amount" step="any" required
+                                                min="{{ getSetting('min_deposit', 10) }}" max="{{ getSetting('max_deposit', 1000000) }}"
+                                                value="250"
+                                                class="w-full bg-[#0B0E11] border border-white/10 rounded-xl py-3 pl-8 pr-16 text-xl font-mono font-bold text-white placeholder-slate-500 focus:outline-none focus:border-[#F0B90B] focus:ring-1 focus:ring-[#F0B90B] text-right transition-all">
+                                            <div class="absolute inset-y-0 right-2.5 flex items-center pointer-events-none">
+                                                <span class="text-[10px] font-bold text-slate-300 bg-white/10 px-2 py-0.5 rounded">USD</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- You Receive -->
+                                    <div>
+                                        <div class="flex justify-between items-center mb-1.5">
+                                            <label class="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+                                                {{ __('You Receive (JWC Credited)') }}
+                                            </label>
+                                            <span class="text-[10px] text-emerald-400 font-bold uppercase tracking-wider">
+                                                {{ __('= Wallet Balance') }}
+                                            </span>
+                                        </div>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                                <img src="{{ asset('assets/images/juwishcoin.png') }}" class="w-5 h-5 object-contain" alt="JWC">
+                                            </div>
+                                            <input type="text" id="dash-buy-jwc-receive" readonly
+                                                value="250.00"
+                                                class="w-full bg-[#0B0E11]/60 border border-white/5 rounded-xl py-3 pl-11 pr-16 text-xl font-mono font-bold text-[#FCD535] text-right cursor-not-allowed">
+                                            <div class="absolute inset-y-0 right-2.5 flex items-center pointer-events-none">
+                                                <span class="text-[10px] font-bold text-[#0B0E11] bg-[#FCD535] px-2 py-0.5 rounded font-black">JWC</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Preset Amount Chips -->
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">{{ __('Presets:') }}</span>
+                                    @foreach([50, 100, 250, 500, 1000, 5000] as $preset)
+                                        <button type="button" onclick="setDashBuyJwcAmount({{ $preset }})"
+                                            class="dash-preset-chip py-1 px-2.5 rounded-lg bg-[#0B0E11] border border-white/10 text-slate-300 hover:text-white hover:border-[#F0B90B]/50 hover:bg-[#F0B90B]/10 text-xs font-mono font-bold transition-all cursor-pointer {{ $preset == 250 ? 'border-[#F0B90B] text-[#FCD535] bg-[#F0B90B]/10' : '' }}"
+                                            data-preset="{{ $preset }}">
+                                            ${{ $preset >= 1000 ? ($preset/1000).'k' : $preset }}
+                                        </button>
+                                    @endforeach
+                                </div>
+
+                                <!-- Payment Gateway Selector -->
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-2">
+                                        {{ __('Select Payment Method') }}
+                                    </label>
+                                    @php
+                                        $dash_pms = $payment_methods ?? $enabled_payment_methods ?? collect();
+                                    @endphp
+                                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                                        @foreach($dash_pms as $idx => $pm)
+                                            <button type="button" onclick="selectDashBuyJwcMethod({{ $pm->id }})"
+                                                class="dash-buy-method-btn p-2 rounded-xl border flex items-center gap-2 transition-all cursor-pointer {{ $idx === 0 ? 'bg-[#F0B90B]/15 border-[#F0B90B] text-white shadow-[0_0_12px_rgba(240,185,11,0.2)]' : 'bg-[#0B0E11] border-white/10 text-slate-300 hover:border-white/20 hover:text-white' }}"
+                                                data-id="{{ $pm->id }}">
+                                                <div class="w-6 h-6 rounded-md bg-black/40 border border-white/10 p-0.5 flex items-center justify-center shrink-0">
+                                                    @if($pm->logo)
+                                                        <img src="{{ asset('assets/images/deposit-methods/' . $pm->logo) }}" alt="{{ $pm->name }}" class="w-full h-full object-contain">
+                                                    @else
+                                                        <span class="text-[10px] font-bold text-white">{{ substr($pm->name, 0, 1) }}</span>
+                                                    @endif
+                                                </div>
+                                                <span class="text-xs font-bold truncate">{{ $pm->name }}</span>
+                                            </button>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                                <!-- CTA Button -->
+                                <button type="submit"
+                                    class="w-full py-3.5 rounded-xl bg-gradient-to-r from-[#F0B90B] via-[#FCD535] to-[#F0B90B] bg-[length:200%_auto] hover:bg-right text-[#0B0E11] font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 shadow-[0_0_20px_rgba(240,185,11,0.35)] hover:shadow-[0_0_30px_rgba(240,185,11,0.55)] active:scale-[0.99] transition-all duration-300 cursor-pointer">
+                                    <img src="{{ asset('assets/images/juwishcoin.png') }}" class="w-5 h-5 object-contain" alt="JWC">
+                                    <span id="dash-buy-jwc-cta-text">{{ __('Instant Buy JuwishCoin & Deposit Funds') }}</span>
+                                    <svg class="w-4 h-4 text-[#0B0E11]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -2180,6 +2367,68 @@
                         }
                     });
                 };
+
+                // Dashboard Buy JuwishCoin Widget Interactions
+                window.setDashBuyJwcAmount = function(amount) {
+                    const input = document.getElementById('dash-buy-jwc-amount');
+                    if (input) {
+                        input.value = amount;
+                        updateDashBuyJwcCalc();
+                    }
+                    document.querySelectorAll('.dash-preset-chip').forEach(chip => {
+                        const preset = parseInt(chip.getAttribute('data-preset'), 10);
+                        if (preset === amount) {
+                            chip.className = "dash-preset-chip py-1 px-2.5 rounded-lg bg-[#F0B90B]/10 border border-[#F0B90B] text-[#FCD535] text-xs font-mono font-bold transition-all cursor-pointer";
+                        } else {
+                            chip.className = "dash-preset-chip py-1 px-2.5 rounded-lg bg-[#0B0E11] border border-white/10 text-slate-300 hover:text-white hover:border-[#F0B90B]/50 hover:bg-[#F0B90B]/10 text-xs font-mono font-bold transition-all cursor-pointer";
+                        }
+                    });
+                };
+
+                window.selectDashBuyJwcMethod = function(methodId) {
+                    const input = document.getElementById('dash-buy-jwc-payment-id');
+                    if (input) input.value = methodId;
+                    document.querySelectorAll('.dash-buy-method-btn').forEach(btn => {
+                        const id = parseInt(btn.getAttribute('data-id'), 10);
+                        if (id === methodId) {
+                            btn.className = "dash-buy-method-btn p-2 rounded-xl border flex items-center gap-2 transition-all cursor-pointer bg-[#F0B90B]/15 border-[#F0B90B] text-white shadow-[0_0_12px_rgba(240,185,11,0.2)]";
+                        } else {
+                            btn.className = "dash-buy-method-btn p-2 rounded-xl border flex items-center gap-2 transition-all cursor-pointer bg-[#0B0E11] border-white/10 text-slate-300 hover:border-white/20 hover:text-white";
+                        }
+                    });
+                };
+
+                function updateDashBuyJwcCalc() {
+                    const input = document.getElementById('dash-buy-jwc-amount');
+                    const receive = document.getElementById('dash-buy-jwc-receive');
+                    const cta = document.getElementById('dash-buy-jwc-cta-text');
+                    const val = parseFloat(input?.value || 0);
+                    const jwc = isNaN(val) ? 0 : val;
+                    if (receive) {
+                        receive.value = jwc.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    }
+                    if (cta) {
+                        cta.textContent = jwc > 0
+                            ? `Instant Buy ${jwc.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} JWC & Deposit`
+                            : 'Instant Buy JuwishCoin & Deposit Funds';
+                    }
+                }
+
+                const dashInput = document.getElementById('dash-buy-jwc-amount');
+                if (dashInput) {
+                    dashInput.addEventListener('input', function() {
+                        updateDashBuyJwcCalc();
+                        const currentVal = parseFloat(this.value);
+                        document.querySelectorAll('.dash-preset-chip').forEach(chip => {
+                            const preset = parseInt(chip.getAttribute('data-preset'), 10);
+                            if (preset === currentVal) {
+                                chip.className = "dash-preset-chip py-1 px-2.5 rounded-lg bg-[#F0B90B]/10 border border-[#F0B90B] text-[#FCD535] text-xs font-mono font-bold transition-all cursor-pointer";
+                            } else {
+                                chip.className = "dash-preset-chip py-1 px-2.5 rounded-lg bg-[#0B0E11] border border-white/10 text-slate-300 hover:text-white hover:border-[#F0B90B]/50 hover:bg-[#F0B90B]/10 text-xs font-mono font-bold transition-all cursor-pointer";
+                            }
+                        });
+                    });
+                }
             });
         </script>
     @endsection

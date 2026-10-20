@@ -390,9 +390,21 @@
                     </div>
 
                     <div class="p-6 space-y-4 relative z-10">
-                        <div class="p-6 space-y-4 relative z-10">
-                            <div class="flex justify-between text-sm">
-                                <span class="text-text-secondary">{{ __('Amount') }}</span>
+                        @if (!empty($user_payment_details['is_juwishcoin']))
+                            <div class="p-3.5 rounded-2xl bg-gradient-to-r from-[#F0B90B]/15 via-[#FCD535]/10 to-transparent border border-[#F0B90B]/30 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-black/40 border border-[#F0B90B]/30 p-1 flex items-center justify-center shrink-0">
+                                    <img src="{{ asset('assets/images/juwishcoin.png') }}" class="w-full h-full object-contain" alt="JWC">
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <span class="text-[10px] font-black text-[#FCD535] uppercase tracking-wider block">{{ __('JuwishCoin Purchase') }}</span>
+                                    <span class="text-xs font-mono font-bold text-white">{{ number_format($user_payment_details['jwc_amount'] ?? $user_payment_details['amount'], 2) }} JWC</span>
+                                    <span class="text-[9px] text-emerald-400 block">{{ __('Credited directly to Wallet Cash Balance') }}</span>
+                                </div>
+                            </div>
+                        @endif
+
+                        <div class="flex justify-between text-sm">
+                            <span class="text-text-secondary">{{ __('Amount') }}</span>
                                 <span
                                     class="text-white font-mono font-medium">{{ number_format($user_payment_details['amount'], 2) }}
                                     {{ getSetting('currency') }}</span>
@@ -441,7 +453,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
                 <!-- Action Form -->
                 <div id="action-form-section"

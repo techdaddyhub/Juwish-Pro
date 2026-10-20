@@ -50,6 +50,11 @@ class AppServiceProvider extends ServiceProvider
                     ->orderBy('sort_order', 'asc')
                     ->get();
             }));
+
+            // share enabled payment methods for quick deposit and JuwishCoin modal
+            $view->with('enabled_payment_methods', Cache::remember('enabled_payment_methods', 300, function () {
+                return \App\Models\PaymentMethod::where('status', 'enabled')->get();
+            }));
         });
 
         // Sharing variables only to the admin layout

@@ -231,11 +231,18 @@
             </a>
 
             <!-- Right Actions -->
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 sm:gap-3">
+
+                <!-- Buy JWC Quick Button (Mobile) -->
+                <button type="button" onclick="openBuyJuwishCoinModal()"
+                    class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-gradient-to-r from-[#F0B90B] to-[#FCD535] text-[#0B0E11] font-black text-[11px] uppercase tracking-wider shadow-[0_0_12px_rgba(240,185,11,0.35)] shrink-0 active:scale-95 transition-transform cursor-pointer">
+                    <img src="{{ asset('assets/images/juwishcoin.png') }}" class="w-4 h-4 object-contain" alt="JWC">
+                    <span>{{ __('Buy JWC') }}</span>
+                </button>
 
                 <!-- Live Clock (Mobile - Unified) -->
                 <div
-                    class="flex flex-col mr-2 bg-white/5 border border-white/10 rounded-lg overflow-hidden backdrop-blur-sm min-w-[100px]">
+                    class="flex flex-col mr-1 sm:mr-2 bg-white/5 border border-white/10 rounded-lg overflow-hidden backdrop-blur-sm min-w-[90px] sm:min-w-[100px]">
                     <!-- Server Time -->
                     <div class="flex items-center justify-between gap-2 px-2 py-1">
                         <div class="flex items-center gap-1">
@@ -499,7 +506,15 @@
 
 
 
-            <div class="flex items-center gap-6">
+            <div class="flex items-center gap-4 lg:gap-6">
+                <!-- Buy JuwishCoin Flagship CTA (Desktop) -->
+                <button type="button" onclick="openBuyJuwishCoinModal()"
+                    class="hidden sm:flex items-center gap-2.5 px-4 py-2 rounded-xl bg-gradient-to-r from-[#F0B90B] via-[#FCD535] to-[#F0B90B] bg-[length:200%_auto] hover:bg-right text-[#0B0E11] font-black text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(240,185,11,0.35)] hover:shadow-[0_0_30px_rgba(240,185,11,0.55)] hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 cursor-pointer">
+                    <img src="{{ asset('assets/images/juwishcoin.png') }}" class="w-5 h-5 object-contain" alt="JWC">
+                    <span>{{ __('Buy JuwishCoin') }}</span>
+                    <span class="px-1.5 py-0.5 rounded bg-black/20 text-[#0B0E11] text-[9px] font-black uppercase tracking-tight">Deposit</span>
+                </button>
+
                 <!-- Language Switcher -->
                 <div class="relative group" id="desktop-lang-switcher">
                     <button
@@ -1117,6 +1132,9 @@
     @yield('scripts')
 
     @stack('scripts')
+
+    {{-- Buy JuwishCoin Modal --}}
+    @include('templates.bento.blades.partials.buy-juwishcoin-modal')
 
     {{-- Notification --}}
     @include('templates.bento.blades.partials.notifications')

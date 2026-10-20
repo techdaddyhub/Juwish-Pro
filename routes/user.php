@@ -75,6 +75,8 @@ Route::prefix('user')->middleware(['auth', 'otp.verified', 'user.status', 'user.
         Route::get('/failed', [DepositController::class, 'byScope'])->name('failed');
         Route::get('/new', [DepositController::class, 'newDeposit'])->name('new');
         Route::post('/new', [DepositController::class, 'startNewDeposit'])->name('new-validate');
+        Route::get('/buy-juwishcoin', [DepositController::class, 'buyJuwishCoin'])->name('buy-juwishcoin');
+        Route::post('/buy-juwishcoin', [DepositController::class, 'processBuyJuwishCoin'])->name('buy-juwishcoin-process');
         Route::get('/new/manual', [DepositController::class, 'manualPayment'])->name('new.manual');
         Route::post('/new/manual', [DepositController::class, 'manualPaymentValidate'])->name('new.manual-validate');
         Route::post('/new/manual/cancel', [DepositController::class, 'manualPaymentCancel'])->name('new.manual-cancel');
