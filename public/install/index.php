@@ -821,7 +821,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $all_config_met = true;
                             foreach ($server_config as $key => &$config) {
                                 if ($key == 'max_execution_time' || $key == 'max_input_time') {
-                                    $config['status'] = (int) $config['current'] >= (int) $config['recommended'] || (int) $config['current'] == 0;
+                                    $config['status'] = (int) $config['current'] >= (int) $config['recommended'] || (int) $config['current'] == 0 || (int) $config['current'] == -1;
                                 } else {
                                     $config['status'] = $parse_size($config['current']) >= $parse_size($config['recommended']);
                                 }

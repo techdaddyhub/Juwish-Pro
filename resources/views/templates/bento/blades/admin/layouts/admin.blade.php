@@ -203,23 +203,23 @@
         <div class="p-4 border-t border-white/5 bg-secondary-dark/30">
             <div class="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/5">
 
-                @if (Auth::guard('admin')->user()->image)
+                @if (Auth::guard('admin')->user()?->image)
                     <div
                         class="h-10 w-10 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center text-white font-bold text-lg shadow-inner">
                         <img src="{{ asset('storage/profile/' . Auth::guard('admin')->user()->image) }}"
-                            alt="{{ Auth::guard('admin')->user()->name }}" class="w-full h-full object-cover">
+                            alt="{{ Auth::guard('admin')->user()?->name }}" class="w-full h-full object-cover">
                     </div>
                 @else
                     <div
                         class="h-10 w-10 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center text-white font-bold text-lg shadow-inner">
-                        {{ substr(Auth::guard('admin')->user()->name ?? 'A', 0, 1) }}
+                        {{ substr(Auth::guard('admin')->user()?->name ?? 'A', 0, 1) }}
                     </div>
                 @endif
                 <div class="flex-1 min-w-0">
                     <p class="text-sm font-bold text-white truncate">
-                        {{ Auth::guard('admin')->user()->name ?? 'Admin' }}</p>
+                        {{ Auth::guard('admin')->user()?->name ?? 'Admin' }}</p>
                     <p class="text-xs text-text-secondary truncate">
-                        {{ Auth::guard('admin')->user()->email ?? 'admin@example.com' }}</p>
+                        {{ Auth::guard('admin')->user()?->email ?? 'admin@example.com' }}</p>
                 </div>
 
                 <a href="{{ route('admin.account.profile') }}"
@@ -292,11 +292,11 @@
                 <div class="relative">
                     <button onclick="toggleDropdown('mobile-header-profile-menu')"
                         class="w-8 h-8 rounded-full overflow-hidden bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center text-white font-bold text-xs shadow-inner ring-2 ring-transparent hover:ring-white/10 transition-all">
-                        @if (Auth::guard('admin')->user()->image)
+                        @if (Auth::guard('admin')->user()?->image)
                             <img src="{{ asset('storage/profile/' . Auth::guard('admin')->user()->image) }}"
-                                alt="{{ Auth::guard('admin')->user()->name }}" class="w-full h-full object-cover">
+                                alt="{{ Auth::guard('admin')->user()?->name }}" class="w-full h-full object-cover">
                         @else
-                            {{ substr(Auth::guard('admin')->user()->name ?? 'A', 0, 1) }}
+                            {{ substr(Auth::guard('admin')->user()?->name ?? 'A', 0, 1) }}
                         @endif
                     </button>
                     <div id="mobile-header-profile-menu"
@@ -304,9 +304,9 @@
                         <div class="p-1">
                             <div class="px-3 py-2 border-b border-white/5 mb-1">
                                 <p class="text-sm font-bold text-white truncate">
-                                    {{ Auth::guard('admin')->user()->name ?? 'Admin' }}</p>
+                                    {{ Auth::guard('admin')->user()?->name ?? 'Admin' }}</p>
                                 <p class="text-xs text-text-secondary truncate">
-                                    {{ Auth::guard('admin')->user()->email ?? 'admin@example.com' }}</p>
+                                    {{ Auth::guard('admin')->user()?->email ?? 'admin@example.com' }}</p>
                             </div>
 
                             <a href="{{ route('admin.account.profile') }}"
@@ -411,18 +411,18 @@
                         class="flex items-center gap-3 pl-3 pr-2 py-1.5 rounded-full border border-white/10 hover:bg-white/5 bg-white/5 transition-all duration-300 group-hover:border-accent-primary/30">
                         <div class="flex flex-col items-end mr-1 hidden sm:flex">
                             <span
-                                class="text-xs font-bold text-white leading-tight">{{ Auth::guard('admin')->user()->name ?? 'Admin' }}</span>
+                                class="text-xs font-bold text-white leading-tight">{{ Auth::guard('admin')->user()?->name ?? 'Admin' }}</span>
                             <span
                                 class="text-[10px] text-text-secondary leading-tight">{{ __('Administrator') }}</span>
                         </div>
                         <div
                             class="h-8 w-8 rounded-full overflow-hidden bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center text-white font-bold text-xs shadow-inner">
-                            @if (Auth::guard('admin')->user()->image)
+                            @if (Auth::guard('admin')->user()?->image)
                                 <img src="{{ asset('storage/profile/' . Auth::guard('admin')->user()->image) }}"
-                                    alt="{{ Auth::guard('admin')->user()->name }}"
+                                    alt="{{ Auth::guard('admin')->user()?->name }}"
                                     class="w-full h-full object-cover">
                             @else
-                                {{ substr(Auth::guard('admin')->user()->name ?? 'A', 0, 1) }}
+                                {{ substr(Auth::guard('admin')->user()?->name ?? 'A', 0, 1) }}
                             @endif
                         </div>
                         <svg class="w-3 h-3 text-text-secondary" fill="none" stroke="currentColor"
@@ -437,9 +437,9 @@
                         <div class="p-1">
                             <div class="px-3 py-2 border-b border-white/5 mb-1">
                                 <p class="text-sm font-bold text-white truncate">
-                                    {{ Auth::guard('admin')->user()->name ?? 'Admin' }}</p>
+                                    {{ Auth::guard('admin')->user()?->name ?? 'Admin' }}</p>
                                 <p class="text-xs text-text-secondary truncate">
-                                    {{ Auth::guard('admin')->user()->email ?? 'admin@example.com' }}</p>
+                                    {{ Auth::guard('admin')->user()?->email ?? 'admin@example.com' }}</p>
                             </div>
 
                             <a href="{{ route('admin.account.profile') }}"

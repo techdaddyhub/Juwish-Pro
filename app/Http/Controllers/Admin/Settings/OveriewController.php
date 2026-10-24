@@ -83,6 +83,10 @@ class OveriewController extends Controller
 
         // Helper to convert ini sizes to bytes
         $parse_size = function ($size) {
+            $size = (string) $size;
+            if ($size === '-1' || (int) $size === -1) {
+                return PHP_INT_MAX;
+            }
             $unit = preg_replace('/[^bkmgtp]/i', '', $size);
             $size = preg_replace('/[^0-9\.]/', '', $size);
             if ($unit) {
@@ -117,7 +121,7 @@ class OveriewController extends Controller
 
         foreach ($server_config as $key => &$config) {
             if ($key == 'max_execution_time' || $key == 'max_input_time') {
-                $config['status'] = (int) $config['current'] >= (int) $config['recommended'] || (int) $config['current'] == 0;
+                $config['status'] = (int) $config['current'] >= (int) $config['recommended'] || (int) $config['current'] == 0 || (int) $config['current'] == -1;
             } else {
                 $config['status'] = $parse_size($config['current']) >= $parse_size($config['recommended']);
             }
@@ -358,6 +362,9 @@ class OveriewController extends Controller
         // 1.2) Server Config
         $parse_size = function ($size) {
             $size = (string) $size;
+            if ($size === '-1' || (int) $size === -1) {
+                return PHP_INT_MAX;
+            }
             $unit = preg_replace('/[^bkmgtp]/i', '', $size);
             $sizeValue = preg_replace('/[^0-9\.]/', '', $size);
             if ($unit) {
@@ -376,7 +383,7 @@ class OveriewController extends Controller
 
         foreach ($server_config as $key => $config) {
             if ($key == 'max_execution_time' || $key == 'max_input_time') {
-                $ok = (int) $config['current'] >= (int) $config['recommended'] || (int) $config['current'] == 0;
+                $ok = (int) $config['current'] >= (int) $config['recommended'] || (int) $config['current'] == 0 || (int) $config['current'] == -1;
             } else {
                 $ok = $parse_size($config['current']) >= $parse_size($config['recommended']);
             }
@@ -389,7 +396,7 @@ class OveriewController extends Controller
             $key = (string) config('app.key');
 
             $supported = ['aes-128-cbc', 'aes-256-cbc', 'aes-128-gcm', 'aes-256-gcm'];
-            $checks[] = $row('APP_CIPHER supported', in_array($cipher, $supported, true), $cipher ?: '(empty)');
+            $checks[] = $row('APP_CIPHER supported', in_array(strtolower($cipher), $supported, true), $cipher ?: '(empty)');
 
             $keyOk = false;
             $keyDetails = $key ?: '(empty)';
