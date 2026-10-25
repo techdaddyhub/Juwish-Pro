@@ -454,7 +454,12 @@ class LoginController extends Controller
             }
         }
 
-        return Socialite::driver($provider)
+        $driver = Socialite::driver($provider);
+        if (method_exists($driver, 'stateless')) {
+            $driver = $driver->stateless();
+        }
+
+        return $driver
             ->redirectUrl(route('user.login.social.callback', ['provider' => $provider]))
             ->redirect();
     }
@@ -465,7 +470,12 @@ class LoginController extends Controller
     public function handleSocialCallback($provider)
     {
         try {
-            $socialUser = Socialite::driver($provider)
+            $driver = Socialite::driver($provider);
+            if (method_exists($driver, 'stateless')) {
+                $driver = $driver->stateless();
+            }
+
+            $socialUser = $driver
                 ->redirectUrl(route('user.login.social.callback', ['provider' => $provider]))
                 ->user();
 
@@ -533,7 +543,7 @@ class LoginController extends Controller
                 }
             }
 
-            Auth::login($user);
+            Auth::login($user, true);
             session()->forget('referrer_code');
             session()->regenerate();
 
@@ -543,8 +553,8 @@ class LoginController extends Controller
 
             return redirect()->route('user.dashboard');
         } catch (\Exception $e) {
-            Log::error('Social authentication failed (' . $provider . '): ' . $e->getMessage());
-            return redirect()->route('user.login')->with('error', __('Social authentication failed. Please try again or use email sign in.'));
+            Log::error('Social authentication failed (' . $provider . '): ' . $e->getMessage() . ' in ' . $e->getFile() . ':' . $e->getLine());
+            return redirect()->route('user.login')->with('error', __('Social authentication failed: ') . $e->getMessage());
         }
     }
 

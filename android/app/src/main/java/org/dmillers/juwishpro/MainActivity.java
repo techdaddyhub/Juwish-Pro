@@ -108,10 +108,13 @@ public class MainActivity extends AppCompatActivity {
         settings.setDisplayZoomControls(false);
         settings.setCacheMode(WebSettings.LOAD_DEFAULT);
         settings.setMediaPlaybackRequiresUserGesture(false);
+        settings.setJavaScriptCanOpenWindowsAutomatically(true);
+        settings.setSupportMultipleWindows(true);
 
-        // Append JuwishPro Mobile App identifier for server attribution
+        // Sanitize User-Agent: strip WebView tags (Version/4.0 and ; wv) so Google OAuth allows seamless in-app login
         String defaultUa = settings.getUserAgentString();
-        settings.setUserAgentString(defaultUa + " JuwishProMobile/1.0.0 (Android Native)");
+        String cleanUa = defaultUa.replace("; wv", "").replaceAll("Version\\/\\d+\\.\\d+\\s*", "");
+        settings.setUserAgentString(cleanUa);
 
         // Disable context menu and URL copying
         webView.setLongClickable(false);
@@ -164,20 +167,21 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
 
-                // If navigating within JuwishPro platform
-                if (host != null && (host.equals("2026.dmillers.org") || host.endsWith(".dmillers.org"))) {
+                // If navigating within JuwishPro platform or OAuth authentication providers (Google, GitHub, etc.)
+                if (isAllowedAppHost(host)) {
                     // Dedicated Admin Panel lock: prevent admin app from falling back to client homepage
-                    if (TARGET_URL.contains("/admin")) {
+                    if (TARGET_URL.contains("/admin") && host != null && (host.equals("2026.dmillers.org") || host.endsWith(".dmillers.org"))) {
                         String path = uri.getPath();
                         if (path == null || path.isEmpty() || path.equals("/") || path.equals("/home") || path.startsWith("/user")) {
                             view.loadUrl("https://2026.dmillers.org/admin/dashboard");
                             return true;
                         }
                     }
+                    // Keep authentication and platform navigation completely inside the app
                     return false;
                 }
 
-                // External links (Social media, external documentation)
+                // External links (Social media pages, external sites)
                 try {
                     Intent intent = new Intent(Intent.ACTION_VIEW, uri);
                     startActivity(intent);
@@ -282,6 +286,15 @@ public class MainActivity extends AppCompatActivity {
                 }
                 return true;
             }
+
+            // Route any popup windows/dialogs directly into the same WebView so everything stays inside the app
+            @Override
+            public boolean onCreateWindow(WebView view, boolean isDialog, boolean isUserGesture, android.os.Message resultMsg) {
+                WebView.WebViewTransport transport = (WebView.WebViewTransport) resultMsg.obj;
+                transport.setWebView(view);
+                resultMsg.sendToTarget();
+                return true;
+            }
         });
     }
 
@@ -340,6 +353,34 @@ public class MainActivity extends AppCompatActivity {
             webView.destroy();
         }
         super.onDestroy();
+    }
+
+    private boolean isAllowedAppHost(String host) {
+        if (host == null) return false;
+        String h = host.toLowerCase();
+        return h.equals("2026.dmillers.org") || h.endsWith(".dmillers.org")
+                // Google OAuth & Services
+                || h.equals("accounts.google.com")
+                || h.endsWith(".google.com")
+                || h.endsWith(".googleusercontent.com")
+                || h.endsWith(".gstatic.com")
+                || h.equals("accounts.youtube.com")
+                || h.equals("oauth2.googleapis.com")
+                || h.equals("apis.google.com")
+                // GitHub OAuth
+                || h.equals("github.com")
+                || h.endsWith(".github.com")
+                // Apple OAuth
+                || h.equals("appleid.apple.com")
+                // Facebook OAuth
+                || h.equals("facebook.com")
+                || h.endsWith(".facebook.com")
+                || h.endsWith(".fbcdn.net")
+                // Twitter / X OAuth
+                || h.equals("twitter.com")
+                || h.endsWith(".twitter.com")
+                || h.equals("x.com")
+                || h.endsWith(".x.com");
     }
 }
 

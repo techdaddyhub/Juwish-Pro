@@ -71,9 +71,8 @@ namespace JuwishPro.Admin
                     }
                 }
 
-                // If navigating outside JuwishPro platform
-                if (!uri.Host.Equals("2026.dmillers.org", StringComparison.OrdinalIgnoreCase) &&
-                    !uri.Host.EndsWith(".dmillers.org", StringComparison.OrdinalIgnoreCase))
+                // If navigating outside JuwishPro platform or OAuth providers
+                if (!IsAllowedAppHost(uri.Host))
                 {
                     try
                     {
@@ -83,6 +82,22 @@ namespace JuwishPro.Admin
                     e.Cancel = true;
                 }
             }
+        }
+
+        private static bool IsAllowedAppHost(string? host)
+        {
+            if (string.IsNullOrEmpty(host)) return false;
+            host = host.ToLowerInvariant();
+            return host == "2026.dmillers.org" || host.EndsWith(".dmillers.org")
+                || host == "accounts.google.com" || host.EndsWith(".google.com")
+                || host.EndsWith(".googleusercontent.com") || host.EndsWith(".gstatic.com")
+                || host == "accounts.youtube.com" || host == "oauth2.googleapis.com"
+                || host == "apis.google.com"
+                || host == "github.com" || host.EndsWith(".github.com")
+                || host == "appleid.apple.com"
+                || host == "facebook.com" || host.EndsWith(".facebook.com")
+                || host == "twitter.com" || host.EndsWith(".twitter.com")
+                || host == "x.com" || host.EndsWith(".x.com");
         }
 
         private void CoreWebView2_NavigationCompleted(object? sender, CoreWebView2NavigationCompletedEventArgs e)

@@ -127,6 +127,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDe
                 return
             }
             decisionHandler(.allow)
+        } else if isAllowedAppHost(url.host) {
+            decisionHandler(.allow)
         } else if url.scheme != "http" && url.scheme != "https" {
             NSWorkspace.shared.open(url)
             decisionHandler(.cancel)
@@ -134,6 +136,20 @@ class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDe
             NSWorkspace.shared.open(url)
             decisionHandler(.cancel)
         }
+    }
+
+    private func isAllowedAppHost(_ host: String?) -> Bool {
+        guard let h = host?.lowercased() else { return false }
+        return h == "2026.dmillers.org" || h.hasSuffix(".dmillers.org")
+            || h == "accounts.google.com" || h.hasSuffix(".google.com")
+            || h.hasSuffix(".googleusercontent.com") || h.hasSuffix(".gstatic.com")
+            || h == "accounts.youtube.com" || h == "oauth2.googleapis.com"
+            || h == "apis.google.com"
+            || h == "github.com" || h.hasSuffix(".github.com")
+            || h == "appleid.apple.com"
+            || h == "facebook.com" || h.hasSuffix(".facebook.com")
+            || h == "twitter.com" || h.hasSuffix(".twitter.com")
+            || h == "x.com" || h.hasSuffix(".x.com")
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
