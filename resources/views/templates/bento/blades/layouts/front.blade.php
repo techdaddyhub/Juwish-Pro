@@ -370,7 +370,7 @@
             <div class="hidden xl:flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#181a20] border border-accent-primary/30 text-xs font-mono shadow-[0_2px_12px_rgba(240,185,11,0.15)] hover:border-accent-primary transition-all">
                 <img src="{{ asset('assets/images/juwishcoin.png') }}" class="w-4 h-4 object-contain animate-[spin_20s_linear_infinite]" alt="JWC">
                 <span class="font-black text-white">JWC</span>
-                <span class="text-accent-primary font-bold">$1.42</span>
+                <span class="text-accent-primary font-bold">$3.00</span>
                 <span class="text-success text-[11px] font-bold">+34.8%</span>
             </div>
 

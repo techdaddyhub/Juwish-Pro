@@ -46,16 +46,27 @@ jobs:
           gradle-version: '8.5'
           cache-disabled: true
 
-      - name: Build Android APKs (All Flavors)
+      - name: Build Android APKs & Release AAB Bundles
         working-directory: android
-        run: gradle assembleDebug --stacktrace
+        run: |
+          gradle assembleDebug --stacktrace
+          gradle bundleClientRelease bundleAdminRelease --stacktrace
 
-      - name: Prepare APK Artifacts
+      - name: Prepare Android Artifacts
         run: |
           mkdir -p release-apks
           find android/app/build/outputs/apk -type f -name "*client*debug*.apk" -exec cp {} release-apks/JuwishPro-Client.apk \;
           find android/app/build/outputs/apk -type f -name "*admin*debug*.apk" -exec cp {} release-apks/JuwishPro-Admin.apk \;
+          find android/app/build/outputs/bundle -type f -name "*client*release*.aab" -exec cp {} release-apks/JuwishPro-Client.aab \;
+          find android/app/build/outputs/bundle -type f -name "*admin*release*.aab" -exec cp {} release-apks/JuwishPro-Admin.aab \;
           ls -la release-apks/
+
+      - name: Upload Android Client AAB (Google Play Store)
+        uses: actions/upload-artifact@v4
+        with:
+          name: JuwishPro-Android-Client-AAB
+          path: release-apks/JuwishPro-Client.aab
+          if-no-files-found: error
 
       - name: Upload Android Client APK
         uses: actions/upload-artifact@v4

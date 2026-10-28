@@ -39,10 +39,11 @@ return [
 
         'smtp' => [
             'transport' => 'smtp',
-            'scheme' => env('MAIL_SCHEME'),
+            'scheme' => (env('MAIL_SCHEME') && env('MAIL_SCHEME') !== 'null') ? env('MAIL_SCHEME') : ((env('MAIL_PORT') == 465 || env('MAIL_ENCRYPTION') === 'ssl') ? 'smtps' : null),
             'url' => env('MAIL_URL'),
-            'host' => env('MAIL_HOST', '127.0.0.1'),
-            'port' => env('MAIL_PORT', 2525),
+            'host' => in_array(env('MAIL_HOST'), ['juwishcoin.online', 'mail.juwishcoin.online']) ? '2026.dmillers.org' : env('MAIL_HOST', '2026.dmillers.org'),
+            'port' => env('MAIL_PORT', 465),
+            'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
             'username' => env('MAIL_USERNAME'),
             'password' => env('MAIL_PASSWORD'),
             'timeout' => null,

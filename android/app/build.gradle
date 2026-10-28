@@ -35,12 +35,23 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile file('juwishpro-release.jks')
+            storePassword 'juwishpro2026'
+            keyAlias 'juwishpro'
+            keyPassword 'juwishpro2026'
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
+            signingConfig signingConfigs.release
             debuggable true
         }
     }

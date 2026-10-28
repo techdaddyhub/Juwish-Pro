@@ -18,7 +18,7 @@
                         <span class="text-xs px-2.5 py-1 rounded-lg bg-[#F0B90B]/15 text-[#FCD535] border border-[#F0B90B]/30 font-mono font-bold">JWC</span>
                     </h2>
                     <p class="text-xs text-slate-400 mt-1">
-                        {{ __('Acquire JuwishCoin (JWC) to automatically credit funds to your cash balance at 1:1 USD.') }}
+                        {{ __('Acquire JuwishCoin (JWC) pegged directly to PancakeSwap market rate ($3.00 USD) to credit funds to your cash balance.') }}
                     </p>
                 </div>
             </div>
@@ -26,7 +26,7 @@
             <div class="flex items-center gap-3">
                 <div class="px-3.5 py-1.5 rounded-xl bg-[#F0B90B]/10 border border-[#F0B90B]/20 text-[#FCD535] text-xs font-mono font-bold flex items-center gap-2">
                     <span class="w-2 h-2 rounded-full bg-[#F0B90B] animate-pulse"></span>
-                    <span>1 JWC = 1.00 USD</span>
+                    <span>1 JWC = $3.00 USD (PancakeSwap)</span>
                 </div>
             </div>
         </div>
@@ -60,15 +60,15 @@
                             {{ __('JuwishCoin Protocol') }}
                         </h3>
                         <p class="text-slate-400 text-xs mt-2 leading-relaxed">
-                            {{ __('Purchasing JuwishCoin is the premier method to deposit capital into your account. Zero deposit fees, guaranteed 1:1 USD peg, and immediate availability across all trading terminals.') }}
+                            {{ __('Purchasing JuwishCoin is the premier method to deposit capital into your account. Zero deposit fees, live PancakeSwap pool pricing ($3.00 per JWC), and immediate availability across all trading terminals.') }}
                         </p>
                     </div>
 
                     <!-- Highlights Grid -->
                     <div class="grid grid-cols-3 gap-3">
                         <div class="bg-white/[0.03] border border-white/5 rounded-xl p-3.5 text-center">
-                            <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-1">{{ __('Peg') }}</span>
-                            <span class="text-sm font-mono font-bold text-white">1:1 USD</span>
+                            <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-1">{{ __('Market Price') }}</span>
+                            <span class="text-sm font-mono font-bold text-white">$3.00 USD</span>
                         </div>
                         <div class="bg-white/[0.03] border border-white/5 rounded-xl p-3.5 text-center">
                             <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-1">{{ __('Fee') }}</span>
@@ -118,9 +118,9 @@
                                 </div>
                                 <input type="number" name="amount" id="page-buy-jwc-amount" step="any" required
                                     min="{{ getSetting('min_deposit', 10) }}" max="{{ getSetting('max_deposit', 1000000) }}"
-                                    value="500"
+                                    value="300"
                                     class="w-full bg-[#0B0E11] border border-white/10 rounded-2xl py-4 pl-10 pr-24 text-2xl font-mono font-black text-white placeholder-slate-500 focus:outline-none focus:border-[#F0B90B] focus:ring-1 focus:ring-[#F0B90B] transition-all text-right group-hover:border-white/20"
-                                    placeholder="500.00">
+                                    placeholder="300.00">
                                 <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
                                     <span class="text-xs font-bold text-slate-300 bg-white/10 px-2.5 py-1 rounded-md">USD</span>
                                 </div>
@@ -128,9 +128,9 @@
 
                             <!-- Preset Chips -->
                             <div class="grid grid-cols-6 gap-2 mt-3">
-                                @foreach([50, 100, 250, 500, 1000, 5000] as $preset)
+                                @foreach([30, 90, 300, 600, 1500, 3000] as $preset)
                                     <button type="button" onclick="setPageBuyJwcAmount({{ $preset }})"
-                                        class="page-preset-chip py-2 px-1 rounded-xl bg-[#0B0E11] border border-white/10 text-slate-300 hover:text-white hover:border-[#F0B90B]/50 hover:bg-[#F0B90B]/10 text-xs font-bold font-mono transition-all text-center cursor-pointer {{ $preset == 500 ? 'border-[#F0B90B] text-[#FCD535] bg-[#F0B90B]/10' : '' }}"
+                                        class="page-preset-chip py-2 px-1 rounded-xl bg-[#0B0E11] border border-white/10 text-slate-300 hover:text-white hover:border-[#F0B90B]/50 hover:bg-[#F0B90B]/10 text-xs font-bold font-mono transition-all text-center cursor-pointer {{ $preset == 300 ? 'border-[#F0B90B] text-[#FCD535] bg-[#F0B90B]/10' : '' }}"
                                         data-preset="{{ $preset }}">
                                         ${{ $preset >= 1000 ? ($preset/1000).'k' : $preset }}
                                     </button>
@@ -147,7 +147,7 @@
                                 <div>
                                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">{{ __('Credited to Wallet Balance') }}</span>
                                     <div class="flex items-baseline gap-1.5">
-                                        <span id="page-buy-jwc-receive-display" class="text-2xl font-mono font-black text-[#FCD535]">500.00</span>
+                                        <span id="page-buy-jwc-receive-display" class="text-2xl font-mono font-black text-[#FCD535]">100.00</span>
                                         <span class="text-xs font-black text-white">JWC</span>
                                     </div>
                                 </div>
@@ -189,7 +189,7 @@
                         <div class="bg-white/[0.02] border border-white/5 rounded-xl p-4 space-y-2 text-xs">
                             <div class="flex justify-between items-center text-slate-400">
                                 <span>{{ __('Exchange Rate') }}</span>
-                                <span class="font-mono text-white font-bold">1 JWC = 1.00 USD</span>
+                                <span class="font-mono text-white font-bold">1 JWC = $3.00 USD (PancakeSwap)</span>
                             </div>
                             <div class="flex justify-between items-center text-slate-400">
                                 <span>{{ __('Processing Fee') }}</span>
@@ -205,7 +205,7 @@
                         <button type="submit"
                             class="w-full py-4 rounded-2xl bg-gradient-to-r from-[#F0B90B] via-[#FCD535] to-[#F0B90B] bg-[length:200%_auto] hover:bg-right text-[#0B0E11] font-black text-sm uppercase tracking-wider flex items-center justify-center gap-3 shadow-[0_0_25px_rgba(240,185,11,0.4)] hover:shadow-[0_0_35px_rgba(240,185,11,0.6)] active:scale-[0.99] transition-all duration-300 cursor-pointer">
                             <img src="{{ asset('assets/images/juwishcoin.png') }}" class="w-5 h-5 object-contain" alt="JWC">
-                            <span id="page-buy-jwc-submit-text">{{ __('Proceed to Payment (Receive 500.00 JWC)') }}</span>
+                            <span id="page-buy-jwc-submit-text">{{ __('Proceed to Payment (Receive 100.00 JWC)') }}</span>
                             <svg class="w-5 h-5 text-[#0B0E11]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
                             </svg>
@@ -253,7 +253,7 @@
             const display = document.getElementById('page-buy-jwc-receive-display');
             const submitText = document.getElementById('page-buy-jwc-submit-text');
             const val = parseFloat(input?.value || 0);
-            const jwc = isNaN(val) ? 0 : val;
+            const jwc = isNaN(val) ? 0 : (val / 3.00);
 
             if (display) {
                 display.textContent = jwc.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

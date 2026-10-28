@@ -40,7 +40,7 @@
                     <svg class="w-3 h-3 text-[#FCD535]" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                     </svg>
-                    <span>1 JWC = 1.00 USD • Direct Deposit</span>
+                    <span>1 JWC = $3.00 USD • PancakeSwap Pool</span>
                 </div>
 
                 <h3 class="text-2xl sm:text-3xl font-black text-white tracking-tight">
@@ -75,9 +75,9 @@
                             </div>
                             <input type="number" name="amount" id="buy-jwc-amount-input" step="any" required
                                 min="{{ getSetting('min_deposit', 10) }}" max="{{ getSetting('max_deposit', 1000000) }}"
-                                value="100"
+                                value="300"
                                 class="w-full bg-[#181A20] border border-white/10 rounded-2xl py-3.5 pl-10 pr-24 text-2xl font-mono font-black text-white placeholder-slate-500 focus:outline-none focus:border-[#F0B90B] focus:ring-1 focus:ring-[#F0B90B] transition-all text-right group-hover:border-white/20"
-                                placeholder="100.00">
+                                placeholder="300.00">
                             <div class="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                                 <span class="text-xs font-bold text-slate-300 bg-white/10 px-2 py-1 rounded-md">USD</span>
                             </div>
@@ -85,9 +85,9 @@
 
                         <!-- Preset Quick Chips -->
                         <div class="grid grid-cols-6 gap-1.5 mt-3">
-                            @foreach([50, 100, 250, 500, 1000, 5000] as $preset)
+                            @foreach([30, 90, 300, 600, 1500, 3000] as $preset)
                                 <button type="button" onclick="setBuyJwcAmount({{ $preset }})"
-                                    class="preset-chip py-1.5 px-1 rounded-lg bg-[#181A20] border border-white/10 text-slate-300 hover:text-white hover:border-[#F0B90B]/50 hover:bg-[#F0B90B]/10 text-[11px] font-bold font-mono transition-all text-center cursor-pointer {{ $preset == 100 ? 'border-[#F0B90B] text-[#FCD535] bg-[#F0B90B]/10' : '' }}"
+                                    class="preset-chip py-1.5 px-1 rounded-lg bg-[#181A20] border border-white/10 text-slate-300 hover:text-white hover:border-[#F0B90B]/50 hover:bg-[#F0B90B]/10 text-[11px] font-bold font-mono transition-all text-center cursor-pointer {{ $preset == 300 ? 'border-[#F0B90B] text-[#FCD535] bg-[#F0B90B]/10' : '' }}"
                                     data-preset="{{ $preset }}">
                                     ${{ $preset >= 1000 ? ($preset/1000).'k' : $preset }}
                                 </button>
@@ -113,7 +113,7 @@
                             <span class="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full uppercase tracking-wider inline-block">
                                 {{ __('+ Balance Credit') }}
                             </span>
-                            <p class="text-[10px] text-slate-400 mt-1 font-mono">1 JWC = $1.00 USD</p>
+                            <p class="text-[10px] text-slate-400 mt-1 font-mono">1 JWC = $3.00 USD (PancakeSwap)</p>
                         </div>
                     </div>
 
@@ -165,7 +165,7 @@
                     <div class="bg-white/[0.02] border border-white/5 rounded-xl p-3.5 space-y-2 text-xs">
                         <div class="flex justify-between items-center text-slate-400">
                             <span>{{ __('Exchange Rate') }}</span>
-                            <span class="font-mono text-white font-bold">1 JWC = 1.00 USD</span>
+                            <span class="font-mono text-white font-bold">1 JWC = $3.00 USD (PancakeSwap)</span>
                         </div>
                         <div class="flex justify-between items-center text-slate-400">
                             <span>{{ __('Deposit Fee') }}</span>
@@ -274,7 +274,7 @@
         const submitText = document.getElementById('buy-jwc-submit-text');
 
         const val = parseFloat(input?.value || 0);
-        const jwcAmount = isNaN(val) ? 0 : val; // 1 JWC = 1.00 USD
+        const jwcAmount = isNaN(val) ? 0 : (val / 3.00); // 1 JWC = $3.00 USD (PancakeSwap)
 
         if (display) {
             display.textContent = jwcAmount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });

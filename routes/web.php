@@ -76,3 +76,17 @@ Route::get('cron', function () {
         'message' => 'Cron job started successfully',
     ]);
 });
+
+// App Download Portal & Landing Page
+Route::get('apps', function () {
+    return response()->file(public_path('apps/index.html'));
+})->name('apps.download');
+
+Route::get('download', function () {
+    return redirect()->route('apps.download');
+});
+
+Route::get('downloads', function () {
+    return redirect()->route('apps.download');
+});
+

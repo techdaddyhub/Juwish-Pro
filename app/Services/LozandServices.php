@@ -1081,13 +1081,13 @@ class LozandServices
                 'base_price' => 11.85,
                 'volume' => 8420000.0,
             ],
-            // Native platform token from brief ($1.42 reference)
+            // Native platform token pegged to live PancakeSwap pool ($3.00 USD)
             'JWCUSDT' => [
                 'ticker' => 'JWCUSDT',
                 'base' => 'JWC',
                 'quote' => 'USDT',
-                'name' => 'Juwish Token',
-                'base_price' => 1.42,
+                'name' => 'Juwish Token (PancakeSwap)',
+                'base_price' => 3.00,
                 'volume' => 18450000.0,
             ],
         ];
@@ -1119,6 +1119,7 @@ class LozandServices
 
         $result = [];
         foreach ($referenceCryptos as $sym => $meta) {
+            $logo = strtolower($meta['base']) . '.svg';
             if (isset($livePrices[$sym])) {
                 $lp = $livePrices[$sym];
                 $result[$sym] = [
@@ -1126,6 +1127,7 @@ class LozandServices
                     'base' => $meta['base'],
                     'quote' => $meta['quote'],
                     'name' => $meta['name'],
+                    'logo' => $logo,
                     'current_price' => $lp['price'],
                     'change_1d_percentage' => $lp['change'],
                     'open_price' => $lp['open'],
@@ -1144,6 +1146,7 @@ class LozandServices
                     'base' => $meta['base'],
                     'quote' => $meta['quote'],
                     'name' => $meta['name'],
+                    'logo' => $logo,
                     'current_price' => $currPrice,
                     'change_1d_percentage' => $changePct,
                     'open_price' => $openPrice,
@@ -1160,11 +1163,13 @@ class LozandServices
 
     protected function generateGenericCryptoTicker(string $ticker): array
     {
+        $base = str_replace(['USDT', 'USD'], '', $ticker);
         return [
             'ticker' => $ticker,
-            'base' => str_replace(['USDT', 'USD'], '', $ticker),
+            'base' => $base,
             'quote' => 'USDT',
             'name' => $ticker,
+            'logo' => strtolower($base) . '.svg',
             'current_price' => 10.00,
             'change_1d_percentage' => 1.25,
             'open_price' => 9.88,

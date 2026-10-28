@@ -221,6 +221,14 @@ return [
             'is_external' => false,
             'is_active' => true
         ],
+        [
+            'name' => 'Download Apps',
+            'route_name' => 'apps.download',
+            'link' => '/apps',
+            'type' => 'link',
+            'is_external' => false,
+            'is_active' => true
+        ],
     ],
 
     'footer_nav' => [

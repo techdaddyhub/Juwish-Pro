@@ -199,11 +199,16 @@ class DepositController extends Controller
 
         $payment_method = PaymentMethod::where('id', $request->payment_method_id)->first();
 
+        $is_jwc = $request->boolean('is_juwishcoin', false);
+        $jwc_rate = (float) getSetting('juwishcoin_price', 3.00);
+        if ($jwc_rate <= 0) $jwc_rate = 3.00;
+
         $user_payment_details = [
             'amount' => $request->amount,
             'payment_method_id' => $request->payment_method_id,
-            'is_juwishcoin' => $request->boolean('is_juwishcoin', false),
-            'jwc_amount' => $request->amount,
+            'is_juwishcoin' => $is_jwc,
+            'jwc_rate' => $jwc_rate,
+            'jwc_amount' => $is_jwc ? round(((float) $request->amount) / $jwc_rate, 4) : $request->amount,
         ];
 
         session()->put('user_payment_details', $user_payment_details);
@@ -223,7 +228,8 @@ class DepositController extends Controller
         $payment_methods = PaymentMethod::where('status', 'enabled')->get();
         $currency = getSetting('currency', 'USD');
         $currency_symbol = getSetting('currency_symbol', '$');
-        $jwc_rate = 1.0;
+        $jwc_rate = (float) getSetting('juwishcoin_price', 3.00);
+        if ($jwc_rate <= 0) $jwc_rate = 3.00;
 
         return view("templates.$template.blades.user.deposits.buy-juwishcoin", compact(
             'page_title',
@@ -254,11 +260,16 @@ class DepositController extends Controller
             ], 422);
         }
 
+        $jwc_rate = (float) getSetting('juwishcoin_price', 3.00);
+        if ($jwc_rate <= 0) $jwc_rate = 3.00;
+        $jwc_amount = round(((float) $request->amount) / $jwc_rate, 4);
+
         $user_payment_details = [
             'amount' => (float) $request->amount,
             'payment_method_id' => $request->payment_method_id,
             'is_juwishcoin' => true,
-            'jwc_amount' => (float) $request->amount,
+            'jwc_rate' => $jwc_rate,
+            'jwc_amount' => $jwc_amount,
         ];
 
         session()->put('user_payment_details', $user_payment_details);

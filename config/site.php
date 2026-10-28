@@ -54,8 +54,8 @@ return [
         //langauges
 
         // finance
-        'currency' => 'JWC',
-        'currency_symbol' => 'JWC',
+        'currency' => 'USD',
+        'currency_symbol' => '$',
         'currency_symbol_position' => 'before', //or after
         'decimal_places' => 2,
 

@@ -138,6 +138,34 @@ if (!function_exists('rateConverter')) {
             ];
         }
 
+        // Live PancakeSwap valuation for JuwishCoin: 1 JWC = $3.00 USD
+        $jwc_usd_rate = (float) getSetting('juwishcoin_price', 3.00);
+        if ($jwc_usd_rate <= 0) {
+            $jwc_usd_rate = 3.00;
+        }
+
+        if ($from === 'JWC' && in_array($to, ['USD', 'USDT'])) {
+            $converted = round($amt * $jwc_usd_rate, $precision ?? 2);
+            return [
+                'converted_amount' => $converted,
+                'exchange_rate' => $jwc_usd_rate,
+                'to_currency' => $to,
+                'from_currency' => $from,
+                'status' => 'success',
+            ];
+        }
+
+        if (in_array($from, ['USD', 'USDT']) && $to === 'JWC') {
+            $converted = round($amt / $jwc_usd_rate, $precision ?? 4);
+            return [
+                'converted_amount' => $converted,
+                'exchange_rate' => round(1 / $jwc_usd_rate, 6),
+                'to_currency' => $to,
+                'from_currency' => $from,
+                'status' => 'success',
+            ];
+        }
+
         try {
             $url = "http://lozand.com/api/v1/convert";
             $params = [
@@ -173,6 +201,25 @@ if (!function_exists('rateConverter')) {
         }
 
         // Resilient fallback so application never crashes on currency conversion
+        if ($from === 'JWC' && in_array($to, ['USD', 'USDT'])) {
+            return [
+                'converted_amount' => round($amt * 3.00, $precision ?? 2),
+                'exchange_rate' => 3.00,
+                'to_currency' => $to,
+                'from_currency' => $from,
+                'status' => 'fallback',
+            ];
+        }
+        if (in_array($from, ['USD', 'USDT']) && $to === 'JWC') {
+            return [
+                'converted_amount' => round($amt / 3.00, $precision ?? 4),
+                'exchange_rate' => round(1 / 3.00, 6),
+                'to_currency' => $to,
+                'from_currency' => $from,
+                'status' => 'fallback',
+            ];
+        }
+
         return [
             'converted_amount' => $amt,
             'exchange_rate' => 1.0,

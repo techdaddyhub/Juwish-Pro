@@ -304,8 +304,8 @@
                             {{-- Highlights --}}
                             <div class="grid grid-cols-3 gap-2.5">
                                 <div class="bg-white/[0.03] border border-white/5 rounded-xl p-3">
-                                    <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-1">{{ __('Peg Rate') }}</span>
-                                    <span class="text-xs sm:text-sm font-mono font-bold text-white tracking-tight">1:1 USD</span>
+                                    <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-1">{{ __('PancakeSwap Price') }}</span>
+                                    <span class="text-xs sm:text-sm font-mono font-bold text-white tracking-tight">$3.00 USD</span>
                                 </div>
                                 <div class="bg-white/[0.03] border border-white/5 rounded-xl p-3">
                                     <span class="text-[9px] text-slate-400 font-bold uppercase tracking-wider block mb-1">{{ __('Settlement') }}</span>
@@ -350,7 +350,7 @@
                                             </div>
                                             <input type="number" name="amount" id="dash-buy-jwc-amount" step="any" required
                                                 min="{{ getSetting('min_deposit', 10) }}" max="{{ getSetting('max_deposit', 1000000) }}"
-                                                value="250"
+                                                value="300"
                                                 class="w-full bg-[#0B0E11] border border-white/10 rounded-xl py-3 pl-8 pr-16 text-xl font-mono font-bold text-white placeholder-slate-500 focus:outline-none focus:border-[#F0B90B] focus:ring-1 focus:ring-[#F0B90B] text-right transition-all">
                                             <div class="absolute inset-y-0 right-2.5 flex items-center pointer-events-none">
                                                 <span class="text-[10px] font-bold text-slate-300 bg-white/10 px-2 py-0.5 rounded">USD</span>
@@ -373,7 +373,7 @@
                                                 <img src="{{ asset('assets/images/juwishcoin.png') }}" class="w-5 h-5 object-contain" alt="JWC">
                                             </div>
                                             <input type="text" id="dash-buy-jwc-receive" readonly
-                                                value="250.00"
+                                                value="100.00"
                                                 class="w-full bg-[#0B0E11]/60 border border-white/5 rounded-xl py-3 pl-11 pr-16 text-xl font-mono font-bold text-[#FCD535] text-right cursor-not-allowed">
                                             <div class="absolute inset-y-0 right-2.5 flex items-center pointer-events-none">
                                                 <span class="text-[10px] font-bold text-[#0B0E11] bg-[#FCD535] px-2 py-0.5 rounded font-black">JWC</span>
@@ -385,9 +385,9 @@
                                 <!-- Preset Amount Chips -->
                                 <div class="flex items-center gap-1.5 flex-wrap">
                                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">{{ __('Presets:') }}</span>
-                                    @foreach([50, 100, 250, 500, 1000, 5000] as $preset)
+                                    @foreach([30, 90, 300, 600, 1500, 3000] as $preset)
                                         <button type="button" onclick="setDashBuyJwcAmount({{ $preset }})"
-                                            class="dash-preset-chip py-1 px-2.5 rounded-lg bg-[#0B0E11] border border-white/10 text-slate-300 hover:text-white hover:border-[#F0B90B]/50 hover:bg-[#F0B90B]/10 text-xs font-mono font-bold transition-all cursor-pointer {{ $preset == 250 ? 'border-[#F0B90B] text-[#FCD535] bg-[#F0B90B]/10' : '' }}"
+                                            class="dash-preset-chip py-1 px-2.5 rounded-lg bg-[#0B0E11] border border-white/10 text-slate-300 hover:text-white hover:border-[#F0B90B]/50 hover:bg-[#F0B90B]/10 text-xs font-mono font-bold transition-all cursor-pointer {{ $preset == 300 ? 'border-[#F0B90B] text-[#FCD535] bg-[#F0B90B]/10' : '' }}"
                                             data-preset="{{ $preset }}">
                                             ${{ $preset >= 1000 ? ($preset/1000).'k' : $preset }}
                                         </button>
@@ -2403,7 +2403,7 @@
                     const receive = document.getElementById('dash-buy-jwc-receive');
                     const cta = document.getElementById('dash-buy-jwc-cta-text');
                     const val = parseFloat(input?.value || 0);
-                    const jwc = isNaN(val) ? 0 : val;
+                    const jwc = isNaN(val) ? 0 : (val / 3.00);
                     if (receive) {
                         receive.value = jwc.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                     }

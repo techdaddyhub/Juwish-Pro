@@ -248,7 +248,7 @@
                             <span class="text-[9px] bg-accent-primary/20 text-accent-primary font-bold px-1.5 py-0.2 rounded font-mono">NATIVE</span>
                         </div>
                         <div class="flex items-center gap-2 mt-0.5">
-                            <span class="text-xs lg:text-sm font-bold text-accent-primary font-mono">$1.42</span>
+                            <span class="text-xs lg:text-sm font-bold text-accent-primary font-mono">$3.00</span>
                             <span class="text-[10px] lg:text-xs font-bold text-success flex items-center gap-0.5 font-mono">
                                 <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" transform="rotate(180 10 10)"/></svg>
                                 +34.8%
@@ -281,7 +281,7 @@
                 <div class="flex items-center gap-2">
                     <div
                         class="w-6 h-6 lg:w-8 lg:h-8 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-500">
-                        <img src="{{ 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/refs/heads/master/svg/color/' . $btc['logo'] }}"
+                        <img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/refs/heads/master/svg/color/{{ $btc['logo'] ?? 'btc.svg' }}"
                             alt="BTC" class="w-4 h-4 lg:w-5 lg:h-5">
                     </div>
                     <div>
@@ -632,8 +632,8 @@
                             </div>
 
                             <div class="mt-6 text-center">
-                                <div class="text-3xl lg:text-4xl font-black text-white font-mono tracking-tight">$1.42 <span class="text-xs text-text-secondary font-normal uppercase">USDT</span></div>
-                                <p class="text-xs text-accent-primary font-mono mt-1">24h High: $1.58 • 24h Low: $1.04</p>
+                                <div class="text-3xl lg:text-4xl font-black text-white font-mono tracking-tight">$3.00 <span class="text-xs text-text-secondary font-normal uppercase">USDT</span></div>
+                                <p class="text-xs text-accent-primary font-mono mt-1">24h High: $3.18 • 24h Low: $2.84 • PancakeSwap Pool</p>
                             </div>
                         </div>
 
@@ -641,7 +641,7 @@
                         <div class="grid grid-cols-2 gap-3 pt-4 border-t border-white/10 text-xs">
                             <div class="p-3 rounded-xl bg-white/5 border border-white/5">
                                 <span class="text-text-secondary block text-[10px] uppercase tracking-wider font-mono">{{ __('Market Capitalization') }}</span>
-                                <span class="text-white font-bold font-mono text-sm">$142,500,000</span>
+                                <span class="text-white font-bold font-mono text-sm">$300,000,000</span>
                             </div>
                             <div class="p-3 rounded-xl bg-white/5 border border-white/5">
                                 <span class="text-text-secondary block text-[10px] uppercase tracking-wider font-mono">{{ __('24H Volume') }}</span>

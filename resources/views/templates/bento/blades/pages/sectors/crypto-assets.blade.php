@@ -203,7 +203,7 @@
                         <div class="flex justify-between items-start mb-4">
                             <div
                                 class="w-10 h-10 rounded-xl bg-white/5 p-1.5 flex items-center justify-center border border-white/10 group-hover:bg-white group-hover:invert transition-all duration-500">
-                                <img src="{{ 'https://raw.githubusercontent.com/spothq/cryptocurrency-icons/refs/heads/master/svg/color/' . $asset['logo'] }}"
+                                <img src="https://raw.githubusercontent.com/spothq/cryptocurrency-icons/refs/heads/master/svg/color/{{ $asset['logo'] ?? (strtolower($asset['base'] ?? 'btc') . '.svg') }}"
                                     alt="{{ $asset['ticker'] }}" class="w-full h-full object-contain"
                                     onerror="this.src='https://ui-avatars.com/api/?name={{ $asset['ticker'] }}&background=6366f1&color=fff'">
                             </div>
