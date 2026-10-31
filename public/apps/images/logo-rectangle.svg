@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 132" width="600" height="132">
+  <defs>
+    <radialGradient id="rectRim" cx="32%" cy="28%" r="72%">
+      <stop offset="0%" stop-color="#FFF5C0"/>
+      <stop offset="30%" stop-color="#FCD535"/>
+      <stop offset="70%" stop-color="#F0B90B"/>
+      <stop offset="100%" stop-color="#8A5B00"/>
+    </radialGradient>
+
+    <radialGradient id="rectFace" cx="45%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#1B1F27"/>
+      <stop offset="60%" stop-color="#12151B"/>
+      <stop offset="100%" stop-color="#0B0E11"/>
+    </radialGradient>
+
+    <linearGradient id="rectStar" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFF8D1"/>
+      <stop offset="45%" stop-color="#FCD535"/>
+      <stop offset="85%" stop-color="#F0B90B"/>
+      <stop offset="100%" stop-color="#B27800"/>
+    </linearGradient>
+
+    <filter id="proBadgeGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="6" flood-color="#F0B90B" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- Left Emblem (Scales down 512x512 down to 104x104, centered at X=66, Y=66) -->
+  <g transform="translate(14, 14) scale(0.203)">
+    <!-- Bezel -->
+    <circle cx="256" cy="256" r="236" fill="url(#rectRim)" stroke="#FFF5C0" stroke-width="5"/>
+    <circle cx="256" cy="256" r="218" fill="none" stroke="#664400" stroke-width="4" stroke-dasharray="8,6"/>
+    <circle cx="256" cy="256" r="202" fill="url(#rectFace)" stroke="#F0B90B" stroke-width="4"/>
+    <circle cx="256" cy="256" r="172" fill="none" stroke="#F0B90B" stroke-width="2" stroke-opacity="0.3" stroke-dasharray="14,8"/>
+
+    <!-- Star of David -->
+    <polygon points="256.0,160.0 339.1,304.0 172.9,304.0"
+             fill="none" stroke="url(#rectStar)" stroke-width="16" stroke-linejoin="round"/>
+    <polygon points="256.0,352.0 172.9,208.0 339.1,208.0"
+             fill="none" stroke="url(#rectStar)" stroke-width="16" stroke-linejoin="round"/>
+    <polygon points="256.0,160.0 339.1,304.0 172.9,304.0"
+             fill="none" stroke="#FFF5C0" stroke-width="3" stroke-linejoin="round"/>
+    <polygon points="256.0,352.0 172.9,208.0 339.1,208.0"
+             fill="none" stroke="#FFF5C0" stroke-width="3" stroke-linejoin="round"/>
+
+    <!-- Center Monogram J -->
+    <path d="M 270 236 L 270 268 C 270 280, 258 288, 244 288 C 234 288, 226 280, 226 270 L 240 270 C 240 274, 244 278, 248 278 C 254 278, 258 274, 258 268 L 258 236 Z"
+          fill="#FFFFFF" stroke="#F0B90B" stroke-width="2.5"/>
+
+    <!-- 6 Nodes -->
+    <circle cx="256.0" cy="160.0" r="9" fill="#FFF5C0"/>
+    <circle cx="339.1" cy="304.0" r="9" fill="#FFF5C0"/>
+    <circle cx="172.9" cy="304.0" r="9" fill="#FFF5C0"/>
+    <circle cx="256.0" cy="352.0" r="9" fill="#FFF5C0"/>
+    <circle cx="339.1" cy="208.0" r="9" fill="#FFF5C0"/>
+    <circle cx="172.9" cy="208.0" r="9" fill="#FFF5C0"/>
+  </g>
+
+  <!-- Typography -->
+  <g transform="translate(136, 0)">
+    <!-- Word: JUWISH -->
+    <text x="0" y="74" fill="#FFFFFF" font-family="sans-serif" font-size="46" font-weight="900" letter-spacing="1.5">JUWISH</text>
+
+    <!-- PRO Gold Badge -->
+    <g transform="translate(186, 38)" filter="url(#proBadgeGlow)">
+      <rect x="0" y="0" width="84" height="42" rx="8" fill="url(#rectStar)" stroke="#FFF8E1" stroke-width="1.5"/>
+      <text x="42" y="29" fill="#0B0E11" font-family="sans-serif" font-size="24" font-weight="900" text-anchor="middle" letter-spacing="1.5">PRO</text>
+    </g>
+
+    <!-- Subtitle: DECENTRALIZED FINANCIAL ECOSYSTEM -->
+    <text x="2" y="102" fill="#848E9C" font-family="sans-serif" font-size="12" font-weight="700" letter-spacing="3.2">DECENTRALIZED FINANCIAL ECOSYSTEM</text>
+
+    <!-- Live Active Dot -->
+    <circle cx="318" cy="98" r="3.5" fill="#0ECB81"/>
+    <circle cx="318" cy="98" r="6" fill="none" stroke="#0ECB81" stroke-width="1" stroke-opacity="0.5"/>
+  </g>
+</svg>

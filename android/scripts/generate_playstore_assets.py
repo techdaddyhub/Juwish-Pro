@@ -433,3 +433,4 @@ if __name__ == '__main__':
     generate_feature_graphic()
     generate_screenshots()
     print("ALL PLAY STORE GRAPHIC ASSETS GENERATED SUCCESSFULLY!")
+

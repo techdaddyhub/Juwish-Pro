@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Metallic Coin Rim Gradient -->
+    <radialGradient id="rimGrad" cx="32%" cy="28%" r="72%">
+      <stop offset="0%" stop-color="#FFF5C0"/>
+      <stop offset="22%" stop-color="#FCD535"/>
+      <stop offset="55%" stop-color="#F0B90B"/>
+      <stop offset="85%" stop-color="#C28600"/>
+      <stop offset="100%" stop-color="#734F00"/>
+    </radialGradient>
+
+    <!-- Obsidian Face Gradient -->
+    <radialGradient id="faceGrad" cx="45%" cy="40%" r="65%">
+      <stop offset="0%" stop-color="#1B1F27"/>
+      <stop offset="55%" stop-color="#12151B"/>
+      <stop offset="100%" stop-color="#0B0E11"/>
+    </radialGradient>
+
+    <!-- Star of David Gold Ribbon Gradient (Light Source top-left) -->
+    <linearGradient id="starGold1" x1="20%" y1="0%" x2="80%" y2="100%">
+      <stop offset="0%" stop-color="#FFF8D1"/>
+      <stop offset="35%" stop-color="#FCD535"/>
+      <stop offset="70%" stop-color="#F0B90B"/>
+      <stop offset="100%" stop-color="#B27800"/>
+    </linearGradient>
+
+    <linearGradient id="starGold2" x1="80%" y1="0%" x2="20%" y2="100%">
+      <stop offset="0%" stop-color="#FFF0A0"/>
+      <stop offset="40%" stop-color="#FCD535"/>
+      <stop offset="75%" stop-color="#E5A605"/>
+      <stop offset="100%" stop-color="#946200"/>
+    </linearGradient>
+
+    <!-- Drop Shadows -->
+    <filter id="medallionShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.85"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="28" flood-color="#F0B90B" flood-opacity="0.3"/>
+    </filter>
+
+    <filter id="starGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.6"/>
+      <feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="#F0B90B" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#medallionShadow)">
+    <!-- Outer Heavy Bezel -->
+    <circle cx="256" cy="256" r="236" fill="url(#rimGrad)" stroke="#FFF5C0" stroke-width="4"/>
+
+    <!-- Perimeter Crypto Nodes / Milling Edge -->
+    <circle cx="256" cy="256" r="218" fill="none" stroke="#664400" stroke-width="3" stroke-dasharray="6,4"/>
+    <circle cx="256" cy="256" r="210" fill="none" stroke="#FFE57F" stroke-width="2" stroke-opacity="0.7"/>
+
+    <!-- Inner Night Obsidian Core Face -->
+    <circle cx="256" cy="256" r="202" fill="url(#faceGrad)" stroke="#F0B90B" stroke-width="3.5"/>
+
+    <!-- Decorative Concentric Tech Rings -->
+    <circle cx="256" cy="256" r="172" fill="none" stroke="#F0B90B" stroke-width="1.5" stroke-opacity="0.25" stroke-dasharray="14,8"/>
+    <circle cx="256" cy="256" r="142" fill="none" stroke="#FCD535" stroke-width="1" stroke-opacity="0.18"/>
+
+    <!-- 12-Validator Node Microdots (Tribes / Decentralized Nodes) -->
+    <circle cx="442.0" cy="256.0" r="3.5" fill="#F0B90B" opacity="0.75"/>
+    <circle cx="417.1" cy="349.0" r="3.5" fill="#F0B90B" opacity="0.75"/>
+    <circle cx="349.0" cy="417.1" r="3.5" fill="#F0B90B" opacity="0.75"/>
+    <circle cx="256.0" cy="442.0" r="3.5" fill="#F0B90B" opacity="0.75"/>
+    <circle cx="163.0" cy="417.1" r="3.5" fill="#F0B90B" opacity="0.75"/>
+    <circle cx="94.9" cy="349.0" r="3.5" fill="#F0B90B" opacity="0.75"/>
+    <circle cx="70.0" cy="256.0" r="3.5" fill="#F0B90B" opacity="0.75"/>
+    <circle cx="94.9" cy="163.0" r="3.5" fill="#F0B90B" opacity="0.75"/>
+    <circle cx="163.0" cy="94.9" r="3.5" fill="#F0B90B" opacity="0.75"/>
+    <circle cx="256.0" cy="70.0" r="3.5" fill="#F0B90B" opacity="0.75"/>
+    <circle cx="349.0" cy="94.9" r="3.5" fill="#F0B90B" opacity="0.75"/>
+    <circle cx="417.1" cy="163.0" r="3.5" fill="#F0B90B" opacity="0.75"/>
+
+    <!-- CENTRAL STAR OF DAVID (MAGEN DAVID) -->
+    <g filter="url(#starGlow)">
+      <!-- Outer Circumscribed Hexagonal Shield Ring -->
+      <polygon points="256,142 354.7,199.0 354.7,313.0 256,370 157.3,313.0 157.3,199.0" 
+               fill="none" stroke="url(#starGold1)" stroke-width="2" stroke-opacity="0.4" stroke-dasharray="8,6"/>
+
+      <!-- Triangle 1 (Points UP) - Heavy Golden Beveled Ribbon -->
+      <polygon points="256.0,160.0 339.1,304.0 172.9,304.0"
+               fill="none" stroke="url(#starGold1)" stroke-width="14" stroke-linejoin="round"/>
+      <polygon points="256.0,160.0 339.1,304.0 172.9,304.0"
+               fill="none" stroke="#FFF5C0" stroke-width="2" stroke-linejoin="round" opacity="0.8"/>
+
+      <!-- Triangle 2 (Points DOWN) - Interlocking Golden Beveled Ribbon -->
+      <polygon points="256.0,352.0 172.9,208.0 339.1,208.0"
+               fill="none" stroke="url(#starGold2)" stroke-width="14" stroke-linejoin="round"/>
+      <polygon points="256.0,352.0 172.9,208.0 339.1,208.0"
+               fill="none" stroke="#FFF5C0" stroke-width="2" stroke-linejoin="round" opacity="0.8"/>
+
+      <!-- Center Hexagon Inner Core Accent -->
+      <polygon points="256,218 288.9,237.0 288.9,275.0 256,294 223.1,275.0 223.1,237.0"
+               fill="#14181F" stroke="#FCD535" stroke-width="2"/>
+
+      <!-- Central "J" Monogram (Brilliant White & Gold Diamond-cut) -->
+      <path d="M 268 238 L 268 266 C 268 276, 258 283, 246 283 C 236 283, 228 276, 228 268 L 239 268 C 239 272, 242 275, 246 275 C 251 275, 256 272, 256 266 L 256 238 Z"
+            fill="#FFFFFF" stroke="#F0B90B" stroke-width="2"/>
+      <polygon points="252,238 274,238 270,243 252,243" fill="#FCD535"/>
+
+      <!-- 6 Star Tips Golden Nodes -->
+      <circle cx="256.0" cy="160.0" r="7" fill="#FFF5C0" stroke="#734F00" stroke-width="2"/>
+      <circle cx="339.1" cy="304.0" r="7" fill="#FFF5C0" stroke="#734F00" stroke-width="2"/>
+      <circle cx="172.9" cy="304.0" r="7" fill="#FFF5C0" stroke="#734F00" stroke-width="2"/>
+      <circle cx="256.0" cy="352.0" r="7" fill="#FFF5C0" stroke="#734F00" stroke-width="2"/>
+      <circle cx="339.1" cy="208.0" r="7" fill="#FFF5C0" stroke="#734F00" stroke-width="2"/>
+      <circle cx="172.9" cy="208.0" r="7" fill="#FFF5C0" stroke="#734F00" stroke-width="2"/>
+    </g>
+
+    <!-- Curved Rim Text -->
+    <path id="textPathTop" d="M 100,256 A 156,156 0 0,1 412,256" fill="none"/>
+    <path id="textPathBottom" d="M 412,256 A 156,156 0 0,1 100,256" fill="none"/>
+
+    <text fill="#FFF5C0" font-family="sans-serif" font-size="22" font-weight="900" letter-spacing="8">
+      <textPath href="#textPathTop" startOffset="50%" text-anchor="middle">JUWISHPRO</textPath>
+    </text>
+
+    <text fill="#F0B90B" font-family="sans-serif" font-size="14" font-weight="700" letter-spacing="6" opacity="0.9">
+      <textPath href="#textPathBottom" startOffset="50%" text-anchor="middle">✡ JUWISHCOIN ✡ JWC</textPath>
+    </text>
+
+    <!-- Specular Flare Glints -->
+    <polygon points="120,110 128,118 120,126 112,118" fill="#FFFFFF" opacity="0.9"/>
+    <polygon points="380,380 386,386 380,392 374,386" fill="#FFFFFF" opacity="0.8"/>
+  </g>
+</svg>

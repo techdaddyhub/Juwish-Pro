@@ -1,0 +1,50 @@
+{
+  "JuwishPro-Windows-Client.zip": {
+    "size": 99644,
+    "sha256": "6d8e11d4d5d648f208483d8b271c6e7710bc258bc617aec08d2f9c3909d6a592"
+  },
+  "JuwishPro-Windows-Admin.zip": {
+    "size": 99643,
+    "sha256": "b4b1ea6e6172ed0149231a7d5b19dfdedbbae791463fcee4a24021012e5d8d87"
+  },
+  "JuwishPro-macOS-Client.zip": {
+    "size": 1111907,
+    "sha256": "6d76d7f8b466fe5302d78e58cbe76ec5dd3ded6ed63164da3d4bd6cb00a1cbd5"
+  },
+  "JuwishPro-macOS-Admin.zip": {
+    "size": 1111697,
+    "sha256": "703d70cde0866cfd9a18804a742e6d6a2577466682afd0a1b4b2add967d2e88a"
+  },
+  "JuwishPro-iOS-Client.zip": {
+    "size": 563740,
+    "sha256": "dcfd1227e163f53aceec0728aa38099f4534d4b1482d2f719f6fda5004374984"
+  },
+  "JuwishPro-iOS-Admin.zip": {
+    "size": 563638,
+    "sha256": "862792047d03c3dddd40ede8990c1ea0ab1d358a7a896f706726ec487cf9820d"
+  },
+  "JuwishPro-Client.apk": {
+    "size": 5847523,
+    "sha256": "b2c8243765dd1c89c81a46eb6dbd23d6cc2e104aab5dc9fb85e659c87ed26338"
+  },
+  "JuwishPro-Admin.apk": {
+    "size": 5847523,
+    "sha256": "1ea660fb9b94e7b7c25c146cefeb1cfaba2e99ad99c1a702ae7c8341bb4f9197"
+  },
+  "JuwishPro-Client.exe": {
+    "size": 99644,
+    "sha256": "6d8e11d4d5d648f208483d8b271c6e7710bc258bc617aec08d2f9c3909d6a592"
+  },
+  "JuwishPro-Admin.exe": {
+    "size": 99643,
+    "sha256": "b4b1ea6e6172ed0149231a7d5b19dfdedbbae791463fcee4a24021012e5d8d87"
+  },
+  "JuwishPro-Client.ipa": {
+    "size": 563740,
+    "sha256": "dcfd1227e163f53aceec0728aa38099f4534d4b1482d2f719f6fda5004374984"
+  },
+  "JuwishPro-Admin.ipa": {
+    "size": 563638,
+    "sha256": "862792047d03c3dddd40ede8990c1ea0ab1d358a7a896f706726ec487cf9820d"
+  }
+}

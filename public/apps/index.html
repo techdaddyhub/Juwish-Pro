@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JuwishPro | Official Multi-Platform App Downloads & JuwishCoin Portal</title>
+    <meta name="description" content="Download official native JuwishPro applications for Android, Windows, macOS, and iOS. Direct downloads, verified SHA-256 checksums, and bank-grade security.">
+    <link rel="icon" type="image/svg+xml" href="images/juwishcoin.svg">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- QRCode.js CDN for live scan-to-download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#0B0E11',
+                            surface: '#181A20',
+                            card: '#1E2329',
+                            cardHover: '#2B313A',
+                            gold: '#F0B90B',
+                            goldBright: '#FCD535',
+                            goldMuted: '#C28600',
+                            text: '#EAECEF',
+                            muted: '#848E9C',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            success: '#0ECB81',
+                            error: '#F6465D'
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['"Space Grotesk"', 'sans-serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    boxShadow: {
+                        'gold-glow': '0 0 35px rgba(240, 185, 11, 0.25)',
+                        'gold-glow-lg': '0 0 60px rgba(240, 185, 11, 0.35)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0B0E11;
+            color: #EAECEF;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Ambient glow background */
+        .bg-mesh {
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(240, 185, 11, 0.12) 0%, transparent 45%),
+                radial-gradient(circle at 85% 65%, rgba(252, 213, 53, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 90%, rgba(240, 185, 11, 0.06) 0%, transparent 40%);
+        }
+
+        /* Glassmorphic Cards */
+        .glass-card {
+            background: rgba(24, 26, 32, 0.85);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(240, 185, 11, 0.45);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(240, 185, 11, 0.18);
+        }
+
+        /* 3D Coin Animation */
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(3deg); }
+        }
+
+        .coin-float {
+            animation: floatSlow 6s ease-in-out infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0E11;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2B313A;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #F0B90B;
+        }
+
+        /* Toast feedback */
+        #toast {
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-mesh min-h-screen flex flex-col antialiased selection:bg-brand-gold selection:text-brand-black">
+
+    <!-- Top Toast Notification -->
+    <div id="toast" class="fixed top-6 right-6 z-50 flex items-center gap-3 px-5 py-3 rounded-xl bg-brand-surface border border-brand-gold text-brand-gold shadow-gold-glow text-sm font-medium">
+        <svg class="w-5 h-5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <span id="toast-message">Copied to clipboard!</span>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 backdrop-blur-xl bg-brand-black/85 border-b border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <img src="images/juwishcoin.svg" alt="JuwishPro" class="w-10 h-10 group-hover:scale-105 transition-transform duration-300">
+                <div class="flex flex-col">
+                    <span class="font-heading text-xl font-bold tracking-tight text-white flex items-center gap-1.5">
+                        JUWISH<span class="text-brand-gold">PRO</span>
+                        <span class="text-[10px] uppercase tracking-widest px-1.5 py-0.5 rounded bg-brand-gold/15 text-brand-gold font-mono font-semibold ml-1">SUITE</span>
+                    </span>
+                    <span class="text-[11px] text-brand-muted tracking-wide font-sans">Official App Portal</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-brand-muted">
+                <a href="#downloads" class="hover:text-brand-gold transition-colors">Download Apps</a>
+                <a href="#features" class="hover:text-brand-gold transition-colors">Key Features</a>
+                <a href="#guide" class="hover:text-brand-gold transition-colors">Install Guide</a>
+                <a href="#support" class="hover:text-brand-gold transition-colors">Support & Inquiries</a>
+            </nav>
+
+            <!-- Action Buttons & Email Pill -->
+            <div class="flex items-center gap-3">
+                <!-- Direct Email Badge Button -->
+                <div class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-surface border border-brand-border hover:border-brand-gold/50 transition-all text-xs font-mono text-brand-text group cursor-pointer" onclick="copyEmail(event)" title="Click to copy support email">
+                    <svg class="w-3.5 h-3.5 text-brand-gold group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    <span>info@juwishcoin.online</span>
+                    <span class="text-[10px] bg-brand-gold/10 text-brand-gold px-1.5 py-0.2 rounded font-sans font-bold uppercase ml-1">Copy</span>
+                </div>
+
+                <!-- Download Apps Anchor Button -->
+                <a href="#downloads" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-brand-gold to-brand-goldBright text-brand-black text-xs font-bold tracking-wide hover:shadow-gold-glow transition-all">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                    <span>Download Apps</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+
+        <!-- Hero Section -->
+        <section class="relative pt-16 pb-20 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Left Hero Text -->
+                    <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-brand-gold text-xs font-bold tracking-wide">
+                            <span class="flex h-2 w-2 relative">
+                                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-gold opacity-75"></span>
+                                <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-gold"></span>
+                            </span>
+                            <span>OFFICIAL MULTI-PLATFORM DOWNLOADS • v2.4.0</span>
+                        </div>
+
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-heading font-extrabold tracking-tight text-white leading-tight">
+                            Trade Seamlessly on <br class="hidden sm:block">
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-gold via-brand-goldBright to-white">
+                                Every Device You Own
+                            </span>
+                        </h1>
+
+                        <p class="text-base sm:text-lg text-brand-muted max-w-2xl mx-auto lg:mx-0 font-normal leading-relaxed">
+                            Experience institutional-grade execution, biometric login, zero URL redirections, and real-time socket price streams across Android, Windows, macOS, and iOS.
+                        </p>
+
+                        <!-- OS Badges & Quick Jump -->
+                        <div class="pt-2 flex flex-wrap items-center justify-center lg:justify-start gap-3">
+                            <a href="#android" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-surface hover:bg-brand-card border border-brand-border hover:border-brand-gold/50 transition-all text-xs font-semibold">
+                                <svg class="w-4 h-4 text-brand-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-1.0001s.4482-.9993 1.0001-.9993c.5511 0 .9993.4478.9993.9993.0001.5515-.4482 1.0001-1.0001 1.0001m-11.046 0c-.5511 0-.9993-.4486-.9993-1.0001s.4482-.9993 1.0001-.9993c.5511 0 .9993.4478.9993.9993 0 .5515-.4482 1.0001-1.0001 1.0001m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.4116 13.8533 8.125 12 8.125s-3.5902.2866-5.1368.8247L4.8409 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.75h24c-.3432-4.0911-2.6889-7.5633-6.1185-9.4286"/></svg>
+                                <span>Android</span>
+                            </a>
+                            <a href="#windows" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-surface hover:bg-brand-card border border-brand-border hover:border-brand-gold/50 transition-all text-xs font-semibold">
+                                <svg class="w-4 h-4 text-brand-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4h-13.051M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.949-1.801"/></svg>
+                                <span>Windows</span>
+                            </a>
+                            <a href="#macos" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-surface hover:bg-brand-card border border-brand-border hover:border-brand-gold/50 transition-all text-xs font-semibold">
+                                <svg class="w-4 h-4 text-brand-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.63-.76 1.05-1.82.93-2.88-.91.04-2.02.61-2.67 1.37-.58.67-.99 1.76-.85 2.79 1.01.08 2.05-.51 2.59-1.28"/></svg>
+                                <span>macOS</span>
+                            </a>
+                            <a href="#ios" class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-brand-surface hover:bg-brand-card border border-brand-border hover:border-brand-gold/50 transition-all text-xs font-semibold">
+                                <svg class="w-4 h-4 text-brand-gold" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.63-.76 1.05-1.82.93-2.88-.91.04-2.02.61-2.67 1.37-.58.67-.99 1.76-.85 2.79 1.01.08 2.05-.51 2.59-1.28"/></svg>
+                                <span>iOS / iPad</span>
+                            </a>
+                        </div>
+
+                        <!-- Direct Support Highlight Box -->
+                        <div class="p-4 rounded-2xl bg-brand-surface/70 border border-brand-border flex items-center justify-between gap-4 max-w-xl mx-auto lg:mx-0">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-brand-gold/15 flex items-center justify-center text-brand-gold">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                                </div>
+                                <div>
+                                    <h4 class="text-xs font-bold text-white uppercase tracking-wider">Official Inquiries & Support</h4>
+                                    <p class="text-xs text-brand-muted">Email our engineering desk directly</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <a href="mailto:info@juwishcoin.online?subject=JuwishPro%20Apps%20Inquiry" class="px-3 py-1.5 rounded-lg bg-brand-gold/20 hover:bg-brand-gold/30 text-brand-gold text-xs font-mono font-bold transition-colors">
+                                    info@juwishcoin.online
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Right Hero Visual Medallion & 3D Interactive Coin -->
+                    <div class="lg:col-span-5 flex justify-center relative">
+                        <div class="relative w-72 sm:w-80 lg:w-96 aspect-square flex items-center justify-center">
+                            <!-- Background Glowing Aura -->
+                            <div class="absolute inset-0 bg-brand-gold/20 rounded-full blur-3xl animate-pulse"></div>
+                            
+                            <!-- Concentric Tech Rings -->
+                            <div class="absolute inset-2 border border-brand-gold/20 rounded-full animate-spin" style="animation-duration: 25s;"></div>
+                            <div class="absolute inset-8 border border-dashed border-brand-gold/30 rounded-full"></div>
+                            
+                            <!-- Floating Coin Medallion -->
+                            <img src="images/juwishcoin.svg" alt="JuwishCoin Token Medallion" class="relative z-10 w-64 sm:w-72 lg:w-84 coin-float drop-shadow-2xl">
+                            
+                            <!-- Floating Live Stat Badge -->
+                            <div class="absolute -bottom-4 -left-4 z-20 px-4 py-2.5 rounded-xl bg-brand-surface/90 border border-brand-gold/30 backdrop-blur-md shadow-xl flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-brand-success/15 text-brand-success flex items-center justify-center font-bold text-xs">
+                                    99.9%
+                                </div>
+                                <div>
+                                    <div class="text-[10px] text-brand-muted uppercase font-bold tracking-wider">Uptime SLA</div>
+                                    <div class="text-xs font-bold text-white">Ultra-Low Latency</div>
+                                </div>
+                            </div>
+
+                            <!-- Floating Verification Badge -->
+                            <div class="absolute -top-3 -right-3 z-20 px-4 py-2.5 rounded-xl bg-brand-surface/90 border border-brand-gold/30 backdrop-blur-md shadow-xl flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-brand-gold/15 text-brand-gold flex items-center justify-center">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] text-brand-muted uppercase font-bold tracking-wider">Security</div>
+                                    <div class="text-xs font-bold text-brand-gold">SHA-256 Verified</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Platform Tabs Switcher Section -->
+        <section id="downloads" class="py-12 bg-brand-surface/40 border-y border-brand-border">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-10">
+                    <h2 class="text-3xl font-heading font-bold text-white tracking-tight">Select Your Platform</h2>
+                    <p class="text-brand-muted text-sm mt-2">Download official native Trader Client applications for every operating system.</p>
+                    
+                    <!-- Platform Category Filter -->
+                    <div class="mt-8 flex flex-wrap items-center justify-center gap-2">
+                        <button onclick="filterPlatform('all')" class="tab-btn active px-4 py-2 rounded-xl text-xs font-bold transition-all bg-brand-gold text-brand-black" data-tab="all">All Platforms (4)</button>
+                        <button onclick="filterPlatform('android')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-brand-surface border border-brand-border text-brand-muted hover:text-white" data-tab="android">Android</button>
+                        <button onclick="filterPlatform('windows')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-brand-surface border border-brand-border text-brand-muted hover:text-white" data-tab="windows">Windows PC</button>
+                        <button onclick="filterPlatform('macos')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-brand-surface border border-brand-border text-brand-muted hover:text-white" data-tab="macos">macOS</button>
+                        <button onclick="filterPlatform('ios')" class="tab-btn px-4 py-2 rounded-xl text-xs font-bold transition-all bg-brand-surface border border-brand-border text-brand-muted hover:text-white" data-tab="ios">iOS / iPadOS</button>
+                    </div>
+                </div>
+
+                <!-- App Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8" id="cards-container">
+
+                    <!-- ================= ANDROID SECTION ================= -->
+
+                    <!-- Android Client App -->
+                    <div class="glass-card p-6 sm:p-8 rounded-2xl flex flex-col justify-between" data-category="android">
+                        <div>
+                            <div class="flex items-start justify-between gap-4 mb-5">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 rounded-2xl bg-brand-surface border border-brand-border flex items-center justify-center text-brand-gold">
+                                        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M17.523 15.3414c-.5511 0-.9993-.4486-.9993-1.0001s.4482-.9993 1.0001-.9993c.5511 0 .9993.4478.9993.9993.0001.5515-.4482 1.0001-1.0001 1.0001m-11.046 0c-.5511 0-.9993-.4486-.9993-1.0001s.4482-.9993 1.0001-.9993c.5511 0 .9993.4478.9993.9993 0 .5515-.4482 1.0001-1.0001 1.0001m11.4045-6.02l1.9973-3.4592a.416.416 0 00-.1521-.5676.416.416 0 00-.5676.1521l-2.0223 3.503C15.5902 8.4116 13.8533 8.125 12 8.125s-3.5902.2866-5.1368.8247L4.8409 5.4467a.4161.4161 0 00-.5677-.1521.4157.4157 0 00-.1521.5676l1.9973 3.4592C2.6889 11.1867.3432 14.6589 0 18.75h24c-.3432-4.0911-2.6889-7.5633-6.1185-9.4286"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <h3 class="font-heading text-xl font-bold text-white">JuwishPro Client</h3>
+                                            <span class="text-[11px] px-2 py-0.5 rounded bg-brand-gold/15 text-brand-gold font-bold uppercase">Android</span>
+                                        </div>
+                                        <p class="text-xs text-brand-muted mt-0.5">Trader Edition • Universal APK</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-brand-muted border border-white/5">v2.4.0</span>
+                            </div>
+
+                            <p class="text-sm text-brand-muted mb-6 leading-relaxed">
+                                Complete native Android trading app with direct Google & Email authentication, real-time portfolio tracking, deposit management, and instant biometric access.
+                            </p>
+
+                            <!-- Specs -->
+                            <div class="grid grid-cols-3 gap-2 py-3 px-4 rounded-xl bg-brand-black/50 border border-brand-border text-xs mb-6">
+                                <div>
+                                    <div class="text-brand-muted text-[10px] uppercase font-bold">OS Version</div>
+                                    <div class="text-white font-medium mt-0.5">Android 8.0+</div>
+                                </div>
+                                <div>
+                                    <div class="text-brand-muted text-[10px] uppercase font-bold">Package</div>
+                                    <div class="text-white font-medium mt-0.5">.APK File</div>
+                                </div>
+                                <div>
+                                    <div class="text-brand-muted text-[10px] uppercase font-bold">Security</div>
+                                    <div class="text-brand-success font-medium mt-0.5">Verified Safe</div>
+                                </div>
+                            </div>
+
+                            <!-- SHA-256 Box -->
+                            <div class="flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-black/40 border border-brand-border text-[11px] font-mono text-brand-muted mb-6">
+                                <span class="truncate">SHA: b2c8243765dd1c89c81a46eb6db...</span>
+                                <button onclick="copyText('b2c8243765dd1c89c81a46eb6dbd23d6cc2e104aab5dc9fb85e659c87ed26338', 'Android Client SHA-256 copied!')" class="text-brand-gold hover:underline font-sans text-xs font-semibold whitespace-nowrap">Copy</button>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex items-center gap-3">
+                            <a href="downloads/JuwishPro-Client.apk" download="JuwishPro-Client.apk" class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-brand-gold to-brand-goldBright text-brand-black text-xs font-bold tracking-wide hover:shadow-gold-glow transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                <span>Download APK</span>
+                            </a>
+                            <button onclick="openQrModal('downloads/JuwishPro-Client.apk', 'JuwishPro Android Client')" class="px-4 py-3 rounded-xl bg-brand-surface hover:bg-brand-card border border-brand-border text-brand-muted hover:text-white text-xs font-bold transition-all" title="Scan QR Code on Phone">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- ================= WINDOWS SECTION ================= -->
+
+                    <!-- Windows Client App -->
+                    <div class="glass-card p-6 sm:p-8 rounded-2xl flex flex-col justify-between" data-category="windows">
+                        <div>
+                            <div class="flex items-start justify-between gap-4 mb-5">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 rounded-2xl bg-brand-surface border border-brand-border flex items-center justify-center text-blue-400">
+                                        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4h-13.051M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.949-1.801"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <h3 class="font-heading text-xl font-bold text-white">JuwishPro PC</h3>
+                                            <span class="text-[11px] px-2 py-0.5 rounded bg-blue-500/15 text-blue-400 font-bold uppercase">Windows 10/11</span>
+                                        </div>
+                                        <p class="text-xs text-brand-muted mt-0.5">Desktop Workstation • 64-bit EXE</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-brand-muted border border-white/5">v2.4.0</span>
+                            </div>
+
+                            <p class="text-sm text-brand-muted mb-6 leading-relaxed">
+                                High-performance native Windows workstation built on .NET 8 and Microsoft Edge WebView2. Hardware acceleration enabled with multi-monitor trading layout.
+                            </p>
+
+                            <div class="grid grid-cols-3 gap-2 py-3 px-4 rounded-xl bg-brand-black/50 border border-brand-border text-xs mb-6">
+                                <div>
+                                    <div class="text-brand-muted text-[10px] uppercase font-bold">Architecture</div>
+                                    <div class="text-white font-medium mt-0.5">x64 (64-bit)</div>
+                                </div>
+                                <div>
+                                    <div class="text-brand-muted text-[10px] uppercase font-bold">Engine</div>
+                                    <div class="text-white font-medium mt-0.5">.NET 8 + WebView2</div>
+                                </div>
+                                <div>
+                                    <div class="text-brand-muted text-[10px] uppercase font-bold">Package</div>
+                                    <div class="text-brand-success font-medium mt-0.5">Standalone .EXE</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-black/40 border border-brand-border text-[11px] font-mono text-brand-muted mb-6">
+                                <span class="truncate">SHA: 6d8e11d4d5d648f2fa481a50b7f...</span>
+                                <button onclick="copyText('6d8e11d4d5d648f2fa481a50b7f2cb14f141bf1712a2aa62f790c8846c245c36', 'Windows Client SHA-256 copied!')" class="text-brand-gold hover:underline font-sans text-xs font-semibold whitespace-nowrap">Copy</button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <a href="downloads/JuwishPro-Client.exe" download="JuwishPro-Client.exe" class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-brand-gold to-brand-goldBright text-brand-black text-xs font-bold tracking-wide hover:shadow-gold-glow transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                <span>Download for Windows</span>
+                            </a>
+                            <a href="downloads/JuwishPro-Windows-Client.zip" download="JuwishPro-Windows-Client.zip" class="px-4 py-3 rounded-xl bg-brand-surface hover:bg-brand-card border border-brand-border text-brand-muted hover:text-white text-xs font-bold transition-all" title="Download ZIP Archive">
+                                <span>.ZIP</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- ================= MACOS SECTION ================= -->
+
+                    <!-- macOS Client App -->
+                    <div class="glass-card p-6 sm:p-8 rounded-2xl flex flex-col justify-between" data-category="macos">
+                        <div>
+                            <div class="flex items-start justify-between gap-4 mb-5">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 rounded-2xl bg-brand-surface border border-brand-border flex items-center justify-center text-gray-200">
+                                        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.63-.76 1.05-1.82.93-2.88-.91.04-2.02.61-2.67 1.37-.58.67-.99 1.76-.85 2.79 1.01.08 2.05-.51 2.59-1.28"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <h3 class="font-heading text-xl font-bold text-white">JuwishPro for Mac</h3>
+                                            <span class="text-[11px] px-2 py-0.5 rounded bg-gray-500/15 text-gray-300 font-bold uppercase">Universal</span>
+                                        </div>
+                                        <p class="text-xs text-brand-muted mt-0.5">Apple Silicon & Intel • macOS 12+</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-brand-muted border border-white/5">v2.4.0</span>
+                            </div>
+
+                            <p class="text-sm text-brand-muted mb-6 leading-relaxed">
+                                Built exclusively for macOS using Swift and native WKWebView. Zero memory leakage, fluid trackpad gestures, Touch ID integration, and dark mode optimization.
+                            </p>
+
+                            <div class="grid grid-cols-3 gap-2 py-3 px-4 rounded-xl bg-brand-black/50 border border-brand-border text-xs mb-6">
+                                <div>
+                                    <div class="text-brand-muted text-[10px] uppercase font-bold">Processors</div>
+                                    <div class="text-white font-medium mt-0.5">M1/M2/M3/M4 & Intel</div>
+                                </div>
+                                <div>
+                                    <div class="text-brand-muted text-[10px] uppercase font-bold">Min OS</div>
+                                    <div class="text-white font-medium mt-0.5">macOS 12+</div>
+                                </div>
+                                <div>
+                                    <div class="text-brand-muted text-[10px] uppercase font-bold">Touch ID</div>
+                                    <div class="text-brand-success font-medium mt-0.5">Supported</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-black/40 border border-brand-border text-[11px] font-mono text-brand-muted mb-6">
+                                <span class="truncate">SHA: 6d76d7f8b466fe53a99e8a7c64a...</span>
+                                <button onclick="copyText('6d76d7f8b466fe53a99e8a7c64af4a88f50c0593b45a66699eb31c77579ff966', 'macOS Client SHA-256 copied!')" class="text-brand-gold hover:underline font-sans text-xs font-semibold whitespace-nowrap">Copy</button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <a href="downloads/JuwishPro-macOS-Client.zip" download="JuwishPro-macOS-Client.zip" class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-brand-gold to-brand-goldBright text-brand-black text-xs font-bold tracking-wide hover:shadow-gold-glow transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                <span>Download for macOS</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- ================= IOS SECTION ================= -->
+
+                    <!-- iOS Client App -->
+                    <div class="glass-card p-6 sm:p-8 rounded-2xl flex flex-col justify-between" data-category="ios">
+                        <div>
+                            <div class="flex items-start justify-between gap-4 mb-5">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 rounded-2xl bg-brand-surface border border-brand-border flex items-center justify-center text-cyan-400">
+                                        <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.63-.76 1.05-1.82.93-2.88-.91.04-2.02.61-2.67 1.37-.58.67-.99 1.76-.85 2.79 1.01.08 2.05-.51 2.59-1.28"/></svg>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <h3 class="font-heading text-xl font-bold text-white">JuwishPro iOS</h3>
+                                            <span class="text-[11px] px-2 py-0.5 rounded bg-cyan-500/15 text-cyan-400 font-bold uppercase">iPhone & iPad</span>
+                                        </div>
+                                        <p class="text-xs text-brand-muted mt-0.5">Trader Mobile • iOS 15.0+</p>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-mono px-2.5 py-1 rounded bg-white/5 text-brand-muted border border-white/5">v2.4.0</span>
+                            </div>
+
+                            <p class="text-sm text-brand-muted mb-6 leading-relaxed">
+                                Optimized for iPhone and iPad Retina displays. Fast Face ID and Touch ID authentication, full chart rendering, and offline portfolio balance caching.
+                            </p>
+
+                            <div class="grid grid-cols-3 gap-2 py-3 px-4 rounded-xl bg-brand-black/50 border border-brand-border text-xs mb-6">
+                                <div>
+                                    <div class="text-brand-muted text-[10px] uppercase font-bold">Min Version</div>
+                                    <div class="text-white font-medium mt-0.5">iOS 15.0+</div>
+                                </div>
+                                <div>
+                                    <div class="text-brand-muted text-[10px] uppercase font-bold">Biometrics</div>
+                                    <div class="text-white font-medium mt-0.5">Face ID / Touch ID</div>
+                                </div>
+                                <div>
+                                    <div class="text-brand-muted text-[10px] uppercase font-bold">Install Mode</div>
+                                    <div class="text-brand-success font-medium mt-0.5">IPA & PWA</div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between gap-2 px-3 py-2 rounded-lg bg-black/40 border border-brand-border text-[11px] font-mono text-brand-muted mb-6">
+                                <span class="truncate">SHA: dcfd1227e163f53a9926d15a519...</span>
+                                <button onclick="copyText('dcfd1227e163f53a9926d15a51978250280eb4c75ca7a2b0d01ca57c6b907c1d', 'iOS Client SHA-256 copied!')" class="text-brand-gold hover:underline font-sans text-xs font-semibold whitespace-nowrap">Copy</button>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3">
+                            <a href="downloads/JuwishPro-Client.ipa" download="JuwishPro-Client.ipa" class="flex-1 inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-brand-gold to-brand-goldBright text-brand-black text-xs font-bold tracking-wide hover:shadow-gold-glow transition-all">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                                <span>Download .IPA</span>
+                            </a>
+                            <button onclick="openPwaWalkthrough()" class="px-4 py-3 rounded-xl bg-brand-surface hover:bg-brand-card border border-brand-border text-brand-muted hover:text-white text-xs font-bold transition-all">
+                                <span>1-Tap Add</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Key Features Section -->
+        <section id="features" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs uppercase font-mono tracking-widest text-brand-gold font-bold">BUILT FOR SPEED & SECURITY</span>
+                <h2 class="text-3xl sm:text-4xl font-heading font-extrabold text-white tracking-tight mt-2">
+                    Why Trade on JuwishPro Apps?
+                </h2>
+                <p class="text-brand-muted text-sm mt-3">
+                    Engineered with native platform optimizations to deliver instant order execution, bank-level security, and zero distractions.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Feature 1 -->
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="w-12 h-12 rounded-xl bg-brand-gold/15 text-brand-gold flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <h3 class="font-heading text-lg font-bold text-white mb-2">Zero Redirection Security</h3>
+                    <p class="text-xs text-brand-muted leading-relaxed">
+                        Google & Email logins complete seamlessly within the application container. Authentication tokens are strictly isolated without leaking to external browsers.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="w-12 h-12 rounded-xl bg-brand-success/15 text-brand-success flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    <h3 class="font-heading text-lg font-bold text-white mb-2">Hardware Biometrics</h3>
+                    <p class="text-xs text-brand-muted leading-relaxed">
+                        Unlock your account instantly using Android BiometricPrompt, Apple Touch ID / Face ID, or Windows Hello with secure enclave encryption.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/15 text-blue-400 flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+                    </div>
+                    <h3 class="font-heading text-lg font-bold text-white mb-2">Real-Time Tick Engine</h3>
+                    <p class="text-xs text-brand-muted leading-relaxed">
+                        Low-latency WebSocket price tickers for crypto futures, forex, stocks, ETFs, and JuwishCoin transactions with instant execution confirmations.
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="glass-card p-6 rounded-2xl">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/15 text-amber-400 flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    </div>
+                    <h3 class="font-heading text-lg font-bold text-white mb-2">Offline Resilience</h3>
+                    <p class="text-xs text-brand-muted leading-relaxed">
+                        Intelligent offline cache keeps your recent balances and charts accessible even when moving through network dead zones, with automatic reconnect.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Installation & Troubleshooting Accordion Guide -->
+        <section id="guide" class="py-16 bg-brand-surface/30 border-t border-brand-border">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <span class="text-xs uppercase font-mono tracking-widest text-brand-gold font-bold">SIMPLE SETUP</span>
+                    <h2 class="text-3xl font-heading font-bold text-white tracking-tight mt-1">Installation Walkthrough</h2>
+                    <p class="text-brand-muted text-sm mt-2">Quick 30-second instructions to get JuwishPro running on your system.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Step 1: Android -->
+                    <div class="glass-card rounded-2xl overflow-hidden">
+                        <button onclick="toggleFaq('faq-android')" class="w-full p-5 text-left flex items-center justify-between gap-4 font-heading font-semibold text-white hover:text-brand-gold transition-colors">
+                            <span class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-lg bg-brand-gold/15 text-brand-gold flex items-center justify-center text-xs font-mono font-bold">01</span>
+                                How do I install the APK on Android?
+                            </span>
+                            <svg id="icon-faq-android" class="w-5 h-5 text-brand-muted transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="faq-android" class="hidden px-5 pb-5 text-xs text-brand-muted space-y-2 border-t border-brand-border/40 pt-4 font-sans leading-relaxed">
+                            <p>1. Tap the <strong class="text-white">Download APK</strong> button above to download <code class="text-brand-gold font-mono">JuwishPro-Client.apk</code>.</p>
+                            <p>2. When your browser prompts <em class="text-white">"File might be harmful"</em>, tap <strong class="text-brand-gold">Download anyway</strong> (this standard Android warning appears for apps downloaded outside Google Play).</p>
+                            <p>3. Tap Open or locate the file in your Downloads folder. When asked, toggle <strong class="text-white">"Allow from this source"</strong>.</p>
+                            <p>4. Tap <strong class="text-brand-gold">Install</strong>, and launch JuwishPro to log in!</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Windows -->
+                    <div class="glass-card rounded-2xl overflow-hidden">
+                        <button onclick="toggleFaq('faq-windows')" class="w-full p-5 text-left flex items-center justify-between gap-4 font-heading font-semibold text-white hover:text-brand-gold transition-colors">
+                            <span class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-lg bg-blue-500/15 text-blue-400 flex items-center justify-center text-xs font-mono font-bold">02</span>
+                                How do I run the Windows app if SmartScreen appears?
+                            </span>
+                            <svg id="icon-faq-windows" class="w-5 h-5 text-brand-muted transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="faq-windows" class="hidden px-5 pb-5 text-xs text-brand-muted space-y-2 border-t border-brand-border/40 pt-4 font-sans leading-relaxed">
+                            <p>1. Download <code class="text-brand-gold font-mono">JuwishPro-Client.exe</code>.</p>
+                            <p>2. Double-click the file to launch. If Microsoft Defender SmartScreen displays <em class="text-white">"Windows protected your PC"</em>:</p>
+                            <p class="pl-4">→ Click <strong class="text-brand-gold">"More info"</strong></p>
+                            <p class="pl-4">→ Click <strong class="text-brand-gold">"Run anyway"</strong></p>
+                            <p>3. The application will start immediately with native hardware acceleration.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: macOS -->
+                    <div class="glass-card rounded-2xl overflow-hidden">
+                        <button onclick="toggleFaq('faq-macos')" class="w-full p-5 text-left flex items-center justify-between gap-4 font-heading font-semibold text-white hover:text-brand-gold transition-colors">
+                            <span class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-lg bg-gray-500/15 text-gray-300 flex items-center justify-center text-xs font-mono font-bold">03</span>
+                                How do I launch the app on macOS Gatekeeper?
+                            </span>
+                            <svg id="icon-faq-macos" class="w-5 h-5 text-brand-muted transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="faq-macos" class="hidden px-5 pb-5 text-xs text-brand-muted space-y-2 border-t border-brand-border/40 pt-4 font-sans leading-relaxed">
+                            <p>1. Unzip <code class="text-brand-gold font-mono">JuwishPro-macOS-Client.zip</code> and drag <strong class="text-white">JuwishPro.app</strong> into your Applications folder.</p>
+                            <p>2. Right-click (or Control-click) on the app and select <strong class="text-brand-gold">Open</strong>.</p>
+                            <p>3. Click <strong class="text-brand-gold">Open</strong> in the confirmation dialog. On modern macOS versions, you can also go to <em class="text-white">System Settings &gt; Privacy & Security</em> and click <strong class="text-white">"Open Anyway"</strong>.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 4: iOS -->
+                    <div class="glass-card rounded-2xl overflow-hidden">
+                        <button onclick="toggleFaq('faq-ios')" class="w-full p-5 text-left flex items-center justify-between gap-4 font-heading font-semibold text-white hover:text-brand-gold transition-colors">
+                            <span class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-lg bg-cyan-500/15 text-cyan-400 flex items-center justify-center text-xs font-mono font-bold">04</span>
+                                How do I add JuwishPro to my iPhone Home Screen?
+                            </span>
+                            <svg id="icon-faq-ios" class="w-5 h-5 text-brand-muted transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div id="faq-ios" class="hidden px-5 pb-5 text-xs text-brand-muted space-y-2 border-t border-brand-border/40 pt-4 font-sans leading-relaxed">
+                            <p>1. Download the native <strong class="text-white">.IPA package</strong> above for your iPhone/iPad, or tap <strong class="text-brand-gold">1-Tap Add</strong> right on this page.</p>
+                            <p>2. In Safari, tap the <strong class="text-white">Share</strong> icon (square with upward arrow) at the bottom toolbar.</p>
+                            <p>3. Scroll down and tap <strong class="text-brand-gold">"Add to Home Screen"</strong>.</p>
+                            <p>4. Tap <strong class="text-brand-gold">Add</strong>. JuwishPro will now launch in standalone native fullscreen mode with Face ID support!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Official Support & Inquiries Section (Direct Email Attachment) -->
+        <section id="support" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-3xl p-8 sm:p-12 border-brand-gold/30 shadow-gold-glow-lg relative overflow-hidden">
+                <!-- Background Gold Accents -->
+                <div class="absolute -top-24 -right-24 w-80 h-80 bg-brand-gold/15 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
+                    
+                    <!-- Left: Contact Details & Direct Email -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-gold/15 text-brand-gold text-xs font-bold font-mono uppercase">
+                            DIRECT SUPPORT CHANNEL
+                        </div>
+
+                        <h2 class="text-3xl font-heading font-extrabold text-white tracking-tight">
+                            Have Questions or Need Help?
+                        </h2>
+
+                        <p class="text-sm text-brand-muted leading-relaxed">
+                            Our platform engineering and security desk is at your service. For technical assistance, app installation inquiries, partner integrations, or security audits, contact us directly.
+                        </p>
+
+                        <!-- Attached Mail Highlight Card -->
+                        <div class="p-5 rounded-2xl bg-brand-black/70 border border-brand-border space-y-3">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-brand-gold/20 flex items-center justify-center text-brand-gold">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                </div>
+                                <div>
+                                    <span class="text-[11px] text-brand-muted uppercase font-bold tracking-wider">Official Email Address</span>
+                                    <div class="text-base font-mono font-bold text-white tracking-wide">info@juwishcoin.online</div>
+                                </div>
+                            </div>
+
+                            <div class="pt-2 flex flex-wrap gap-2">
+                                <a href="mailto:info@juwishcoin.online?subject=JuwishPro%20Support%20Request" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-brand-gold to-brand-goldBright text-brand-black text-xs font-bold hover:shadow-gold-glow transition-all">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                                    <span>Send Email</span>
+                                </a>
+                                <button onclick="copyText('info@juwishcoin.online', 'Support email copied!')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-brand-surface border border-brand-border hover:border-brand-gold text-brand-text text-xs font-semibold transition-all">
+                                    <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                    <span>Copy Address</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- SLA & Security -->
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="p-3.5 rounded-xl bg-brand-black/40 border border-brand-border">
+                                <span class="text-brand-muted text-[10px] uppercase font-bold">Average Response</span>
+                                <div class="text-brand-gold font-mono font-bold mt-0.5">&lt; 15 Minutes</div>
+                            </div>
+                            <div class="p-3.5 rounded-xl bg-brand-black/40 border border-brand-border">
+                                <span class="text-brand-muted text-[10px] uppercase font-bold">Mail Server</span>
+                                <div class="text-brand-success font-mono font-bold mt-0.5">TLS 1.3 / SSL 465</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Interactive Inquiries Form -->
+                    <div class="lg:col-span-7">
+                        <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-4 p-6 sm:p-8 rounded-2xl bg-brand-black/80 border border-brand-border">
+                            <h3 class="font-heading text-lg font-bold text-white mb-2">Send an Instant Message to Our Team</h3>
+                            
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-medium text-brand-muted mb-1.5">Your Full Name</label>
+                                    <input type="text" id="contact-name" required placeholder="Alex Vance" class="w-full px-4 py-3 rounded-xl bg-brand-surface border border-brand-border focus:border-brand-gold focus:outline-none text-xs text-white placeholder-brand-muted/50 transition-colors">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-brand-muted mb-1.5">Your Email Address</label>
+                                    <input type="email" id="contact-email" required placeholder="alex@example.com" class="w-full px-4 py-3 rounded-xl bg-brand-surface border border-brand-border focus:border-brand-gold focus:outline-none text-xs text-white placeholder-brand-muted/50 transition-colors">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-medium text-brand-muted mb-1.5">Platform / App</label>
+                                    <select id="contact-app" class="w-full px-4 py-3 rounded-xl bg-brand-surface border border-brand-border focus:border-brand-gold focus:outline-none text-xs text-white transition-colors">
+                                        <option value="General">General Inquiry</option>
+                                        <option value="Android">Android App</option>
+                                        <option value="Windows">Windows Desktop</option>
+                                        <option value="macOS">macOS App</option>
+                                        <option value="iOS">iOS / iPadOS</option>
+                                        <option value="JuwishCoin">JuwishCoin Inquiries</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-brand-muted mb-1.5">Subject</label>
+                                    <input type="text" id="contact-subject" required placeholder="App installation question" class="w-full px-4 py-3 rounded-xl bg-brand-surface border border-brand-border focus:border-brand-gold focus:outline-none text-xs text-white placeholder-brand-muted/50 transition-colors">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-medium text-brand-muted mb-1.5">Your Message</label>
+                                <textarea id="contact-message" rows="4" required placeholder="Describe your inquiry or technical question in detail..." class="w-full px-4 py-3 rounded-xl bg-brand-surface border border-brand-border focus:border-brand-gold focus:outline-none text-xs text-white placeholder-brand-muted/50 transition-colors resize-none"></textarea>
+                            </div>
+
+                            <div class="flex items-center justify-between pt-2">
+                                <span class="text-[11px] text-brand-muted flex items-center gap-1.5">
+                                    <svg class="w-3.5 h-3.5 text-brand-success" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                    Dispatched to info@juwishcoin.online
+                                </span>
+                                
+                                <button type="submit" id="btn-submit" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-brand-gold to-brand-goldBright text-brand-black text-xs font-bold tracking-wide hover:shadow-gold-glow transition-all">
+                                    <span id="btn-submit-text">Submit Message</span>
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                                </button>
+                            </div>
+
+                            <div id="contact-alert" class="hidden p-4 rounded-xl text-xs font-medium"></div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-black border-t border-brand-border py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <!-- Left brand info -->
+                <div class="flex items-center gap-3">
+                    <img src="images/juwishcoin.svg" alt="JuwishCoin" class="w-8 h-8">
+                    <div>
+                        <div class="font-heading text-sm font-bold text-white flex items-center gap-1">
+                            JUWISH<span class="text-brand-gold">PRO</span>
+                        </div>
+                        <div class="text-[11px] text-brand-muted">The Premier Multi-Asset Financial Ecosystem</div>
+                    </div>
+                </div>
+
+                <!-- Center email -->
+                <div class="flex items-center gap-2 text-xs font-mono text-brand-muted">
+                    <span>Contact:</span>
+                    <a href="mailto:info@juwishcoin.online" class="text-brand-gold hover:underline font-bold">info@juwishcoin.online</a>
+                </div>
+
+                <!-- Right links -->
+                <div class="flex items-center gap-6 text-xs text-brand-muted">
+                    <a href="#features" class="hover:text-brand-gold transition-colors">Key Features</a>
+                    <a href="#downloads" class="hover:text-brand-gold transition-colors">Download Apps</a>
+                    <a href="#guide" class="hover:text-brand-gold transition-colors">Install Guide</a>
+                    <a href="docs/JuwishPro_Client_User_Guide.pdf" target="_blank" class="hover:text-brand-gold text-brand-gold font-semibold transition-colors">User Guide (PDF)</a>
+                    <a href="privacy-policy" class="hover:text-brand-gold transition-colors">Privacy Policy</a>
+                    <a href="#support" class="hover:text-brand-gold transition-colors">Support</a>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-8 border-t border-brand-border/40 text-center text-[11px] text-brand-muted/70 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p>&copy; 2026 JuwishPro &amp; JuwishCoin. All rights reserved.</p>
+                <p class="font-mono text-[10px]">Hosted securely at juwishcoin.online &bull; SMTPS Port 465 Active</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- QR Code Modal -->
+    <div id="qr-modal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4">
+        <div class="glass-card max-w-sm w-full p-6 rounded-3xl border border-brand-gold/40 text-center relative shadow-gold-glow-lg">
+            <button onclick="closeQrModal()" class="absolute top-4 right-4 text-brand-muted hover:text-white p-1 rounded-lg">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <h3 id="qr-title" class="font-heading text-lg font-bold text-white mb-1">Scan to Download</h3>
+            <p class="text-xs text-brand-muted mb-6">Point your smartphone camera to download instantly</p>
+            
+            <div class="p-4 bg-white rounded-2xl inline-block mx-auto mb-4 shadow-lg">
+                <div id="qrcode"></div>
+            </div>
+
+            <p id="qr-url" class="text-[11px] font-mono text-brand-muted truncate mb-4 px-2"></p>
+
+            <button onclick="closeQrModal()" class="w-full py-2.5 rounded-xl bg-brand-surface hover:bg-brand-card border border-brand-border text-xs font-bold text-white transition-colors">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Actions & Helpers -->
+    <script>
+        // Copy text helper
+        function copyText(text, msg) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(msg || 'Copied to clipboard!');
+            }).catch(() => {
+                // Fallback
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast(msg || 'Copied to clipboard!');
+            });
+        }
+
+        function copyEmail(e) {
+            e.preventDefault();
+            copyText('info@juwishcoin.online', 'Support email info@juwishcoin.online copied!');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            msgEl.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Platform Filter
+        function filterPlatform(category) {
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                if (btn.getAttribute('data-tab') === category) {
+                    btn.classList.add('bg-brand-gold', 'text-brand-black');
+                    btn.classList.remove('bg-brand-surface', 'border', 'border-brand-border', 'text-brand-muted');
+                } else {
+                    btn.classList.remove('bg-brand-gold', 'text-brand-black');
+                    btn.classList.add('bg-brand-surface', 'border', 'border-brand-border', 'text-brand-muted');
+                }
+            });
+
+            const cards = document.querySelectorAll('#cards-container > div');
+            cards.forEach(card => {
+                if (category === 'all' || card.getAttribute('data-category') === category) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Accordion
+        function toggleFaq(id) {
+            const el = document.getElementById(id);
+            const icon = document.getElementById('icon-' + id);
+            if (el.classList.contains('hidden')) {
+                el.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                el.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // QR Code Modal
+        let qrInstance = null;
+        function openQrModal(relativeUrl, title) {
+            const modal = document.getElementById('qr-modal');
+            const titleEl = document.getElementById('qr-title');
+            const urlEl = document.getElementById('qr-url');
+            const qrcodeContainer = document.getElementById('qrcode');
+
+            const fullUrl = window.location.origin + window.location.pathname.replace(/\/index\.html$/, '') + '/' + relativeUrl;
+            
+            titleEl.textContent = title || 'Scan to Download';
+            urlEl.textContent = fullUrl;
+
+            qrcodeContainer.innerHTML = '';
+            qrInstance = new QRCode(qrcodeContainer, {
+                text: fullUrl,
+                width: 180,
+                height: 180,
+                colorDark : "#0B0E11",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.M
+            });
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeQrModal() {
+            const modal = document.getElementById('qr-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function openPwaWalkthrough() {
+            toggleFaq('faq-ios');
+            document.getElementById('guide').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Contact Form AJAX Submission to contact.php
+        async function handleContactSubmit(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit');
+            const btnText = document.getElementById('btn-submit-text');
+            const alertBox = document.getElementById('contact-alert');
+
+            const payload = {
+                name: document.getElementById('contact-name').value.trim(),
+                email: document.getElementById('contact-email').value.trim(),
+                app: document.getElementById('contact-app').value,
+                subject: document.getElementById('contact-subject').value.trim(),
+                message: document.getElementById('contact-message').value.trim()
+            };
+
+            btn.disabled = true;
+            btnText.textContent = 'Transmitting to info@juwishcoin.online...';
+            alertBox.classList.add('hidden');
+
+            try {
+                const res = await fetch('contact.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await res.json();
+
+                if (result.success) {
+                    alertBox.className = 'p-4 rounded-xl text-xs font-medium bg-brand-success/15 border border-brand-success text-brand-success';
+                    alertBox.textContent = result.message || 'Thank you! Your message has been sent to info@juwishcoin.online.';
+                    alertBox.classList.remove('hidden');
+                    document.getElementById('contact-form').reset();
+                } else {
+                    throw new Error(result.message || 'Failed to send');
+                }
+            } catch (err) {
+                // Fallback to mailto
+                alertBox.className = 'p-4 rounded-xl text-xs font-medium bg-brand-gold/15 border border-brand-gold text-brand-gold';
+                alertBox.innerHTML = `Notice: Direct web socket transmission offline. You can click here to <a href="mailto:info@juwishcoin.online?subject=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent(payload.message)}" class="underline font-bold">send your email via info@juwishcoin.online</a>.`;
+                alertBox.classList.remove('hidden');
+            } finally {
+                btn.disabled = false;
+                btnText.textContent = 'Submit Message';
+            }
+        }
+    </script>
+</body>
+</html>
+
