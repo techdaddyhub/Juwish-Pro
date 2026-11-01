@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Windows;
 using Microsoft.Web.WebView2.Core;
 
@@ -8,6 +9,8 @@ namespace JuwishPro.Client
     public partial class MainWindow : Window
     {
         private const string TargetUrl = "https://2026.dmillers.org";
+        private const string WebView2InstallerUrl = "https://go.microsoft.com/fwlink/p/?LinkId=2124703";
+        private bool _isMissingWebView2 = false;
 
         public MainWindow()
         {
@@ -17,19 +20,30 @@ namespace JuwishPro.Client
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            await InitializeBrowserAsync();
+        }
+
+        private async System.Threading.Tasks.Task InitializeBrowserAsync()
+        {
             try
             {
-                var env = await CoreWebView2Environment.CreateAsync();
+                _isMissingWebView2 = false;
+
+                // Dedicated persistent cache in user's LocalAppData to avoid permissions issues anywhere on disk
+                string localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                string userDataFolder = Path.Combine(localAppData, "JuwishPro", "Client", "WebView2");
+                Directory.CreateDirectory(userDataFolder);
+
+                var env = await CoreWebView2Environment.CreateAsync(null, userDataFolder);
                 await webView.EnsureCoreWebView2Async(env);
 
                 var settings = webView.CoreWebView2.Settings;
-                // Lockdown app: hide devtools, context menu, status bar, and accelerators
                 settings.AreDefaultContextMenusEnabled = false;
                 settings.IsStatusBarEnabled = false;
                 settings.AreDevToolsEnabled = false;
                 settings.AreBrowserAcceleratorKeysEnabled = false;
                 settings.IsBuiltInErrorPageEnabled = false;
-                settings.UserAgent = settings.UserAgent + " JuwishProWindows/1.0.0 (Native Desktop)";
+                settings.UserAgent = settings.UserAgent + " JuwishProWindows/1.0.0 (Native Desktop; x64)";
 
                 webView.CoreWebView2.NavigationStarting += CoreWebView2_NavigationStarting;
                 webView.CoreWebView2.NavigationCompleted += CoreWebView2_NavigationCompleted;
@@ -38,16 +52,41 @@ namespace JuwishPro.Client
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"WebView2 initialization failed: {ex.Message}");
-                errorPanel.Visibility = Visibility.Visible;
+                Debug.WriteLine($"WebView2 initialization failed: {ex}");
+                ShowInitializationError(ex);
             }
+        }
+
+        private void ShowInitializationError(Exception ex)
+        {
+            string exName = ex.GetType().Name;
+            string exMsg = ex.Message;
+
+            if (exName.Contains("WebView2RuntimeNotFound") || 
+                exName.Contains("DllNotFound") || 
+                exMsg.IndexOf("WebView2", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                exMsg.IndexOf("runtime", StringComparison.OrdinalIgnoreCase) >= 0)
+            {
+                _isMissingWebView2 = true;
+                txtErrorTitle.Text = "Microsoft Edge WebView2 Required";
+                txtErrorMessage.Text = "JuwishPro requires the Microsoft Edge WebView2 runtime component to run on Windows. Click below to download and install it directly from Microsoft.";
+                btnAction.Content = "Install WebView2 Runtime";
+            }
+            else
+            {
+                _isMissingWebView2 = false;
+                txtErrorTitle.Text = "Initialization Error";
+                txtErrorMessage.Text = $"Unable to start application engine: {ex.Message}";
+                btnAction.Content = "Retry";
+            }
+
+            errorPanel.Visibility = Visibility.Visible;
         }
 
         private void CoreWebView2_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e)
         {
             if (Uri.TryCreate(e.Uri, UriKind.Absolute, out var uri))
             {
-                // External communications (whatsapp, mailto, tel)
                 if (uri.Scheme != "http" && uri.Scheme != "https")
                 {
                     try
@@ -59,10 +98,8 @@ namespace JuwishPro.Client
                     return;
                 }
 
-                // If navigating outside JuwishPro platform or OAuth providers
                 if (!IsAllowedAppHost(uri.Host))
                 {
-                    // Open third-party external link in user's default browser so app container remains secure
                     try
                     {
                         Process.Start(new ProcessStartInfo(e.Uri) { UseShellExecute = true });
@@ -93,6 +130,10 @@ namespace JuwishPro.Client
         {
             if (!e.IsSuccess)
             {
+                _isMissingWebView2 = false;
+                txtErrorTitle.Text = "Connection Offline";
+                txtErrorMessage.Text = "Network connection is currently unavailable. Please check your internet settings.";
+                btnAction.Content = "Retry Connection";
                 errorPanel.Visibility = Visibility.Visible;
             }
             else
@@ -101,11 +142,31 @@ namespace JuwishPro.Client
             }
         }
 
-        private void OnRetryClick(object sender, RoutedEventArgs e)
+        private async void OnActionButtonClick(object sender, RoutedEventArgs e)
         {
-            errorPanel.Visibility = Visibility.Collapsed;
-            webView.CoreWebView2?.Reload();
+            if (_isMissingWebView2)
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo(WebView2InstallerUrl) { UseShellExecute = true });
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Could not open browser: {ex.Message}", "JuwishPro", MessageBoxButton.OK, MessageBoxImage.Warning);
+                }
+            }
+            else
+            {
+                errorPanel.Visibility = Visibility.Collapsed;
+                if (webView.CoreWebView2 != null)
+                {
+                    webView.CoreWebView2.Reload();
+                }
+                else
+                {
+                    await InitializeBrowserAsync();
+                }
+            }
         }
     }
 }
-

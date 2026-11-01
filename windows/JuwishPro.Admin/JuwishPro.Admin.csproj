@@ -8,8 +8,12 @@
     <ApplicationIcon>app.ico</ApplicationIcon>
     <AssemblyName>JuwishPro-Admin</AssemblyName>
     <RootNamespace>JuwishPro.Admin</RootNamespace>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishSingleFile>true</PublishSingleFile>
-    <SelfContained>false</SelfContained>
+    <SelfContained>true</SelfContained>
+    <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+    <EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+    <PublishReadyToRun>false</PublishReadyToRun>
   </PropertyGroup>
 
   <ItemGroup>

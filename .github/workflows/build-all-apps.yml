@@ -109,11 +109,27 @@ jobs:
 
       - name: Publish JuwishPro Client Executable
         run: |
-          dotnet publish windows/JuwishPro.Client/JuwishPro.Client.csproj -c Release -r win-x64 -p:PublishSingleFile=true --self-contained false -o dist/client
+          dotnet publish windows/JuwishPro.Client/JuwishPro.Client.csproj -c Release -r win-x64 -p:PublishSingleFile=true --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -o dist/client
 
       - name: Publish JuwishPro Admin Executable
         run: |
-          dotnet publish windows/JuwishPro.Admin/JuwishPro.Admin.csproj -c Release -r win-x64 -p:PublishSingleFile=true --self-contained false -o dist/admin
+          dotnet publish windows/JuwishPro.Admin/JuwishPro.Admin.csproj -c Release -r win-x64 -p:PublishSingleFile=true --self-contained true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -o dist/admin
+
+      - name: Package Windows Zips
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist/client-pkg
+          Copy-Item dist/client/JuwishPro-Client.exe dist/client-pkg/
+          if (Test-Path dist/client/WebView2Loader.dll) { Copy-Item dist/client/WebView2Loader.dll dist/client-pkg/ }
+          Compress-Archive -Path dist/client-pkg/* -DestinationPath dist/client/JuwishPro-Windows-Client.zip -Force
+
+          New-Item -ItemType Directory -Force -Path dist/admin-pkg
+          Copy-Item dist/admin/JuwishPro-Admin.exe dist/admin-pkg/
+          if (Test-Path dist/admin/WebView2Loader.dll) { Copy-Item dist/admin/WebView2Loader.dll dist/admin-pkg/ }
+          Compress-Archive -Path dist/admin-pkg/* -DestinationPath dist/admin/JuwishPro-Windows-Admin.zip -Force
+
+          Get-ChildItem -Path dist/client
+          Get-ChildItem -Path dist/admin
 
       - name: Upload Windows Client Executable
         uses: actions/upload-artifact@v4
