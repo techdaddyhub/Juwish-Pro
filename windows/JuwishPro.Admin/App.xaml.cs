@@ -1,12 +1,23 @@
 using System;
+using System.Runtime.InteropServices;
 using System.Windows;
 
 namespace JuwishPro.Admin
 {
     public partial class App : Application
     {
+        [DllImport("shell32.dll", SetLastError = true)]
+        private static extern int SetCurrentProcessExplicitAppUserModelID([MarshalAs(UnmanagedType.LPWStr)] string AppID);
+
         protected override void OnStartup(StartupEventArgs e)
         {
+            try
+            {
+                // Explicitly set AppUserModelID so Windows Taskbar pins and identifies this app independently
+                SetCurrentProcessExplicitAppUserModelID("TechDaddyHub.JuwishPro.Admin");
+            }
+            catch { }
+
             base.OnStartup(e);
 
             AppDomain.CurrentDomain.UnhandledException += (s, args) =>

@@ -158,6 +158,15 @@ class AppDelegate: NSObject, NSApplicationDelegate, WKNavigationDelegate, WKUIDe
 }
 
 let app = NSApplication.shared
+app.setActivationPolicy(.regular)
+
+if let iconUrl = Bundle.main.url(forResource: "AppIcon", withExtension: "icns"),
+   let iconImage = NSImage(contentsOf: iconUrl) {
+    app.applicationIconImage = iconImage
+} else if let icon = NSImage(named: "AppIcon") {
+    app.applicationIconImage = icon
+}
+
 let delegate = AppDelegate()
 app.delegate = delegate
 app.run()

@@ -6,6 +6,13 @@
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>app.ico</ApplicationIcon>
+    <AssemblyTitle>JuwishPro Admin</AssemblyTitle>
+    <Product>JuwishPro Admin</Product>
+    <Description>JuwishPro Administrative Mission Control Workstation</Description>
+    <Company>JuwishPro</Company>
+    <Copyright>© 2026 JuwishPro. All rights reserved.</Copyright>
+    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <AssemblyName>JuwishPro-Admin</AssemblyName>
     <RootNamespace>JuwishPro.Admin</RootNamespace>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>

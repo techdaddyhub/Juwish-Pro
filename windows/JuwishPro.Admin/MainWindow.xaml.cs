@@ -1,7 +1,10 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
 using Microsoft.Web.WebView2.Core;
 
 namespace JuwishPro.Admin
@@ -12,10 +15,86 @@ namespace JuwishPro.Admin
         private const string WebView2InstallerUrl = "https://go.microsoft.com/fwlink/p/?LinkId=2124703";
         private bool _isMissingWebView2 = false;
 
+        private const uint WM_SETICON = 0x0080;
+        private static readonly IntPtr ICON_SMALL = (IntPtr)0;
+        private static readonly IntPtr ICON_BIG = (IntPtr)1;
+
+        private const uint IMAGE_ICON = 1;
+        private const uint LR_SHARED = 0x8000;
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr GetModuleHandle(string? lpModuleName);
+
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+        private static extern IntPtr LoadImage(IntPtr hinst, IntPtr lpszName, uint uType, int cxDesired, int cyDesired, uint fuLoad);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr LoadIcon(IntPtr hInstance, IntPtr lpIconName);
+
         public MainWindow()
         {
             InitializeComponent();
             Loaded += MainWindow_Loaded;
+        }
+
+        protected override void OnSourceInitialized(EventArgs e)
+        {
+            base.OnSourceInitialized(e);
+            SetupTaskbarAndWindowIcon();
+        }
+
+        private void SetupTaskbarAndWindowIcon()
+        {
+            try
+            {
+                // Ensure WPF Window Icon is set via pack URI
+                var iconUri = new Uri("pack://application:,,,/app.ico", UriKind.RelativeOrAbsolute);
+                this.Icon = BitmapFrame.Create(iconUri);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Icon] WPF Icon binding notice: {ex.Message}");
+            }
+
+            try
+            {
+                // Explicitly send WM_SETICON messages to Win32 HWND so Windows Taskbar and Alt+Tab always display the icon
+                var hwnd = new WindowInteropHelper(this).Handle;
+                if (hwnd != IntPtr.Zero)
+                {
+                    IntPtr hModule = GetModuleHandle(null);
+
+                    // Load 32x32 icon for Taskbar & Alt+Tab switcher (ICON_BIG)
+                    IntPtr hBigIcon = LoadImage(hModule, (IntPtr)1, IMAGE_ICON, 32, 32, LR_SHARED);
+                    if (hBigIcon == IntPtr.Zero)
+                    {
+                        hBigIcon = LoadIcon(hModule, (IntPtr)1);
+                    }
+
+                    // Load 16x16 icon for Window Titlebar (ICON_SMALL)
+                    IntPtr hSmallIcon = LoadImage(hModule, (IntPtr)1, IMAGE_ICON, 16, 16, LR_SHARED);
+                    if (hSmallIcon == IntPtr.Zero)
+                    {
+                        hSmallIcon = LoadIcon(hModule, (IntPtr)1);
+                    }
+
+                    if (hBigIcon != IntPtr.Zero)
+                    {
+                        SendMessage(hwnd, WM_SETICON, ICON_BIG, hBigIcon);
+                    }
+                    if (hSmallIcon != IntPtr.Zero)
+                    {
+                        SendMessage(hwnd, WM_SETICON, ICON_SMALL, hSmallIcon);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"[Icon] Win32 WM_SETICON notice: {ex.Message}");
+            }
         }
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
