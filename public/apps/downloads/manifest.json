@@ -20,8 +20,8 @@
     "sha256": "b2c8243765dd1c89c81a46eb6dbd23d6cc2e104aab5dc9fb85e659c87ed26338"
   },
   "JuwishPro-Client.exe": {
-    "size": 72260852,
-    "sha256": "6e42ff0bf0dad7abd9c6ba612bd32e5571dcc0f88dc33519450c1abf5be18473"
+    "size": 72262900,
+    "sha256": "39207c20e4d855d0dc23bc48ca979c8dc6ea582e48f523c6620625ef75ee8d04"
   },
   "JuwishPro-Client.ipa": {
     "size": 563740,
@@ -32,8 +32,8 @@
     "sha256": "b4b1ea6e6172ed0149231a7d5b19dfdedbbae791463fcee4a24021012e5d8d87"
   },
   "JuwishPro-Windows-Client.zip": {
-    "size": 66850944,
-    "sha256": "6f626991e5c30b6f5e029ca90688be5c90662fe5847808b4da5de2ff70144e73"
+    "size": 66851788,
+    "sha256": "06aa240ca03e9a19b9321783de1c6b17f1966f904a7d7ae716487931d6ebc036"
   },
   "JuwishPro-iOS-Admin.zip": {
     "size": 563638,
@@ -48,7 +48,7 @@
     "sha256": "703d70cde0866cfd9a18804a742e6d6a2577466682afd0a1b4b2add967d2e88a"
   },
   "JuwishPro-macOS-Client.zip": {
-    "size": 1125144,
-    "sha256": "b43ef60ee2a4e10378115d6167e4e285d47657063fcd88b3fb57321f0a02e0c2"
+    "size": 1126178,
+    "sha256": "4451bb476a3c3f2f178611de9e08575bf12ebc8d9cce564b4bad18ee128415ce"
   }
 }
