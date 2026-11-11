@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account & Data Deletion Request | JuwishPro & JuwishCoin</title>
+    <meta name="description" content="Official account and personal data deletion portal for Juwishcoin / JuwishPro (org.dmillers.juwishpro). Submit a deletion request without logging in or follow in-app steps.">
+    <link rel="icon" type="image/svg+xml" href="images/juwishcoin.svg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#0B0E11',
+                            surface: '#181A20',
+                            card: '#1E2329',
+                            gold: '#F0B90B',
+                            goldBright: '#FCD535',
+                            text: '#EAECEF',
+                            muted: '#848E9C',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            success: '#0ECB81',
+                            error: '#F6465D'
+                        }
+                    },
+                    fontFamily: {
+                        heading: ['"Space Grotesk"', 'sans-serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-brand-black text-brand-text min-h-screen flex flex-col justify-between font-sans">
+
+    <header class="sticky top-0 z-50 bg-[#0B0E11]/90 backdrop-blur-md border-b border-brand-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="/" class="flex items-center gap-3">
+                <img src="images/juwishcoin.svg" alt="JuwishPro" class="w-10 h-10">
+                <span class="font-heading font-bold text-2xl text-white tracking-wider">JUWISH<span class="text-brand-gold">PRO</span></span>
+            </a>
+            <div class="flex items-center gap-4">
+                <a href="/privacy-policy" class="text-brand-muted hover:text-brand-gold transition text-sm font-medium">Privacy Policy</a>
+                <a href="/" class="text-brand-muted hover:text-white transition text-sm font-medium">← App Portal</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14 w-full">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-error/10 border border-brand-error/30 mb-6">
+            <span class="w-2 h-2 rounded-full bg-brand-error"></span>
+            <span class="text-xs font-bold text-brand-error uppercase tracking-wider">User Data Rights & Account Removal</span>
+        </div>
+
+        <h1 class="text-3xl sm:text-5xl font-heading font-black text-white mb-4 tracking-tight">
+            Account & Personal Data Deletion
+        </h1>
+        <p class="text-brand-muted text-sm sm:text-base mb-10">
+            Applies to <strong class="text-white">Juwishcoin / JuwishPro</strong> (<code class="text-brand-gold bg-black/40 px-2 py-0.5 rounded">org.dmillers.juwishpro</code>) operated by <strong class="text-white">D. Millers Global Ecosystem</strong>.
+        </p>
+
+        <div class="space-y-8 text-gray-300 leading-relaxed text-sm sm:text-base">
+            <section class="p-6 sm:p-8 rounded-2xl bg-brand-surface border border-brand-border">
+                <h2 class="text-xl sm:text-2xl font-heading font-bold text-white mb-4">
+                    Option 1: Delete Your Account Inside the App
+                </h2>
+                <ol class="list-decimal pl-6 space-y-2 text-brand-muted">
+                    <li>Open the <strong class="text-white">JuwishPro / Juwishcoin</strong> Android, Desktop, or Web app and sign in.</li>
+                    <li>Open the navigation menu and select <strong class="text-white">Profile Settings</strong> (<code class="text-brand-gold">/user/account/profile</code>).</li>
+                    <li>Scroll to the <strong class="text-white">Delete Account</strong> section at the bottom of the page.</li>
+                    <li>Type <code class="text-brand-gold">DELETE</code> and confirm with your account password to immediately deactivate your account, revoke all active sessions, and purge your personal profile details.</li>
+                </ol>
+            </section>
+
+            <section class="p-6 sm:p-8 rounded-2xl bg-brand-surface border border-brand-border">
+                <h2 class="text-xl sm:text-2xl font-heading font-bold text-white mb-4">
+                    Option 2: Request Deletion via Web (No Login Required)
+                </h2>
+                <p class="text-brand-muted mb-6">
+                    If you cannot access your account or have uninstalled the app, submit the request below. Our Data Protection Officer will process deletion within <strong class="text-white">14 business days</strong> and send confirmation to your registered email.
+                </p>
+
+                <form id="deleteRequestForm" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="del-name" class="block text-xs font-mono uppercase tracking-wider text-brand-muted mb-1.5">Full Name</label>
+                            <input id="del-name" name="name" type="text" required placeholder="Your registered name"
+                                class="w-full rounded-xl bg-brand-black border border-brand-border px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-gold">
+                        </div>
+                        <div>
+                            <label for="del-email" class="block text-xs font-mono uppercase tracking-wider text-brand-muted mb-1.5">Registered Email Address</label>
+                            <input id="del-email" name="email" type="email" required placeholder="you@example.com"
+                                class="w-full rounded-xl bg-brand-black border border-brand-border px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-gold">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label for="del-scope" class="block text-xs font-mono uppercase tracking-wider text-brand-muted mb-1.5">Deletion Scope</label>
+                        <select id="del-scope" name="app" class="w-full rounded-xl bg-brand-black border border-brand-border px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-gold">
+                            <option value="Full Account & All Personal Data Deletion">Delete my entire account and all personal data</option>
+                            <option value="Partial Data Deletion (KYC / Profile Media Only)">Delete uploaded KYC / profile media while keeping account</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="del-reason" class="block text-xs font-mono uppercase tracking-wider text-brand-muted mb-1.5">Additional Details (Optional)</label>
+                        <textarea id="del-reason" name="message" rows="3" placeholder="Include your username or any notes for our compliance team..."
+                            class="w-full rounded-xl bg-brand-black border border-brand-border px-4 py-3 text-white text-sm focus:outline-none focus:border-brand-gold">Please permanently delete my JuwishPro / Juwishcoin account and associated personal data.</textarea>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-4 pt-2">
+                        <button type="submit" id="delSubmitBtn"
+                            class="px-6 py-3 rounded-xl bg-brand-error hover:opacity-90 text-white font-bold text-sm transition cursor-pointer">
+                            Submit Account Deletion Request
+                        </button>
+                        <a href="mailto:info@juwishcoin.online?subject=Account%20Deletion%20Request" class="text-xs text-brand-gold hover:underline">
+                            Or email info@juwishcoin.online directly
+                        </a>
+                    </div>
+                    <p id="delStatus" class="hidden text-sm font-medium pt-2" role="status"></p>
+                </form>
+            </section>
+
+            <section class="p-6 sm:p-8 rounded-2xl bg-brand-surface border border-brand-border">
+                <h2 class="text-xl sm:text-2xl font-heading font-bold text-white mb-4">
+                    Data Types Deleted vs. Statutory Retention
+                </h2>
+                <ul class="list-disc pl-6 space-y-2 text-brand-muted">
+                    <li><strong class="text-white">Immediately Anonymized / Deleted:</strong> Account credentials, name, email address, username, profile photo, uploaded KYC images, session tokens, and device identifiers.</li>
+                    <li><strong class="text-white">Statutory Financial Compliance Retention:</strong> Where required by anti-money-laundering (AML) or tax regulations, anonymized financial transaction and blockchain ledger timestamps may be retained securely in cold audit logs for up to 5 years before automatic purge.</li>
+                </ul>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-[#0B0E11] border-t border-brand-border py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-brand-muted">
+            <p>© 2026 JuwishPro. All rights reserved. D. Millers Global Ecosystem.</p>
+            <div class="flex items-center gap-6">
+                <a href="/privacy-policy" class="hover:text-white transition">Privacy Policy</a>
+                <a href="/delete-account" class="text-brand-gold hover:underline">Account Deletion</a>
+                <a href="mailto:info@juwishcoin.online" class="hover:text-white transition">info@juwishcoin.online</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('deleteRequestForm').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const btn = document.getElementById('delSubmitBtn');
+            const status = document.getElementById('delStatus');
+            const name = document.getElementById('del-name').value.trim();
+            const email = document.getElementById('del-email').value.trim();
+            const app = document.getElementById('del-scope').value;
+            const message = document.getElementById('del-reason').value.trim();
+
+            btn.disabled = true;
+            btn.textContent = 'Submitting Request...';
+            status.classList.add('hidden');
+
+            try {
+                const res = await fetch('/contact.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        subject: 'Account Deletion Request',
+                        app: app,
+                        message: message
+                    })
+                });
+                const json = await res.json();
+                status.textContent = json.message || 'Your account deletion request has been submitted.';
+                status.className = 'text-sm font-medium pt-2 text-brand-success';
+                e.target.reset();
+            } catch (err) {
+                status.textContent = 'Unable to reach server. Please email info@juwishcoin.online from your registered email.';
+                status.className = 'text-sm font-medium pt-2 text-brand-error';
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Submit Account Deletion Request';
+            }
+        });
+    </script>
+</body>
+</html>

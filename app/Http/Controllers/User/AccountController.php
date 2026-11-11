@@ -168,4 +168,57 @@ class AccountController extends Controller
 
         return back()->with('success', __('Logged out from other devices successfully.'));
     }
+
+    /**
+     * Permanently delete or anonymize the authenticated user account.
+     */
+    public function deleteAccount(Request $request)
+    {
+        $request->validate([
+            'confirm_delete' => 'required|in:DELETE',
+        ], [
+            'confirm_delete.in' => __('Please type DELETE in uppercase to confirm account deletion.'),
+        ]);
+
+        $user = Auth::user();
+
+        if ($user->isReviewDemoAccount()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => __('Account deletion request confirmed. Live deactivation is simulated on the shared app-review demo account.'),
+            ]);
+        }
+
+        // Verify current password when account uses password-based login
+        if (empty($user->provider_name) || strtolower((string) $user->provider_name) === 'email') {
+            $request->validate([
+                'password' => 'required|current_password',
+            ]);
+        }
+
+        DB::table('sessions')->where('user_id', $user->id)->delete();
+
+        $stamp = $user->id . '_' . time();
+        $user->update([
+            'first_name' => 'Deleted',
+            'last_name' => 'User',
+            'email' => 'deleted_' . $stamp . '@deleted.juwishcoin.online',
+            'username' => 'deleted_' . $stamp,
+            'photo' => null,
+            'provider_id' => null,
+            'social_token' => null,
+            'status' => 'suspended',
+        ]);
+
+        Auth::logout();
+        session()->forget('user_otp_verified');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => __('Your account and personal data have been scheduled for deletion.'),
+            'redirect' => route('user.login'),
+        ]);
+    }
 }

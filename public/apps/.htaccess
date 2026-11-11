@@ -6,6 +6,7 @@ DirectoryIndex index.html index.php
     RewriteBase /
     RewriteRule ^privacy-policy/?$ privacy-policy.html [L]
     RewriteRule ^privacy/?$ privacy-policy.html [L]
+    RewriteRule ^delete-account/?$ delete-account.html [L]
 </IfModule>
 
 # Force download headers for app binaries

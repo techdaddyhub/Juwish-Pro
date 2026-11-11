@@ -183,5 +183,6 @@ Route::prefix('user')->middleware(['auth', 'otp.verified', 'user.status', 'user.
         Route::get('/security', [\App\Http\Controllers\User\AccountController::class, 'security'])->name('security');
         Route::post('/password', [\App\Http\Controllers\User\AccountController::class, 'passwordUpdate'])->name('password.update');
         Route::post('/sessions/logout-other', [\App\Http\Controllers\User\AccountController::class, 'logoutOtherDevices'])->name('sessions.logout-other');
+        Route::post('/delete', [\App\Http\Controllers\User\AccountController::class, 'deleteAccount'])->name('delete');
     });
 });

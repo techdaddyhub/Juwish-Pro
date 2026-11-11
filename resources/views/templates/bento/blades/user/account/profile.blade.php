@@ -274,6 +274,44 @@
                         </div>
                     </form>
                 </div>
+
+                {{-- Delete Account (App Store / Google Play Compliance) --}}
+                <div class="profile-container mt-8 border-red-500/20">
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold text-red-400">{{ __('Delete Account') }}</h3>
+                        <p class="text-sm text-text-secondary mt-1">
+                            {{ __('Permanently delete your account and personal profile information. Active sessions will be closed immediately.') }}
+                        </p>
+                    </div>
+
+                    <form id="account-delete-form" action="{{ route('user.account.delete') }}" method="POST" class="space-y-4">
+                        @csrf
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="confirm_delete" class="block text-xs font-mono uppercase tracking-wider text-text-secondary mb-2">
+                                    {{ __('Type DELETE to confirm') }}
+                                </label>
+                                <input type="text" name="confirm_delete" id="confirm_delete" placeholder="DELETE" required class="flat-input">
+                            </div>
+
+                            @if (empty($user->provider_name) || strtolower((string) $user->provider_name) === 'email')
+                                <div>
+                                    <label for="delete_password" class="block text-xs font-mono uppercase tracking-wider text-text-secondary mb-2">
+                                        {{ __('Current Password') }}
+                                    </label>
+                                    <input type="password" name="password" id="delete_password" placeholder="••••••••" required class="flat-input">
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="pt-2">
+                            <button type="submit" id="delete-account-btn"
+                                class="px-6 py-3.5 rounded-2xl bg-red-600 hover:bg-red-500 text-white font-bold text-sm transition cursor-pointer">
+                                {{ __('Delete My Account') }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -338,6 +376,41 @@
                         $btnText.text(originalText);
                         $submitIcon.removeClass('hidden');
                         $loadingIcon.addClass('hidden');
+                    }
+                });
+            });
+
+            // Account Delete Ajax
+            $('#account-delete-form').on('submit', function(e) {
+                e.preventDefault();
+                const $form = $(this);
+                const $btn = $('#delete-account-btn');
+                $btn.prop('disabled', true).addClass('opacity-70 cursor-not-allowed');
+
+                $.ajax({
+                    url: $form.attr('action'),
+                    type: 'POST',
+                    data: $form.serialize(),
+                    success: function(response) {
+                        toastNotification(response.message, 'success');
+                        if (response.redirect) {
+                            setTimeout(function() {
+                                window.location.href = response.redirect;
+                            }, 1200);
+                        } else {
+                            $form[0].reset();
+                        }
+                    },
+                    error: function(xhr) {
+                        let errorMessage = xhr.responseJSON ? xhr.responseJSON.message :
+                            '{{ __('Something went wrong.') }}';
+                        if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
+                            errorMessage = Object.values(xhr.responseJSON.errors).flat().join(' | ');
+                        }
+                        toastNotification(errorMessage, 'error');
+                    },
+                    complete: function() {
+                        $btn.prop('disabled', false).removeClass('opacity-70 cursor-not-allowed');
                     }
                 });
             });
