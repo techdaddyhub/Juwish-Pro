@@ -24,6 +24,11 @@ class KycMiddleware
             return $next($request);
         }
 
+        // Bypass KYC verification for the app-store reviewer demo account
+        if (auth()->check() && auth()->user()->isReviewDemoAccount()) {
+            return $next($request);
+        }
+
         // check if kyc module is loaded
         if (!moduleEnabled('kyc_module')) {
             return $next($request);

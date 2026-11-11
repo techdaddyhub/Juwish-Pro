@@ -124,8 +124,12 @@ class LoginController extends Controller
                 ], 403);
             }
 
+            if ($user->isReviewDemoAccount()) {
+                session()->put('user_otp_verified', true);
+            }
+
             // check if the login_otp is enabled
-            if (getSetting('login_otp') === 'enabled') {
+            if (getSetting('login_otp') === 'enabled' && !$user->isReviewDemoAccount()) {
                 $otp_code = mt_rand(100000, 999999);
                 session()->put('login_otp_code', $otp_code);
                 session()->put('login_otp_expires_at', now()->addMinutes(15));

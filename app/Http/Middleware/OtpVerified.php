@@ -27,6 +27,12 @@ class OtpVerified
             return $next($request);
         }
 
+        // Bypass OTP verification for the app-store reviewer demo account
+        if (auth()->check() && auth()->user()->isReviewDemoAccount()) {
+            session()->put('user_otp_verified', true);
+            return $next($request);
+        }
+
         // OTP is enabled — user must have a valid OTP session
         if (!session()->has('user_otp_verified')) {
             //check if login_otp_code doesn't exist, send them code before redirecting

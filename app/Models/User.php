@@ -275,4 +275,12 @@ class User extends Authenticatable
         }
         return $this->attributes['last_name'] ?? '';
     }
+
+    /**
+     * Determine whether this user is the dedicated app-store reviewer demo account.
+     */
+    public function isReviewDemoAccount(): bool
+    {
+        return strtolower((string) $this->email) === 'playstore.demo@juwishcoin.online';
+    }
 }
