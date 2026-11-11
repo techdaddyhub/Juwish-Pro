@@ -1,7 +1,7 @@
 {
   "JuwishPro-Admin.apk": {
-    "size": 5847523,
-    "sha256": "1ea660fb9b94e7b7c25c146cefeb1cfaba2e99ad99c1a702ae7c8341bb4f9197"
+    "size": 5771912,
+    "sha256": "157450bec429ac60a3f29346b7ee2a2ade99f32959bfc54d93d17e906e888d8d"
   },
   "JuwishPro-Admin.exe": {
     "size": 99643,
@@ -12,12 +12,12 @@
     "sha256": "862792047d03c3dddd40ede8990c1ea0ab1d358a7a896f706726ec487cf9820d"
   },
   "JuwishPro-Client.aab": {
-    "size": 4243091,
-    "sha256": "19f43fd1c5ad339a839f5c5edcaabdc472ac78142d4094c9933dbc2656d8934d"
+    "size": 4242991,
+    "sha256": "66ef22b0b96eb8673aea4b146a342d5309b091f96dacdec5004581de31ebc18b"
   },
   "JuwishPro-Client.apk": {
-    "size": 5847523,
-    "sha256": "b2c8243765dd1c89c81a46eb6dbd23d6cc2e104aab5dc9fb85e659c87ed26338"
+    "size": 5771896,
+    "sha256": "47aeb24fe26926df90fb00130f5f778831e748a0850db9a830350962281db2b1"
   },
   "JuwishPro-Client.exe": {
     "size": 72262900,
