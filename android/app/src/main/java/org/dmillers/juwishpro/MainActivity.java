@@ -29,6 +29,11 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity {
@@ -69,14 +74,38 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Handle Android 15/16 edge-to-edge system bars cleanly while keeping dark theme contrast
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_main);
 
+        setupEdgeToEdgeInsets();
         initViews();
         setupWebView();
         setupSwipeRefresh();
         setupBackNavigation();
 
         loadTargetUrl();
+    }
+
+    private void setupEdgeToEdgeInsets() {
+        WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        if (controller != null) {
+            controller.setAppearanceLightStatusBars(false);
+            controller.setAppearanceLightNavigationBars(false);
+        }
+
+        View rootLayout = findViewById(R.id.rootLayout);
+        if (rootLayout != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(rootLayout, (v, windowInsets) -> {
+                Insets bars = windowInsets.getInsets(
+                        WindowInsetsCompat.Type.systemBars()
+                                | WindowInsetsCompat.Type.displayCutout()
+                                | WindowInsetsCompat.Type.ime()
+                );
+                v.setPadding(bars.left, bars.top, bars.right, bars.bottom);
+                return WindowInsetsCompat.CONSUMED;
+            });
+        }
     }
 
     private void initViews() {
